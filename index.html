@@ -9,8 +9,8 @@
 <meta property="og:description" content="特別な一日を、あなたと。LINEで簡単予約。">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Lueur">
-<meta property="og:url" content="https://miyao130414harumi-commits.github.io/rental-kareshi/">
-<link rel="canonical" href="https://miyao130414harumi-commits.github.io/rental-kareshi/">
+<meta property="og:url" content="https://ramunekyuzin.github.io/rental-kareshi/">
+<link rel="canonical" href="https://ramunekyuzin.github.io/rental-kareshi/">
 <!-- ▼ Google Search Console の確認コードをもらったら、下の行の「ここにコード」を書き換えてコメントを外す -->
 <!-- <meta name="google-site-verification" content="ここにコード"> -->
 <script type="application/ld+json">
@@ -19,7 +19,7 @@
   "@type": "WebSite",
   "name": "Lueur",
   "alternateName": ["リュウール", "レンタル彼氏 Lueur"],
-  "url": "https://miyao130414harumi-commits.github.io/rental-kareshi/"
+  "url": "https://ramunekyuzin.github.io/rental-kareshi/"
 }
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -106,6 +106,11 @@
   .collage{display:grid;grid-template-columns:1.25fr 1fr;grid-template-rows:1fr 1fr;gap:10px;max-width:460px;margin:0 auto;width:100%;aspect-ratio:1/1}
   .collage a{border-radius:18px;background:center/cover no-repeat;position:relative;overflow:hidden;display:flex;align-items:flex-end;box-shadow:0 10px 30px rgba(44,49,80,.12)}
   .collage a:first-child{grid-row:1 / 3}
+  /* キャストが1人・2人のときの並び */
+  .collage.n1{grid-template-columns:1fr;grid-template-rows:1fr;max-width:340px;aspect-ratio:3/4}
+  .collage.n1 a:first-child{grid-row:auto}
+  .collage.n2{grid-template-columns:1fr 1fr;grid-template-rows:1fr;aspect-ratio:3/2}
+  .collage.n2 a:first-child{grid-row:auto}
   .collage a span{width:100%;padding:18px 12px 10px;background:linear-gradient(transparent,rgba(0,0,0,.45));color:#fff;font-size:13px;font-weight:700;letter-spacing:.06em}
   .collage a .ini{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:"Cormorant Garamond",serif;font-size:56px;color:rgba(255,255,255,.9)}
 
@@ -299,7 +304,8 @@
   footer a{text-decoration:underline;margin:0 6px}
 
   /* ===== スマホ下固定ボタン ===== */
-  .fixed-cta{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:8px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.95);border-top:1px solid var(--border)}
+  .fixed-cta{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:8px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.95);border-top:1px solid var(--border);transition:transform .25s}
+  .fixed-cta.away{transform:translateY(110%)}
   .fixed-cta .btn{flex:1;min-width:0;padding:14px 8px;font-size:14px}
 
   /* ===== キャスト個別ページ ===== */
@@ -1098,6 +1104,7 @@
   function renderHero(){
     const casts = (DATA.casts || []).slice().sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0)).slice(0, 3);
     $("heroCollage").hidden = casts.length === 0;
+    $("heroCollage").className = "collage n" + casts.length;
     $("heroCollage").innerHTML = casts.map(c => `<a href="#cast/${encodeURIComponent(c.name)}" style="${castBg(c)}">
       ${safeUrl(c.photo) ? "" : `<span class="ini">${esc(String(c.name).charAt(0))}</span>`}<span>${esc(T(c, "name"))}</span></a>`).join("");
   }
@@ -1204,6 +1211,16 @@
       $("reserve").scrollIntoView({ behavior: "smooth" });
     }, 50);
   });
+
+  // ===== 下の固定ボタン:トップのボタンや予約欄が見えている間は隠す(LINEボタンが2つ並ばないように) =====
+  if ("IntersectionObserver" in window) {
+    const seen = new Set();
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(en => en.isIntersecting ? seen.add(en.target) : seen.delete(en.target));
+      document.querySelector(".fixed-cta").classList.toggle("away", seen.size > 0);
+    });
+    [document.querySelector(".hero .btns"), $("reserve")].forEach(el => el && io.observe(el));
+  }
 
   // ===== スマホのメニュー =====
   $("menuBtn").addEventListener("click", () => { $("drawer").hidden = false; });
