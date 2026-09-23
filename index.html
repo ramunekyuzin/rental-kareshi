@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>レンタル彼氏 Lueur(リュウール)|特別な一日を、あなたと。</title>
+<meta name="description" content="レンタル彼氏 Lueur(リュウール)。デート・ショッピング・カフェ巡り・話し相手など、あなたの「こんな一日を過ごしたい」を叶えます。60分〜、LINEで簡単予約。">
+<meta property="og:title" content="レンタル彼氏 Lueur(リュウール)">
+<meta property="og:description" content="特別な一日を、あなたと。LINEで簡単予約。">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf6f1;
+    --bg2:#f2ebe3;
+    --ink:#23263a;
+    --sub:#6b6a78;
+    --accent:#c48a8a;
+    --accent-dk:#a86f70;
+    --navy:#2c3150;
+    --line:#06c755;
+    --card:#ffffff;
+    --radius:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Zen Kaku Gothic New",sans-serif;
+    background:var(--bg);color:var(--ink);
+    line-height:1.85;font-size:15px;
+    padding-bottom:76px; /* 下固定ボタン分 */
+  }
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+  .en{font-family:"Cormorant Garamond",serif;letter-spacing:.08em}
+
+  /* ===== ヘッダー ===== */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(250,246,241,.92);backdrop-filter:blur(8px);
+    border-bottom:1px solid rgba(35,38,58,.06);
+  }
+  .head{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .logo{font-size:26px;font-weight:600;color:var(--navy)}
+  .logo small{font-family:"Zen Kaku Gothic New";font-size:10px;letter-spacing:.1em;color:var(--sub);margin-left:6px}
+  nav ul{display:none;list-style:none;gap:26px;font-size:13px;letter-spacing:.05em}
+  nav a:hover{color:var(--accent-dk)}
+
+  /* ===== ヒーロー ===== */
+  .hero{
+    position:relative;overflow:hidden;
+    padding:72px 0 80px;text-align:center;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(196,138,138,.22), transparent 55%),
+      radial-gradient(circle at 85% 75%, rgba(44,49,80,.14), transparent 50%),
+      var(--bg);
+  }
+  .hero .catch-en{font-size:15px;color:var(--accent-dk);font-style:italic}
+  .hero h1{
+    font-size:30px;font-weight:700;line-height:1.5;margin:14px 0 18px;color:var(--navy);
+    letter-spacing:.06em;
+  }
+  .hero p{color:var(--sub);font-size:14px}
+  .hero .btns{margin-top:34px;display:flex;flex-direction:column;gap:12px;align-items:center}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    min-width:260px;padding:15px 28px;border-radius:999px;
+    font-weight:700;font-size:15px;letter-spacing:.05em;transition:.2s;
+  }
+  .btn-line{background:var(--line);color:#fff;box-shadow:0 6px 18px rgba(6,199,85,.25)}
+  .btn-line:hover{transform:translateY(-2px)}
+  .btn-ghost{border:1.5px solid var(--navy);color:var(--navy)}
+  .btn-ghost:hover{background:var(--navy);color:#fff}
+
+  /* ===== セクション共通 ===== */
+  section{padding:76px 0}
+  .sec-title{text-align:center;margin-bottom:40px}
+  .sec-title .en{display:block;font-size:34px;color:var(--navy);line-height:1.2}
+  .sec-title .ja{font-size:12px;color:var(--accent-dk);letter-spacing:.2em}
+  .alt{background:var(--bg2)}
+
+  /* ===== コンセプト ===== */
+  .concept p{max-width:640px;margin:0 auto;text-align:center}
+  .scenes{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:36px}
+  .scene{
+    background:var(--card);border-radius:var(--radius);padding:20px 12px;text-align:center;
+    font-size:13px;font-weight:500;box-shadow:0 4px 14px rgba(35,38,58,.05);
+  }
+  .scene .ico{font-size:26px;display:block;margin-bottom:4px}
+
+  /* ===== キャスト ===== */
+  .cast-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .cast{
+    background:var(--card);border-radius:var(--radius);overflow:hidden;
+    box-shadow:0 4px 14px rgba(35,38,58,.06);
+  }
+  .cast .photo{
+    aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;
+    font-family:"Cormorant Garamond",serif;font-size:44px;color:#fff;background-size:cover;background-position:center;
+  }
+  .cast .info{padding:12px 14px 16px}
+  .cast .name{font-weight:700;font-size:16px}
+  .cast .meta{font-size:12px;color:var(--sub)}
+  .cast .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+  .cast .tags span{font-size:10.5px;background:var(--bg2);border-radius:999px;padding:2px 9px}
+
+  /* ===== 料金 ===== */
+  .price-box{background:var(--card);border-radius:var(--radius);padding:28px 22px;max-width:640px;margin:0 auto;box-shadow:0 4px 14px rgba(35,38,58,.05)}
+  .price-row{display:flex;justify-content:space-between;align-items:baseline;padding:14px 0;border-bottom:1px dashed #ddd3c8}
+  .price-row:last-child{border-bottom:none}
+  .price-row .yen{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:600;color:var(--navy)}
+  .price-row .yen small{font-family:"Zen Kaku Gothic New";font-size:12px;color:var(--sub);margin-left:2px}
+  .note{font-size:12px;color:var(--sub);margin-top:16px;line-height:1.7}
+
+  /* ===== ご利用の流れ ===== */
+  .flow{display:grid;gap:14px;max-width:640px;margin:0 auto;counter-reset:step}
+  .step{display:flex;gap:16px;background:var(--card);border-radius:var(--radius);padding:18px 20px;align-items:flex-start}
+  .step::before{
+    counter-increment:step;content:counter(step,decimal-leading-zero);
+    font-family:"Cormorant Garamond",serif;font-size:30px;color:var(--accent);line-height:1;min-width:40px;
+  }
+  .step h3{font-size:15px}
+  .step p{font-size:13px;color:var(--sub)}
+
+  /* ===== ルール ===== */
+  .rules{max-width:640px;margin:0 auto;background:var(--card);border-radius:var(--radius);padding:24px 22px;border-left:4px solid var(--accent)}
+  .rules ul{list-style:none;display:grid;gap:8px;font-size:13.5px}
+  .rules li::before{content:"✕";color:var(--accent-dk);font-weight:700;margin-right:8px}
+
+  /* ===== FAQ ===== */
+  .faq{max-width:700px;margin:0 auto;display:grid;gap:10px}
+  details{background:var(--card);border-radius:14px;padding:4px 20px}
+  summary{cursor:pointer;list-style:none;padding:14px 0;font-weight:500;display:flex;justify-content:space-between;gap:10px}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"Q.";font-family:"Cormorant Garamond",serif;color:var(--accent-dk);font-size:18px;font-weight:600}
+  summary span{flex:1}
+  summary::after{content:"+";font-size:20px;color:var(--sub);transition:.2s}
+  details[open] summary::after{transform:rotate(45deg)}
+  details p{padding:0 0 16px 26px;font-size:13.5px;color:var(--sub)}
+
+  /* ===== 予約 ===== */
+  .reserve{text-align:center;background:var(--navy);color:#fff}
+  .reserve .sec-title .en{color:#fff}
+  .reserve .sec-title .ja{color:#e7b9b9}
+  .reserve p{font-size:14px;opacity:.85}
+  .reserve .btns{margin-top:28px;display:flex;flex-direction:column;gap:12px;align-items:center}
+  .reserve .btn-ghost{border-color:#fff;color:#fff}
+  .reserve .btn-ghost:hover{background:#fff;color:var(--navy)}
+  .hours{margin-top:22px;font-size:12px;opacity:.7}
+
+  footer{text-align:center;padding:30px 20px;font-size:11px;color:var(--sub)}
+
+  /* ===== スマホ下固定ボタン ===== */
+  .fixed-cta{
+    position:fixed;left:0;right:0;bottom:0;z-index:60;
+    padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+    background:rgba(250,246,241,.95);border-top:1px solid rgba(35,38,58,.08);
+  }
+  .fixed-cta .btn{width:100%;min-width:0}
+
+  /* ===== PC ===== */
+  @media (min-width:768px){
+    body{font-size:16px;padding-bottom:0}
+    .fixed-cta{display:none}
+    nav ul{display:flex}
+    .hero{padding:120px 0 130px}
+    .hero h1{font-size:44px}
+    .hero .btns{flex-direction:row;justify-content:center}
+    .scenes{grid-template-columns:repeat(4,1fr)}
+    .cast-grid{grid-template-columns:repeat(4,1fr);gap:20px}
+    .sec-title .en{font-size:44px}
+    .reserve .btns{flex-direction:row;justify-content:center}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap head">
+    <a href="#top" class="logo en">Lueur<small>レンタル彼氏</small></a>
+    <nav>
+      <ul>
+        <li><a href="#concept">コンセプト</a></li>
+        <li><a href="#cast">キャスト</a></li>
+        <li><a href="#price">料金</a></li>
+        <li><a href="#flow">ご利用の流れ</a></li>
+        <li><a href="#faq">よくある質問</a></li>
+        <li><a href="#reserve">ご予約</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- ヒーロー -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="catch-en en">A special day, just for you.</div>
+    <h1>特別な一日を、<br>あなたと。</h1>
+    <p>カフェ、ショッピング、映画、ちょっとした話し相手まで。<br>あなたの「こんな一日を過ごしたい」を叶えます。</p>
+    <div class="btns">
+      <a href="#reserve" class="btn btn-line">LINEで予約・相談する</a>
+      <a href="#cast" class="btn btn-ghost">キャストを見る</a>
+    </div>
+  </div>
+</section>
+
+<!-- コンセプト -->
+<section class="concept" id="concept">
+  <div class="wrap">
+    <div class="sec-title"><span class="en">Concept</span><span class="ja">コンセプト</span></div>
+    <p>Lueur(リュウール)はフランス語で「やさしい光」。<br>
+    忙しい毎日の中で、ほっとできる時間をお届けしたい。<br>
+    はじめての方でも安心してご利用いただけるよう、<br>丁寧なヒアリングと明朗な料金でお迎えします。</p>
+    <div class="scenes">
+      <div class="scene"><span class="ico">☕</span>カフェ巡り</div>
+      <div class="scene"><span class="ico">🛍️</span>ショッピング</div>
+      <div class="scene"><span class="ico">🎬</span>映画・テーマパーク</div>
+      <div class="scene"><span class="ico">💬</span>話し相手・相談</div>
+    </div>
+  </div>
+</section>
+
+<!-- キャスト -->
+<section class="alt" id="cast">
+  <div class="wrap">
+    <div class="sec-title"><span class="en">Cast</span><span class="ja">キャスト紹介</span></div>
+    <div class="cast-grid" id="castGrid"></div>
+  </div>
+</section>
+
+<!-- 料金 -->
+<section id="price">
+  <div class="wrap">
+    <div class="sec-title"><span class="en">Price</span><span class="ja">料金システム</span></div>
+    <div class="price-box">
+      <div class="price-row"><span>デート料金(60分)</span><span class="yen">¥5,000<small>〜</small></span></div>
+      <div class="price-row"><span>延長(30分ごと)</span><span class="yen">¥2,500</span></div>
+      <div class="price-row"><span>指名料</span><span class="yen">¥1,000</span></div>
+      <div class="price-row"><span>初回限定 お試し(60分)</span><span class="yen">¥4,000</span></div>
+      <p class="note">
+        ※ご利用は120分〜となります(初回お試しを除く)。<br>
+        ※キャストの交通費、デート中の飲食代・施設利用料はお客様のご負担となります。<br>
+        ※料金はデート当日、開始時にキャストへ現金でお支払いください。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ご利用の流れ -->
+<section class="alt" id="flow">
+  <div class="wrap">
+    <div class="sec-title"><span class="en">Flow</span><span class="ja">ご利用の流れ</span></div>
+    <div class="flow">
+      <div class="step"><div><h3>LINEでお問い合わせ</h3><p>公式LINEを友だち追加し、ご希望の日時・キャスト・デート内容をお送りください。</p></div></div>
+      <div class="step"><div><h3>ヒアリング・ご予約確定</h3><p>スタッフがご希望を伺い、プランと料金をご案内。内容にご納得いただけたら予約確定です。</p></div></div>
+      <div class="step"><div><h3>待ち合わせ</h3><p>当日は指定の場所でキャストがお待ちしています。開始時に料金をお支払いください。</p></div></div>
+      <div class="step"><div><h3>デートをお楽しみください</h3><p>終了後、よろしければLINEでご感想をお聞かせください。</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 禁止事項 -->
+<section id="rules">
+  <div class="wrap">
+    <div class="sec-title"><span class="en">Rules</span><span class="ja">ご利用にあたってのお願い</span></div>
+    <div class="rules">
+      <ul>
+        <li>18歳未満の方のご利用</li>
+        <li>手つなぎ以上の身体的接触・性的サービスの要求</li>
+        <li>ホテル・個室・ご自宅など密室でのデート</li>
+        <li>飲酒を強要する行為、泥酔状態でのご利用</li>
+        <li>キャストへの連絡先交換・店舗を通さない私的な誘い</li>
+        <li>写真・動画の無断撮影、SNSへの無断掲載</li>
+      </ul>
+      <p class="note">上記に該当した場合、その時点でデートを終了させていただきます(料金の返金はいたしません)。</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="alt" id="faq">
+  <div class="wrap">
+    <div class="sec-title"><span class="en">FAQ</span><span class="ja">よくある質問</span></div>
+    <div class="faq">
+      <details><summary><span>はじめてでも大丈夫ですか?</span></summary><p>ご利用の多くがはじめての方です。緊張される方もキャストがリードしますので、安心してお越しください。</p></details>
+      <details><summary><span>予約はいつまでにすればいいですか?</span></summary><p>ご希望日の前日までのご予約をおすすめしています。当日のご予約はキャストの空き状況によります。</p></details>
+      <details><summary><span>キャンセルはできますか?</span></summary><p>前日までは無料です。当日のキャンセルはデート料金の50%、無断キャンセルは100%をキャンセル料として頂戴します。</p></details>
+      <details><summary><span>どのエリアで利用できますか?</span></summary><p>○○駅周辺を中心に対応しています。エリア外の場合は別途交通費で対応できることもありますので、お気軽にご相談ください。</p></details>
+      <details><summary><span>デート以外のお願いもできますか?</span></summary><p>話し相手、買い物の付き添い、イベントの同行なども承ります。ルールの範囲内でご相談ください。</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- 予約 -->
+<section class="reserve" id="reserve">
+  <div class="wrap">
+    <div class="sec-title"><span class="en">Reserve</span><span class="ja">ご予約・お問い合わせ</span></div>
+    <p>ご予約・ご相談はすべて公式LINEで受け付けています。<br>お気軽にメッセージをお送りください。</p>
+    <div class="btns">
+      <!-- ▼ 公式LINEのURLに差し替え -->
+      <a href="https://lin.ee/XXXXXXX" class="btn btn-line" target="_blank" rel="noopener">LINEで予約する</a>
+      <!-- ▼ InstagramのURLに差し替え -->
+      <a href="https://www.instagram.com/XXXXXXX/" class="btn btn-ghost" target="_blank" rel="noopener">Instagramを見る</a>
+    </div>
+    <div class="hours">受付時間 12:00〜22:00(年中無休)</div>
+  </div>
+</section>
+
+<footer>&copy; <span id="year"></span> Lueur All Rights Reserved.</footer>
+
+<!-- スマホ用 下固定ボタン -->
+<div class="fixed-cta"><a href="#reserve" class="btn btn-line">LINEで予約・相談する</a></div>
+
+<script>
+  // ===== キャスト情報(ここを編集すれば一覧が変わる) =====
+  // photo: 画像ファイル名(例 "img/haruto.jpg")。空なら頭文字+グラデーションで表示
+  const CASTS = [
+    { name:"ハルト", age:24, height:178, tags:["聞き上手","カフェ好き","癒し系"], photo:"", color:["#c48a8a","#2c3150"] },
+    { name:"ソウタ", age:22, height:175, tags:["明るい","映画好き","リード上手"], photo:"", color:["#8aa4c4","#2c3150"] },
+    { name:"レン",   age:26, height:181, tags:["大人っぽい","ショッピング","紳士"], photo:"", color:["#b7a17d","#3a2f45"] },
+    { name:"ユウキ", age:23, height:173, tags:["甘え上手","テーマパーク","笑顔"], photo:"", color:["#d4a5b8","#4a3a5a"] },
+  ];
+
+  const grid = document.getElementById("castGrid");
+  grid.innerHTML = CASTS.map(c => {
+    const bg = c.photo
+      ? `background-image:url('${c.photo}')`
+      : `background:linear-gradient(145deg,${c.color[0]},${c.color[1]})`;
+    const initial = c.photo ? "" : c.name.charAt(0);
+    return `
+      <div class="cast">
+        <div class="photo" style="${bg}">${initial}</div>
+        <div class="info">
+          <div class="name">${c.name}</div>
+          <div class="meta">${c.age}歳 / ${c.height}cm</div>
+          <div class="tags">${c.tags.map(t => `<span>${t}</span>`).join("")}</div>
+        </div>
+      </div>`;
+  }).join("");
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
