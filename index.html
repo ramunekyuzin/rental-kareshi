@@ -216,7 +216,10 @@
   .opt span{flex:1}
   .opt em{font-style:normal;font-weight:700;color:var(--navy)}
   .opt.fixed{opacity:.75}
-  .estimate{display:flex;justify-content:space-between;align-items:baseline;background:var(--bg);border-radius:12px;padding:14px 16px;margin-bottom:16px}
+  .estimate{background:var(--bg);border-radius:12px;padding:14px 16px;margin-bottom:16px}
+  .est-lines{font-size:12.5px;color:var(--sub);border-bottom:1px dashed #ddd3c8;padding-bottom:8px;margin-bottom:8px}
+  .est-lines div{display:flex;justify-content:space-between;gap:10px}
+  .est-total{display:flex;justify-content:space-between;align-items:baseline}
   .estimate .lb{font-size:13px;font-weight:700}
   .estimate .lb small{display:block;font-size:11px;font-weight:400;color:var(--sub)}
   .estimate .sum{font-family:"Cormorant Garamond",serif;font-size:28px;font-weight:600;color:var(--accent-dk)}
@@ -457,14 +460,27 @@
         <div class="opts" id="optList"></div>
       </div>
 
+      <div class="fg" id="transportWrap" hidden>
+        <label for="fTransport" data-i18n="f_transport">待ち合わせエリア(交通費)</label>
+        <select id="fTransport" name="transport"></select>
+      </div>
+
       <div class="estimate" id="estimate" hidden>
-        <span class="lb"><span data-i18n="f_estimate">料金の目安</span><small data-i18n="f_estimate_note">交通費・飲食代は別途</small></span>
-        <span class="sum" id="estSum">¥0</span>
+        <div class="est-lines" id="estLines"></div>
+        <div class="est-total">
+          <span class="lb"><span data-i18n="f_estimate">料金の目安</span><small data-i18n="f_estimate_note">飲食代・施設利用料は別途</small></span>
+          <span class="sum" id="estSum">¥0</span>
+        </div>
       </div>
 
       <div class="fg">
         <label for="fPlace" data-i18n="f_place">待ち合わせ場所(駅名など)</label>
         <input type="text" id="fPlace" name="place" maxlength="100" data-i18n-ph="f_place_ph" placeholder="例:○○駅 東口">
+      </div>
+
+      <div class="fg" id="sourceWrap" hidden>
+        <label for="fSource" data-i18n="f_source">当店を知ったきっかけ</label>
+        <select id="fSource" name="source"></select>
       </div>
 
       <div class="fg">
@@ -541,7 +557,7 @@
       f_repeat_note:"Enter the phone number you used last time. We'll reuse your name and contact details.",
       f_name:"Name (nickname OK)", f_contact:"Contact other than phone", f_mail:"Email", f_line_ph:"Your LINE ID", f_mail_ph:"Your email address",
       f_date:"Date", f_time:"Start time", f_select:"Select", f_course:"Course", f_cast:"Preferred cast", f_cast_any:"No preference", f_options:"Options",
-      f_estimate:"Estimated price", f_estimate_note:"Transport and food costs not included", f_place:"Meeting place (station etc.)", f_place_ph:"e.g. East exit of ○○ Station",
+      f_estimate:"Estimated price", f_estimate_note:"Food and venue costs not included", f_place:"Meeting place (station etc.)", f_place_ph:"e.g. East exit of ○○ Station",
       f_request:"What would you like to do?", f_request_ph:"e.g. I'd like to chat over coffee", f_agree18:"I am 18 or older",
       f_agree_rules:'I have read and agree to the <a href="#rules">house rules</a>',
       f_remember:'Save my phone, name and contact on this device for next time<small class="sub-s">(Uncheck on shared devices)</small>',
@@ -551,7 +567,8 @@
       thanks_line:"Get confirmation on LINE", thanks_line_note:"A LINE message with your booking number will open. Just send it.",
       or_line:"You can also ask or book on LINE", fixed_reserve:"Book", fixed_line:"LINE", footer_recruit:"Join our cast", loading:"Loading…",
       filter_all:"All", filter_today:"Working today", today:"Today", cast_preparing:"Cast profiles coming soon", sched_none:"No schedule posted for this day yet.",
-      cat_course:"Courses", cat_option:"Options", cat_other:"Other", age:"y/o", load_error:"Could not load data. Please reload the page later.",
+      cat_course:"Courses", cat_option:"Options", cat_other:"Other", cat_nomination:"Nomination fee", cat_transport:"Travel fee", age:"y/o",
+      f_transport:"Meeting area (travel fee)", f_transport_none:"Not decided / ask", f_source:"How did you hear about us?", f_source_none:"Prefer not to say", free:"free", load_error:"Could not load data. Please reload the page later.",
       err_phone:"Please enter a valid phone number (10–11 digits)", err_sample:"Sample mode: the form cannot be sent", err_network:"Could not send. Please check your connection and try again.",
       weekdays:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
     },
@@ -572,7 +589,7 @@
       f_repeat_note:"请输入上次预约时的电话号码。姓名和联系方式将沿用上次的信息。",
       f_name:"姓名(可用昵称)", f_contact:"电话以外的联系方式", f_mail:"邮箱", f_line_ph:"请输入LINE ID", f_mail_ph:"请输入邮箱地址",
       f_date:"希望日期", f_time:"开始时间", f_select:"请选择", f_course:"套餐", f_cast:"指定成员", f_cast_any:"不指定", f_options:"附加选项",
-      f_estimate:"费用参考", f_estimate_note:"交通费・餐饮费另计", f_place:"见面地点(车站名等)", f_place_ph:"例:○○站 东口",
+      f_estimate:"费用参考", f_estimate_note:"餐饮费・场地费另计", f_place:"见面地点(车站名等)", f_place_ph:"例:○○站 东口",
       f_request:"约会内容・要求", f_request_ph:"例:想在咖啡馆慢慢聊天", f_agree18:"我已满18岁",
       f_agree_rules:'我已阅读并同意<a href="#rules">使用须知</a>',
       f_remember:'在此设备上保存电话、姓名和联系方式，方便下次使用<small class="sub-s">(公共设备请取消勾选)</small>',
@@ -582,7 +599,8 @@
       thanks_line:"通过LINE接收确定通知", thanks_line_note:"将打开含有预约编号的LINE消息，请直接发送。",
       or_line:"也可以通过LINE咨询・预约", fixed_reserve:"预约", fixed_line:"LINE咨询", footer_recruit:"招募成员", loading:"加载中…",
       filter_all:"全部", filter_today:"今日出勤", today:"今日", cast_preparing:"成员信息准备中", sched_none:"该日期的出勤信息尚未公布。",
-      cat_course:"套餐", cat_option:"附加选项", cat_other:"其他", age:"岁", load_error:"无法加载信息，请稍后刷新页面。",
+      cat_course:"套餐", cat_option:"附加选项", cat_other:"其他", cat_nomination:"指名费", cat_transport:"交通费", age:"岁",
+      f_transport:"见面区域(交通费)", f_transport_none:"未定・商量", f_source:"您是如何得知本店的?", f_source_none:"不选择", free:"免费", load_error:"无法加载信息，请稍后刷新页面。",
       err_phone:"请输入正确的电话号码(10〜11位)", err_sample:"示例模式下无法发送", err_network:"发送失败，请检查网络后重试。",
       weekdays:["日","一","二","三","四","五","六"]
     },
@@ -603,7 +621,7 @@
       f_repeat_note:"지난번 예약 시 사용한 전화번호를 입력해 주세요. 이름과 연락처는 지난번 정보를 사용합니다.",
       f_name:"이름(닉네임 가능)", f_contact:"전화 이외의 연락처", f_mail:"이메일", f_line_ph:"LINE ID 입력", f_mail_ph:"이메일 주소 입력",
       f_date:"희망 날짜", f_time:"시작 시간", f_select:"선택", f_course:"코스", f_cast:"지명 캐스트", f_cast_any:"상관없음", f_options:"옵션",
-      f_estimate:"예상 요금", f_estimate_note:"교통비・식비 별도", f_place:"만날 장소(역 이름 등)", f_place_ph:"예:○○역 동쪽 출구",
+      f_estimate:"예상 요금", f_estimate_note:"식비・시설 이용료 별도", f_place:"만날 장소(역 이름 등)", f_place_ph:"예:○○역 동쪽 출구",
       f_request:"데이트 내용・요청 사항", f_request_ph:"예:카페에서 천천히 이야기하고 싶어요", f_agree18:"만 18세 이상입니다",
       f_agree_rules:'<a href="#rules">이용 시 주의사항</a>을 읽고 동의합니다',
       f_remember:'다음 이용을 위해 이 기기에 전화번호・이름・연락처를 저장합니다<small class="sub-s">(공용 기기에서는 체크를 해제해 주세요)</small>',
@@ -613,7 +631,8 @@
       thanks_line:"LINE으로 확정 알림 받기", thanks_line_note:"예약 번호가 들어간 LINE 메시지가 열리면 그대로 보내주세요.",
       or_line:"LINE으로도 상담・예약을 받고 있습니다", fixed_reserve:"예약", fixed_line:"LINE 상담", footer_recruit:"캐스트 모집", loading:"불러오는 중…",
       filter_all:"전체", filter_today:"오늘 출근", today:"오늘", cast_preparing:"캐스트 정보 준비 중입니다", sched_none:"이 날의 출근 정보는 아직 없습니다.",
-      cat_course:"코스", cat_option:"옵션", cat_other:"기타", age:"세", load_error:"정보를 불러올 수 없습니다. 잠시 후 새로고침해 주세요.",
+      cat_course:"코스", cat_option:"옵션", cat_other:"기타", cat_nomination:"지명료", cat_transport:"교통비", age:"세",
+      f_transport:"만날 지역(교통비)", f_transport_none:"미정・상담", f_source:"저희 가게를 알게 된 계기", f_source_none:"선택 안 함", free:"무료", load_error:"정보를 불러올 수 없습니다. 잠시 후 새로고침해 주세요.",
       err_phone:"전화번호를 올바르게 입력해 주세요(10~11자리)", err_sample:"샘플 표시 중에는 보낼 수 없습니다", err_network:"전송하지 못했습니다. 통신 상태를 확인하고 다시 시도해 주세요.",
       weekdays:["일","월","화","수","목","금","토"]
     },
@@ -622,7 +641,8 @@
   const JA = {
     f_line_ph:"LINE IDを入力", f_mail_ph:"メールアドレスを入力", f_sending:"送信中…",
     filter_all:"すべて", filter_today:"本日出勤", today:"本日", cast_preparing:"ただいまキャスト準備中です", sched_none:"この日の出勤情報はまだありません",
-    cat_course:"コース", cat_option:"オプション", cat_other:"その他", age:"歳", load_error:"情報を読み込めませんでした。時間をおいて再読み込みしてください。",
+    cat_course:"コース", cat_option:"オプション", cat_other:"その他", cat_nomination:"指名料", cat_transport:"交通費", age:"歳",
+    f_transport_none:"未定・相談", f_source_none:"選択しない", free:"無料", load_error:"情報を読み込めませんでした。時間をおいて再読み込みしてください。",
     err_phone:"電話番号を正しく入力してください(10〜11桁)", err_sample:"サンプル表示中のため送信できません(config.js に GAS_URL を設定してください)",
     err_network:"送信できませんでした。通信状況を確認して、もう一度お試しください", weekdays:["日","月","火","水","木","金","土"], loading:"読み込み中…"
   };
@@ -662,6 +682,7 @@
       "サブコピー": "カフェ、ショッピング、映画、ちょっとした話し相手まで。\nあなたの「こんな一日を過ごしたい」を叶えます。",
       "コンセプト文": "Lueur(リュウール)はフランス語で「やさしい光」。\n忙しい毎日の中で、ほっとできる時間をお届けしたい。\nはじめての方でも安心してご利用いただけるよう、\n丁寧なヒアリングと明朗な料金でお迎えします。",
       "タイプ一覧": "癒し系,王子様系,爽やか系,かわいい系,クール系,大人系,体育会系,インテリ系,オラオラ系",
+      "流入元の選択肢": "Instagram,X(旧Twitter),TikTok,Google検索,口コミ・紹介,ブログ・まとめサイト,その他",
       "LINE_URL": "", "LINE公式ID": "", "Instagram_URL": "", "X_URL": "", "TikTok_URL": "", "YouTube_URL": "",
       "受付時間": "受付時間 12:00〜22:00(年中無休)",
       "料金の注意書き": "※キャストの交通費、デート中の飲食代・施設利用料はお客様のご負担となります。\n※料金はデート当日、開始時にキャストへ現金でお支払いください。"
@@ -683,11 +704,14 @@
       { cat:"コース", item:"120分コース", price:10000, unit:"", note:"一番人気" },
       { cat:"コース", item:"180分コース", price:15000, unit:"", note:"" },
       { cat:"コース", item:"初回限定 お試し60分", price:4000, unit:"", note:"はじめての方のみ" },
-      { cat:"オプション", item:"指名料", price:1000, unit:"", note:"キャストを指名した場合" },
+      { cat:"指名料", item:"指名料", price:1000, unit:"", note:"はじめてそのキャストを指名する場合" },
+      { cat:"指名料", item:"本指名料", price:2000, unit:"", note:"2回目以降、同じキャストを指名する場合" },
       { cat:"オプション", item:"延長30分", price:2500, unit:"/30分", note:"" },
       { cat:"オプション", item:"深夜料金(22時以降)", price:1000, unit:"", note:"" },
       { cat:"オプション", item:"ツーショット写真", price:1000, unit:"", note:"" },
-      { cat:"その他", item:"キャストの交通費", price:null, unit:"実費", note:"" },
+      { cat:"交通費", item:"○○駅周辺", price:0, unit:"", note:"無料エリア" },
+      { cat:"交通費", item:"○○市内", price:1000, unit:"", note:"" },
+      { cat:"交通費", item:"それ以外のエリア", price:2000, unit:"〜", note:"ご相談ください" },
       { cat:"その他", item:"デート中の飲食代・施設利用料", price:null, unit:"実費", note:"お客様のご負担となります" }
     ],
     faqs: [
@@ -834,7 +858,7 @@
   }
 
   function renderPrices(){
-    const cats = [["コース", "cat_course"], ["オプション", "cat_option"], ["その他", "cat_other"]];
+    const cats = [["コース", "cat_course"], ["指名料", "cat_nomination"], ["オプション", "cat_option"], ["交通費", "cat_transport"], ["その他", "cat_other"]];
     $("priceList").innerHTML = cats.map(([cat, key]) => {
       const list = (DATA.prices || []).filter(p => p.cat === cat);
       if (!list.length) return "";
@@ -868,6 +892,23 @@
     $("optWrap").hidden = opts.length === 0;
     $("optList").innerHTML = opts.map(p => `<label class="opt" data-item="${esc(p.item)}"><input type="checkbox" name="options" value="${esc(p.item)}" ${checked.includes(p.item) ? "checked" : ""}>
       <span>${esc(T(p, "item"))}</span><em>+${yen(p.price)}</em></label>`).join("");
+
+    // 交通費(待ち合わせエリア)
+    const trs = (d.prices || []).filter(p => p.cat === "交通費" && p.price != null);
+    const curTr = $("fTransport").value;
+    $("transportWrap").hidden = trs.length === 0;
+    $("fTransport").innerHTML = `<option value="">${esc(t("f_transport_none"))}</option>` +
+      trs.map(p => `<option value="${esc(p.item)}">${esc(T(p, "item"))}(${p.price ? "+" + yen(p.price) + esc(T(p, "unit")) : esc(t("free"))})</option>`).join("");
+    if (trs.some(p => p.item === curTr)) $("fTransport").value = curTr;
+
+    // 当店を知ったきっかけ
+    const sources = String((d.settings || {})["流入元の選択肢"] || "").split(/[,、,]/).map(x => x.trim()).filter(Boolean);
+    const curSrc = $("fSource").value;
+    $("sourceWrap").hidden = sources.length === 0;
+    $("fSource").innerHTML = `<option value="">${esc(t("f_source_none"))}</option>` +
+      sources.map(x => `<option value="${esc(x)}">${esc((d.sourceMap && d.sourceMap[x]) || x)}</option>`).join("");
+    if (sources.includes(curSrc)) $("fSource").value = curSrc;
+
     updateEstimate();
   }
 
@@ -883,29 +924,34 @@
     if ((d.casts || []).some(c => c.name === cur)) $("fCast").value = cur;
   }
 
-  // 指名したら指名料を自動でON(外せない)にして、料金の目安を計算
+  // 料金の目安(コース+指名料+オプション+交通費)。本指名かどうかはお店側で判定するので、ここでは通常の指名料で計算
   function updateEstimate(){
     const d = DATA;
     if (!d) return;
-    const nominate = $("fCast").value !== "おまかせ";
-    form.querySelectorAll(".opt").forEach(l => {
-      if (l.dataset.item === "指名料") {
-        const cb = l.querySelector("input");
-        cb.checked = nominate;
-        cb.disabled = true;
-        l.classList.add("fixed");
-      }
+    const P = d.prices || [];
+    const lines = [];
+    const course = P.find(p => p.cat === "コース" && p.item === $("fCourse").value);
+    if (course) lines.push([T(course, "item"), course.price || 0]);
+    if ($("fCast").value !== "おまかせ") {
+      const noms = P.filter(p => p.cat === "指名料" && p.price != null);
+      const nom = noms.find(n => n.item.indexOf("本指名") === -1) || noms[0];
+      if (nom) lines.push([T(nom, "item"), nom.price || 0]);
+    }
+    [...form.querySelectorAll('input[name="options"]:checked')].forEach(x => {
+      const o = P.find(p => p.cat === "オプション" && p.item === x.value);
+      if (o) lines.push([T(o, "item"), o.price || 0]);
     });
-    const course = (d.prices || []).find(p => p.cat === "コース" && p.item === $("fCourse").value);
-    const opts = [...form.querySelectorAll('input[name="options"]:checked')].map(x => (d.prices || []).find(p => p.cat === "オプション" && p.item === x.value)).filter(Boolean);
-    const sum = (course ? course.price || 0 : 0) + opts.reduce((a, p) => a + (p.price || 0), 0);
+    const tr = P.find(p => p.cat === "交通費" && p.item === $("fTransport").value && p.price != null);
+    if (tr) lines.push([t("cat_transport") + "(" + T(tr, "item") + ")", tr.price || 0]);
+    const sum = lines.reduce((a, l) => a + l[1], 0);
     $("estimate").hidden = !course;
+    $("estLines").innerHTML = lines.map(l => `<div><span>${esc(l[0])}</span><span>${yen(l[1])}</span></div>`).join("");
     $("estSum").textContent = yen(sum) + "〜";
   }
 
   form.addEventListener("change", e => {
     if (e.target.id === "fDate") renderCastSelect();
-    if (["fCourse", "fCast", "fDate"].includes(e.target.id) || e.target.name === "options") updateEstimate();
+    if (["fCourse", "fCast", "fDate", "fTransport"].includes(e.target.id) || e.target.name === "options") updateEstimate();
   });
 
   // 開始時間(10:00〜22:00 を30分刻み)

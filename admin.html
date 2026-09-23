@@ -48,7 +48,53 @@
   .tab.dirty::after{content:"";position:absolute;top:8px;right:3px;width:7px;height:7px;border-radius:50%;background:#f4b740}
   .tab .badge{display:inline-block;min-width:18px;height:18px;line-height:18px;border-radius:999px;background:#f4b740;color:var(--navy);font-size:11px;font-weight:700;margin-left:4px;padding:0 5px}
 
+  .groups{display:flex;gap:6px;padding:0 16px 8px;max-width:760px;margin:0 auto}
+  .grp{flex:1;border:none;border-radius:999px;padding:7px 0;background:rgba(255,255,255,.12);color:#fff;font-size:13px;font-weight:700;cursor:pointer;position:relative}
+  .grp.active{background:#fff;color:var(--navy)}
+  .gdot{position:absolute;top:5px;right:12px;width:8px;height:8px;border-radius:50%;background:#f4b740}
   main{max-width:760px;margin:0 auto;padding:16px}
+
+  /* ===== お金(売上・経費・集計) ===== */
+  .period{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+  .period b{font-size:15px;color:var(--navy);min-width:96px;text-align:center}
+  .period input[type=date]{padding:6px 8px;border:1.5px solid var(--line);border-radius:8px;font-size:14px;background:#fff}
+  .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+  .kpi{background:var(--card);border-radius:12px;padding:12px 14px;box-shadow:0 2px 8px rgba(35,38,58,.05)}
+  .kpi span{display:block;font-size:11.5px;color:var(--sub)}
+  .kpi b{font-size:20px;color:var(--navy)}
+  .kpi b.minus{color:var(--danger)}
+  .kpi small{display:block;font-size:11px;color:var(--sub)}
+  .tbl-wrap{overflow-x:auto;background:var(--card);border-radius:12px;box-shadow:0 2px 8px rgba(35,38,58,.05);margin-bottom:6px}
+  table.tbl{width:100%;border-collapse:collapse;font-size:12.5px;white-space:nowrap}
+  table.tbl th{background:#f7f4ef;color:var(--sub);font-weight:500;text-align:right;padding:8px 10px}
+  table.tbl td{padding:9px 10px;text-align:right;border-top:1px solid var(--line)}
+  table.tbl th:first-child,table.tbl td:first-child{text-align:left;position:sticky;left:0;background:inherit}
+  table.tbl tr.click{cursor:pointer}
+  table.tbl tr.click:hover td{background:#faf8f4}
+  table.tbl td.bad{color:var(--danger);font-weight:700}
+  table.tbl td.good{color:var(--ok);font-weight:700}
+  table.tbl tr.sum td{font-weight:700;background:#f7f4ef}
+  .row-item{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;box-shadow:0 2px 8px rgba(35,38,58,.05)}
+  .row-item .l{flex:1;min-width:0}
+  .row-item .l b{font-size:14px}
+  .row-item .l small{display:block;font-size:11.5px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .row-item .r{text-align:right;font-weight:700;color:var(--navy)}
+  .row-item .r small{display:block;font-size:11px;font-weight:500;color:var(--sub)}
+  .nom{display:inline-block;font-size:10.5px;font-weight:700;border-radius:999px;padding:1px 8px;margin-left:4px;vertical-align:1px}
+  .nom-フリー{background:#eee;color:#666}.nom-指名{background:#dbe7fb;color:#1f4f9c}.nom-本指名{background:#f6dcea;color:#9c2f6a}
+
+  /* ===== モーダル ===== */
+  .modal-bg{position:fixed;inset:0;background:rgba(20,22,40,.55);z-index:50;display:flex;align-items:flex-end;justify-content:center}
+  .modal{background:var(--bg);width:100%;max-width:560px;max-height:92vh;overflow-y:auto;border-radius:18px 18px 0 0;padding:18px 16px calc(20px + env(safe-area-inset-bottom))}
+  .modal h2{font-size:17px;color:var(--navy);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+  .modal h2 button{border:none;background:none;font-size:22px;color:var(--sub);cursor:pointer}
+  .calc{background:var(--card);border-radius:12px;padding:12px 14px;margin-top:12px;font-size:13px}
+  .calc div{display:flex;justify-content:space-between;padding:3px 0}
+  .calc .big{font-size:18px;font-weight:700;color:var(--navy);border-top:1px solid var(--line);margin-top:4px;padding-top:6px}
+  .mbtns{display:flex;gap:8px;margin-top:14px}
+  .mbtns .btn{flex:1}
+  .btn.danger{background:#fff;color:var(--danger);border:1.5px solid var(--danger)}
+  @media (min-width:600px){ .kpis{grid-template-columns:repeat(3,1fr)} .modal-bg{align-items:center} .modal{border-radius:18px} }
   .hint{font-size:12px;color:var(--sub);margin-bottom:12px}
   .sec-h{font-size:14px;font-weight:700;color:var(--navy);margin:20px 0 8px}
 
@@ -201,22 +247,20 @@
         <button id="logoutBtn">ログアウト</button>
       </div>
     </div>
-    <nav class="tabs" id="tabs">
-      <button class="tab active" data-tab="reservations">予約<span class="badge" id="resBadge" hidden></span></button>
-      <button class="tab" data-tab="shifts">出勤</button>
-      <button class="tab" data-tab="customers">顧客</button>
-      <button class="tab" data-tab="applications">応募<span class="badge" id="appBadge" hidden></span></button>
-      <button class="tab" data-tab="casts">キャスト</button>
-      <button class="tab" data-tab="prices">料金</button>
-      <button class="tab" data-tab="news">お知らせ</button>
-      <button class="tab" data-tab="faqs">FAQ</button>
-      <button class="tab" data-tab="settings">基本設定</button>
-      <button class="tab" data-tab="recruit">求人</button>
-      <button class="tab" data-tab="notice">自動送信</button>
+    <nav class="groups" id="groups">
+      <button class="grp active" data-group="ops">運営<span class="gdot" id="dotOps" hidden></span></button>
+      <button class="grp" data-group="money">お金</button>
+      <button class="grp" data-group="hp">HP編集</button>
     </nav>
+    <nav class="tabs" id="tabs"></nav>
   </header>
 
   <main id="panel"><div class="center">読み込み中…</div></main>
+
+  <!-- 会計・経費などの入力画面 -->
+  <div class="modal-bg" id="modal" hidden>
+    <div class="modal" id="modalBody"></div>
+  </div>
 
   <div class="savebar">
     <div class="in">
@@ -237,10 +281,23 @@
 <script>
   const GAS_URL = window.GAS_URL || "";
   const TOKEN_KEY = "rk_admin_token";
-  const SECTIONS = { shifts:"出勤", casts:"キャスト", prices:"料金", news:"お知らせ", faqs:"FAQ", settings:"基本設定", recruit:"求人", notice:"自動送信" };
-  const KV_SECTIONS = ["settings", "recruit", "notice"];
-  const MULTILINE_KEYS = ["キャッチコピー", "サブコピー", "コンセプト文", "料金の注意書き", "タイプ一覧", "紹介文", "給与", "応募資格", "待遇", "募集者"];
-  const PRICE_CATEGORIES = ["コース", "オプション", "その他"];
+  const SECTIONS = { shifts:"出勤", casts:"キャスト", prices:"料金", news:"お知らせ", faqs:"FAQ", settings:"基本設定", recruit:"求人", notice:"自動送信", manage:"給与・店舗設定" };
+  const KV_SECTIONS = ["settings", "recruit", "notice", "manage"];
+  const MULTILINE_KEYS = ["キャッチコピー", "サブコピー", "コンセプト文", "料金の注意書き", "タイプ一覧", "流入元の選択肢", "紹介文", "給与", "応募資格", "待遇", "募集者"];
+  const PRICE_CATEGORIES = ["コース", "指名料", "オプション", "交通費", "その他"];
+  const NOM_TYPES = ["フリー", "指名", "本指名"];
+  // 画面上の切り替え(運営 / お金 / HP編集)
+  const GROUPS = {
+    ops:   ["reservations", "shifts", "customers", "applications"],
+    money: ["report", "sales", "expenses", "manage"],
+    hp:    ["casts", "prices", "news", "faqs", "settings", "recruit", "notice"],
+  };
+  const TAB_LABELS = {
+    reservations:"予約", shifts:"出勤", customers:"顧客", applications:"応募",
+    report:"集計", sales:"売上・給料", expenses:"経費・広告費", manage:"給与・店舗設定",
+    casts:"キャスト", prices:"料金", news:"お知らせ", faqs:"FAQ", settings:"基本設定", recruit:"求人", notice:"自動送信",
+  };
+  let group = "ops";
   const RES_STATUSES = ["新規", "対応中", "確定", "完了", "キャンセル"];
   const APP_STATUSES = ["新規", "連絡済み", "面接予定", "採用", "不採用", "辞退"];
   const RES_FILTERS = {
@@ -349,6 +406,14 @@
   }
 
   // ===== タブ =====
+  $("groups").addEventListener("click", e => {
+    const b = e.target.closest(".grp");
+    if (!b) return;
+    group = b.dataset.group;
+    current = GROUPS[group][0];
+    renderAll();
+    window.scrollTo(0, 0);
+  });
   $("tabs").addEventListener("click", e => {
     const b = e.target.closest(".tab");
     if (!b) return;
@@ -358,14 +423,16 @@
   });
 
   function renderAll(){
-    document.querySelectorAll(".tab").forEach(t => {
-      t.classList.toggle("active", t.dataset.tab === current);
-      t.classList.toggle("dirty", dirty.has(t.dataset.tab));
-    });
+    const counts = badgeCounts();
+    document.querySelectorAll(".grp").forEach(g => g.classList.toggle("active", g.dataset.group === group));
+    $("dotOps").hidden = !(counts.reservations || counts.applications);
+    $("tabs").innerHTML = GROUPS[group].map(t =>
+      `<button class="tab ${t === current ? "active" : ""} ${dirty.has(t) ? "dirty" : ""}" data-tab="${t}">${TAB_LABELS[t]}${counts[t] ? `<span class="badge">${counts[t]}</span>` : ""}</button>`
+    ).join("");
     $("shopTitle").textContent = (kv("settings", "店名") || "HP") + " 管理画面";
     $("panel").innerHTML = RENDER[current]();
-    updateBadge();
     updateSaveBar();
+    if (["report", "sales", "expenses"].includes(current)) ensureMoney();
   }
 
   function kv(sec, key){
@@ -373,12 +440,13 @@
     return x ? x.value : "";
   }
 
-  function updateBadge(){
-    const n = (state.reservations || []).filter(r => r.status === "新規").length;
-    $("resBadge").textContent = n; $("resBadge").hidden = n === 0;
-    const a = (state.applications || []).filter(r => r.status === "新規").length;
-    $("appBadge").textContent = a; $("appBadge").hidden = a === 0;
+  function badgeCounts(){
+    return {
+      reservations: (state.reservations || []).filter(r => r.status === "新規").length,
+      applications: (state.applications || []).filter(r => r.status === "新規").length,
+    };
   }
+  function updateBadge(){ renderAll(); }
 
   function markDirty(sec){
     dirty.add(sec);
@@ -479,7 +547,8 @@
           <label class="f">店舗メモ(お客様には見えません)</label>
           <textarea class="t" data-rid="${esc(r.id)}" data-field="memo" placeholder="対応内容など" style="min-height:60px">${esc(r.memo)}</textarea>
           ${r.notified ? `<div class="notified">📨 自動送信:${esc(r.notified)}</div>` : ""}
-          <div class="res-foot">受付:${esc(r.received)}</div>
+          ${r.status === "完了" ? `<button class="mini" style="margin-top:10px" data-act="checkout" data-id="${esc(r.id)}">💴 会計(売上・給料)を入力・確認</button>` : ""}
+          <div class="res-foot">受付:${esc(r.received)}${r.source ? " / きっかけ:" + esc(r.source) : ""}${r.nomType ? " / " + esc(r.nomType) : ""}</div>
         </div>`;
         }).join("")
         : `<div class="center">${resFilter}の予約はありません</div>`);
@@ -496,11 +565,15 @@
         return `<button class="dayb ${i === shiftDay ? "active" : ""} ${w === 0 ? "sun" : w === 6 ? "sat" : ""}" data-day="${i}">
           <b>${+d.split("/")[2]}</b>${WD[w]}<span class="cnt">${cnt ? cnt + "人" : "-"}</span></button>`;
       }).join("");
+      const past = date <= state.today;
       const rows = casts.map(c => {
         const s = (state.shifts || []).find(x => x.cast === c.name && x.date === date);
         const opt = (v, blank) => `<option value="">${blank}</option>` + TIMES.map(t => `<option ${t === v ? "selected" : ""}>${t}</option>`).join("");
+        // 今日以前の出勤には、出勤・遅刻・当欠を付けられる(出勤率・当欠率の計算に使う)
+        const st = s && past ? `<select class="t" data-shift="${esc(c.name)}" data-k="status" style="margin-top:4px;padding:5px 26px 5px 8px;font-size:13px;${s.status === "当欠" ? "color:var(--danger);font-weight:700" : s.status === "遅刻" ? "color:#b7791f;font-weight:700" : ""}">
+            ${[["", "出勤"], ["遅刻", "遅刻"], ["当欠", "当欠"]].map(([v, l]) => `<option value="${v}" ${(s.status || "") === v ? "selected" : ""}>${l}</option>`).join("")}</select>` : "";
         return `<div class="shift-row ${s ? "" : "off"}">
-          <div class="nm">${esc(c.name)}${c.show ? "" : '<small style="color:var(--sub)">(非表示)</small>'}</div>
+          <div class="nm">${esc(c.name)}${c.show ? "" : '<small style="color:var(--sub)">(非表示)</small>'}${st}</div>
           <select class="t" data-shift="${esc(c.name)}" data-k="start">${opt(s && s.start, "休み")}</select>
           <select class="t" data-shift="${esc(c.name)}" data-k="end" ${s ? "" : "disabled"}>${opt(s && s.end, "終了")}</select>
         </div>`;
@@ -522,7 +595,7 @@
           </div>
           ${rows || `<div class="center">キャストがいません</div>`}
         </div>
-        <p class="hint">開始時間を選ぶと出勤、「休み」にすると休みになります。24時を過ぎる場合は 25:00(=翌1:00)のように選んでください。<br>公開HPには今日から7日分が表示されます。</p>`;
+        <p class="hint">開始時間を選ぶと出勤、「休み」にすると休みになります。24時を過ぎる場合は 25:00(=翌1:00)のように選んでください。<br>公開HPには今日から7日分が表示されます(当欠にした人は表示されません)。<br>今日以前の日は、名前の下で「出勤・遅刻・当欠」を選べます。何もしなければ出勤扱いです。</p>`;
     },
 
     // ---------- 顧客 ----------
@@ -602,6 +675,11 @@
             <div class="private">
               <div class="ttl">🔒 非公開(HPには出ません):予約確定のお知らせ先</div>
               <label class="f">メールアドレス</label>${input("casts", i, "email", c.email, "cast@example.com", "email")}
+              <div class="row2">
+                <div><label class="f">所属店舗</label>${select("casts", i, "store", c.store, splitList(kv("manage", "店舗一覧")), "未設定")}</div>
+                <div><label class="f">バック率(%)</label>${input("casts", i, "rate", c.rate, "空欄=共通の率", "number", 'inputmode="numeric" min="0" max="100"')}</div>
+              </div>
+              <div class="desc">バック率を入れると、このキャストだけコース・オプション・延長の率が変わります(指名料・交通費は共通の率)。</div>
               <div class="line-st">LINE:${c.resetLine ? `<span class="warn-t">保存すると新しい登録コードを発行します</span>`
                 : c.lineUser ? `<span class="ok-t">登録済み ✓</span> <button class="mini" data-act="resetLine" data-i="${i}">登録を解除</button>`
                 : c.code ? `<span class="warn-t">未登録</span><br>キャスト本人に、お店の公式LINEへ「キャスト登録 <code>${esc(c.code)}</code>」と送ってもらうと登録されます。`
@@ -619,7 +697,12 @@
     // ---------- 料金 ----------
     prices(){
       const list = state.prices;
-      return `<p class="hint">「コース」は予約フォームで1つ選ぶもの、「オプション」は追加で選べるもの、「その他」は料金表に載せるだけのもの(交通費など)です。<br>「指名料」という名前のオプションは、お客様がキャストを指名すると自動で加算されます。</p>` +
+      return `<p class="hint">区分ごとの使われ方:<br>
+        ・<b>コース</b>:予約フォームで1つ選ぶ<br>
+        ・<b>指名料</b>:キャストを指名すると自動で加算。名前に「本指名」を含む項目は、同じキャストを2回目以降に指名したお客様に自動で使われます<br>
+        ・<b>オプション</b>:追加で選べる<br>
+        ・<b>交通費</b>:予約フォームで待ち合わせエリアとして1つ選ぶ<br>
+        ・<b>その他</b>:料金表に載せるだけ(飲食代など)</p>` +
         list.map((p, i) => `<div class="item">
           <div class="row2">
             <div><label class="f">区分</label>${select("prices", i, "cat", p.cat, PRICE_CATEGORIES)}</div>
@@ -658,6 +741,84 @@
         `<button class="add" data-add="faqs">+ 質問を追加</button>`;
     },
 
+    // ---------- 集計 ----------
+    report(){
+      const m = moneyReady();
+      if (!m) return periodBar() + `<div class="center">集計中…</div>`;
+      const t = m.totals;
+      const pct = v => v == null ? "-" : Math.round(v * 100) + "%";
+      const store = m.byStore.length ? `<div class="sec-h">🏠 店舗ごと</div><div class="tbl-wrap"><table class="tbl">
+          <tr><th>店舗</th><th>売上</th><th>件数</th><th>給料</th><th>取り分</th><th>経費</th><th>利益</th></tr>
+          ${m.byStore.map(s => `<tr><td>${esc(s.store)}</td><td>${yen(s.sales)}</td><td>${s.count}</td><td>${yen(s.pay)}</td><td>${yen(s.shop)}</td><td>${yen(s.expenses)}</td><td class="${s.profit < 0 ? "bad" : ""}">${yen(s.profit)}</td></tr>`).join("")}
+          <tr class="sum"><td>全体</td><td>${yen(t.sales)}</td><td>${t.count}</td><td>${yen(t.pay)}</td><td>${yen(t.shop)}</td><td>${yen(t.expenses)}</td><td class="${t.profit < 0 ? "bad" : ""}">${yen(t.profit)}</td></tr>
+        </table></div>` : "";
+      const cast = m.byCast.length ? `<div class="sec-h">👤 キャストごと(タップで給与明細)</div><div class="tbl-wrap"><table class="tbl">
+          <tr><th>キャスト</th><th>出勤率</th><th>当欠率</th><th>出勤</th><th>接客</th><th>指名</th><th>本指名</th><th>売上</th><th>給料</th></tr>
+          ${m.byCast.map(c => `<tr class="click" data-act="castDetail" data-cast="${esc(c.cast)}">
+            <td>${esc(c.cast)}${c.store ? `<br><small style="color:var(--sub)">${esc(c.store)}</small>` : ""}</td>
+            <td class="${c.attendRate != null && c.attendRate < .8 ? "bad" : ""}">${pct(c.attendRate)}</td>
+            <td class="${c.absentRate ? "bad" : ""}">${pct(c.absentRate)}</td>
+            <td>${c.worked}/${c.scheduled}${c.late ? `<br><small style="color:#b7791f">遅刻${c.late}</small>` : ""}</td>
+            <td>${c.count}</td><td>${c.nominated}</td><td>${c.honshimei}</td><td>${yen(c.sales)}</td><td>${yen(c.pay)}</td></tr>`).join("")}
+        </table></div>
+        <p class="hint">出勤率=(予定−当欠)÷予定、当欠率=当欠÷予定(今日までの出勤予定で計算)。本指名=同じお客様が同じキャストを2回目以降に指名。</p>` : "";
+      const media = m.byMedia.length ? `<div class="sec-h">📣 広告・流入元ごと</div><div class="tbl-wrap"><table class="tbl">
+          <tr><th>媒体</th><th>広告費</th><th>予約</th><th>接客</th><th>売上</th><th>1予約あたり</th><th>費用対効果</th></tr>
+          ${m.byMedia.map(x => `<tr><td>${esc(x.media)}</td><td>${yen(x.ad)}</td><td>${x.reservations}</td><td>${x.count}</td><td>${yen(x.sales)}</td>
+            <td>${x.cpa == null ? "-" : yen(x.cpa)}</td><td class="${x.roas == null ? "" : x.roas >= 1 ? "good" : "bad"}">${x.roas == null ? "-" : Math.round(x.roas * 100) + "%"}</td></tr>`).join("")}
+        </table></div>
+        <p class="hint">1予約あたり=広告費÷予約数。費用対効果=売上÷広告費(100%以上なら広告費より売上が多い)。流入元は予約フォームの「当店を知ったきっかけ」から。</p>` : "";
+      return periodBar() + `<div class="kpis">
+          <div class="kpi"><span>売上</span><b>${yen(t.sales)}</b><small>接客${t.count}件(指名${t.nominated}・本指名${t.honshimei})</small></div>
+          <div class="kpi"><span>キャスト給料</span><b>${yen(t.pay)}</b></div>
+          <div class="kpi"><span>店舗の取り分</span><b>${yen(t.shop)}</b></div>
+          <div class="kpi"><span>経費</span><b>${yen(t.expenses)}</b><small>うち広告費 ${yen(t.ad)}</small></div>
+          <div class="kpi"><span>利益(取り分−経費)</span><b class="${t.profit < 0 ? "minus" : ""}">${yen(t.profit)}</b></div>
+          <div class="kpi"><span>予約</span><b>${t.reservations}件</b><small>キャンセル${t.canceled}件</small></div>
+        </div>` + store + cast + media +
+        (!m.sales.length && !m.expenses.length ? `<p class="hint">まだこの期間の売上・経費がありません。予約を「完了」にして会計を入力するか、「売上・給料」「経費・広告費」タブから手で追加してください。</p>` : "");
+    },
+
+    // ---------- 売上・給料 ----------
+    sales(){
+      const m = moneyReady();
+      if (!m) return periodBar() + `<div class="center">読み込み中…</div>`;
+      return periodBar() + `<div class="kpis">
+          <div class="kpi"><span>売上</span><b>${yen(m.totals.sales)}</b><small>${m.totals.count}件</small></div>
+          <div class="kpi"><span>キャスト給料</span><b>${yen(m.totals.pay)}</b></div>
+          <div class="kpi"><span>店舗の取り分</span><b>${yen(m.totals.shop)}</b></div>
+        </div>
+        <button class="add" data-act="newSale" style="margin-bottom:12px">+ 売上を手で追加(LINE・電話で受けた予約など)</button>` +
+        (m.sales.length ? m.sales.map(s => `<div class="row-item" data-act="editSale" data-id="${esc(s.id)}">
+            <div class="l"><b>${esc(s.cast || "(キャスト未設定)")}</b><span class="nom nom-${esc(s.nomType)}">${esc(s.nomType)}</span>
+              <small>${esc(s.date)} ${esc(s.customer)}${s.store ? " / " + esc(s.store) : ""}${s.memo ? " / " + esc(s.memo) : ""}</small></div>
+            <div class="r">${yen(s.total)}<small>給料 ${yen(s.pay)}</small></div>
+          </div>`).join("") : `<div class="center">この期間の売上はありません</div>`);
+    },
+
+    // ---------- 経費・広告費 ----------
+    expenses(){
+      const m = moneyReady();
+      if (!m) return periodBar() + `<div class="center">読み込み中…</div>`;
+      const byCat = {};
+      m.expenses.forEach(e => byCat[e.cat] = (byCat[e.cat] || 0) + e.amount);
+      return periodBar() + `<div class="kpis">
+          <div class="kpi"><span>経費合計</span><b>${yen(m.totals.expenses)}</b></div>
+          ${Object.keys(byCat).map(k => `<div class="kpi"><span>${esc(k)}</span><b>${yen(byCat[k])}</b></div>`).join("")}
+        </div>
+        <button class="add" data-act="newExpense" style="margin-bottom:12px">+ 経費・広告費を追加</button>` +
+        (m.expenses.length ? m.expenses.map(e => `<div class="row-item" data-act="editExpense" data-id="${esc(e.id)}">
+            <div class="l"><b>${esc(e.cat)}${e.media ? `(${esc(e.media)})` : ""}</b>
+              <small>${esc(e.date)}${e.store ? " / " + esc(e.store) : " / 共通"}${e.memo ? " / " + esc(e.memo) : ""}</small></div>
+            <div class="r">${yen(e.amount)}</div>
+          </div>`).join("") : `<div class="center">この期間の経費はありません</div>`);
+    },
+
+    manage(){
+      return `<p class="hint">🔒 ここはHPには出ません。キャスト給料は「売上 × バック率」で自動計算されます(会計画面で手で変えることもできます)。<br>
+        キャストごとにバック率を変えたい時は「HP編集 → キャスト」の非公開欄に入れてください。</p>` + kvForm("manage");
+    },
+
     settings(){ return `<p class="hint">HPの英語・中国語・韓国語ページには、ここの文章が自動翻訳されて表示されます(訳の手直しはスプレッドシートの「翻訳」シートで)。</p>` + kvForm("settings"); },
     recruit(){ return `<p class="hint">求人ページ(recruit.html)に表示される内容です。</p>` + kvForm("recruit"); },
 
@@ -673,17 +834,26 @@
         </div>
         <div class="item">
           <div class="sec-h" style="margin-top:0">💬 LINE(公式アカウント)</div>
-          <div class="line-st">状態:${line.ready ? `<span class="ok-t">連携済み ✓</span>` : `<span class="warn-t">未連携</span>`}</div>
-          <label class="f">チャネルアクセストークン(長期)</label>
-          <div class="copybox"><input type="password" id="lineTokenInput" placeholder="${line.ready ? "変更する時だけ入力" : "LINE Developersでコピーしたトークン"}" autocomplete="off"><button class="mini" data-act="saveLineToken">保存</button></div>
+          <div class="line-st">状態:${line.ready ? `<span class="ok-t">連携済み ✓</span>${line.mode === "auto" ? "(トークンは自動で取得・更新しています)" : "(手入力のトークンを使用中)"}` : `<span class="warn-t">未連携</span>`}</div>
+          <div class="row2">
+            <div><label class="f">チャネルID</label><input class="t" type="text" id="lineChId" inputmode="numeric" value="${esc(line.channelId || "")}" placeholder="例:2001234567"></div>
+            <div><label class="f">チャネルシークレット</label><input class="t" type="password" id="lineChSecret" placeholder="${line.mode === "auto" ? "変更する時だけ入力" : "英数字32文字"}" autocomplete="off"></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button class="btn small" data-act="saveLineChannel">連携する</button>
+            ${line.ready ? `<button class="mini" data-act="unlinkLine">連携を解除</button>` : ""}
+          </div>
+          <details style="margin-top:10px"><summary style="font-size:12px;color:var(--sub);cursor:pointer">トークンを手で入れる場合(ふつうは不要)</summary>
+            <div class="copybox"><input type="password" id="lineTokenInput" placeholder="チャネルアクセストークン(長期)" autocomplete="off"><button class="mini" data-act="saveLineToken">保存</button></div>
+          </details>
           ${hook ? `<label class="f">Webhook URL(LINE Developersに貼る)</label>
           <div class="copybox"><input type="text" readonly value="${esc(hook)}" id="hookUrl"><button class="mini" data-act="copyHook">コピー</button></div>` : ""}
           <ol class="steps">
             <li>LINE Official Account Manager で公式アカウントを作り、設定 → Messaging API を「利用する」</li>
-            <li>LINE Developers でそのチャネルを開き、「Messaging API設定」の一番下で<b>チャネルアクセストークン(長期)</b>を発行 → 上に貼って保存</li>
-            <li>表示された<b>Webhook URL</b>をLINE Developersの「Webhook URL」に貼り、「Webhookの利用」をオン</li>
+            <li>LINE Developers でそのチャネルを開き、「チャネル基本設定」にある<b>チャネルID</b>と<b>チャネルシークレット</b>を上に貼って「連携する」<br>(トークンの発行・更新はこちらで自動でやります)</li>
+            <li>表示された<b>Webhook URL</b>をLINE Developersの「Messaging API設定 → Webhook URL」に貼り、「Webhookの利用」をオン</li>
             <li>LINE Official Account Manager の応答設定で「Webhook」をオン(応答メッセージはオフ推奨)</li>
-            <li>「基本設定」タブの<b>LINE公式ID</b>(@から始まるID)を入力して保存</li>
+            <li>「基本設定」タブの<b>LINE公式ID</b>は、連携すると自動で入ります(保存を押してください)</li>
           </ol>
           <p class="hint" style="margin-top:8px">※LINE Developersの「検証」ボタンはエラーになることがありますが、実際のメッセージは届きます。<br>
           ※お客様は予約後に表示されるボタンから予約番号を送るだけで、確定のお知らせをLINEで受け取れます。キャストは「キャスト」タブの登録コードで登録します。<br>
@@ -737,6 +907,252 @@
     }).join("");
   }
 
+  // =====================================================================
+  //  お金(売上・給料・経費・集計)
+  // =====================================================================
+  const yen = n => "¥" + Math.round(Number(n) || 0).toLocaleString("ja-JP");
+  let period = null;      // { mode:"month"|"year"|"range", from, to }
+  let money = null;       // 集計結果
+  let moneyKey = "";      // どの期間の集計か
+  let moneyLoading = false;
+
+  function monthRange(y, m){
+    const last = new Date(y, m, 0).getDate();
+    return { mode:"month", from: `${y}/${String(m).padStart(2,"0")}/01`, to: `${y}/${String(m).padStart(2,"0")}/${last}` };
+  }
+  function curPeriod(){
+    if (!period) { const p = state.today.split("/").map(Number); period = monthRange(p[0], p[1]); }
+    return period;
+  }
+  function periodBar(){
+    const p = curPeriod();
+    const [y, mo] = p.from.split("/").map(Number);
+    const label = p.mode === "month" ? `${y}年${mo}月` : p.mode === "year" ? `${y}年` : "期間指定";
+    return `<div class="period">
+      ${p.mode === "range" ? `<input type="date" id="pFrom" value="${p.from.replace(/\//g, "-")}"> 〜 <input type="date" id="pTo" value="${p.to.replace(/\//g, "-")}">`
+        : `<button class="mini" data-act="pPrev">‹</button><b>${label}</b><button class="mini" data-act="pNext">›</button>`}
+      <button class="chip ${p.mode === "month" ? "active" : ""}" data-act="pMonth">月</button>
+      <button class="chip ${p.mode === "year" ? "active" : ""}" data-act="pYear">年</button>
+      <button class="chip ${p.mode === "range" ? "active" : ""}" data-act="pRange">期間指定</button>
+    </div>`;
+  }
+  function moneyReady(){
+    const p = curPeriod();
+    return money && moneyKey === p.from + "-" + p.to ? money : null;
+  }
+  async function ensureMoney(force){
+    const p = curPeriod();
+    const key = p.from + "-" + p.to;
+    if (!force && (moneyKey === key && money || moneyLoading)) return;
+    moneyLoading = true;
+    try {
+      const j = await api({ action:"report", from: p.from, to: p.to });
+      money = j.report; moneyKey = key;
+    } catch(err) {
+      toast(err.message, true);
+    } finally {
+      moneyLoading = false;
+    }
+    if (["report", "sales", "expenses"].includes(current)) $("panel").innerHTML = RENDER[current]();
+  }
+  function movePeriod(dir){
+    const p = curPeriod();
+    const [y, m] = p.from.split("/").map(Number);
+    if (p.mode === "month") { const d = new Date(y, m - 1 + dir, 1); period = monthRange(d.getFullYear(), d.getMonth() + 1); }
+    else if (p.mode === "year") { period = { mode:"year", from: `${y + dir}/01/01`, to: `${y + dir}/12/31` }; }
+    renderAll();
+  }
+
+  // ---------- モーダル ----------
+  function openModal(html){ $("modalBody").innerHTML = html; $("modal").hidden = false; document.body.style.overflow = "hidden"; }
+  function closeModal(){ $("modal").hidden = true; document.body.style.overflow = ""; }
+  $("modal").addEventListener("click", e => { if (e.target === $("modal")) closeModal(); });
+
+  const numIn = (id, label, v) => `<div><label class="f">${label}</label><input class="t" type="number" inputmode="numeric" min="0" step="100" id="${id}" value="${v === "" || v == null ? "" : Number(v) || 0}"></div>`;
+  const opts = (list, v, blank) => (blank != null ? `<option value="">${esc(blank)}</option>` : "") +
+    list.concat(v && !list.includes(v) ? [v] : []).map(o => `<option value="${esc(o)}" ${o === v ? "selected" : ""}>${esc(o)}</option>`).join("");
+
+  // バック率(%)→ 0〜1
+  function rates(){
+    const r = k => { const v = Number(String(kv("manage", "バック率:" + k)).replace(/[^\d.]/g, "")); return isNaN(v) ? 0 : v / 100; };
+    return { course: r("コース"), nomination: r("指名料"), honshimei: r("本指名料"), option: r("オプション"), transport: r("交通費"), other: r("その他・延長") };
+  }
+  function autoPay(a, nomType, cast){
+    const R = rates();
+    const c = (state.casts || []).find(x => x.name === cast);
+    const own = c && c.rate !== "" && c.rate != null && !isNaN(Number(c.rate)) ? Number(c.rate) / 100 : null;
+    const cr = own != null ? own : R.course, or = own != null ? own : R.option, xr = own != null ? own : R.other;
+    return Math.round(a.course * cr + a.nomination * (nomType === "本指名" ? R.honshimei : R.nomination) + a.option * or + a.transport * R.transport + a.other * xr);
+  }
+
+  let editingSale = null;
+  function openSaleModal(s, title){
+    editingSale = Object.assign({}, s);
+    const stores = splitList(kv("manage", "店舗一覧"));
+    const castNames = (state.casts || []).map(c => c.name);
+    const sources = splitList(kv("settings", "流入元の選択肢"));
+    openModal(`<h2>${esc(title || (s.id ? "売上を編集" : "売上を追加"))}<button data-act="closeModal">×</button></h2>
+      <div class="item">
+        <div class="row2">
+          <div><label class="f">日付</label><input class="t" type="date" id="sDate" value="${esc(toInputDate(s.date))}"></div>
+          <div><label class="f">店舗</label><select class="t" id="sStore">${opts(stores, s.store, "未設定")}</select></div>
+        </div>
+        <div class="row2">
+          <div><label class="f">キャスト</label><select class="t" id="sCast">${opts(castNames, s.cast, "未設定")}</select></div>
+          <div><label class="f">指名区分</label><select class="t" id="sNom">${opts(NOM_TYPES, s.nomType || "フリー")}</select></div>
+        </div>
+        <div class="row2">
+          <div><label class="f">お客様</label><input class="t" type="text" id="sCustomer" value="${esc(s.customer)}"></div>
+          <div><label class="f">電話番号</label><input class="t" type="tel" id="sPhone" value="${esc(s.phone)}"></div>
+        </div>
+        <label class="f">流入元(当店を知ったきっかけ)</label><select class="t" id="sSource">${opts(sources, s.source, "不明")}</select>
+      </div>
+      <div class="item">
+        <div class="row2">${numIn("sCourse", "コース", s.course)}${numIn("sNomination", "指名料", s.nomination)}</div>
+        <div class="row2">${numIn("sOption", "オプション", s.option)}${numIn("sTransport", "交通費", s.transport)}</div>
+        <div class="row2">${numIn("sOther", "その他・延長", s.other)}${numIn("sDiscount", "値引き", s.discount)}</div>
+        <label class="f">キャスト報酬(空欄ならバック率で自動計算)</label>
+        <input class="t" type="number" inputmode="numeric" min="0" step="100" id="sPay" value="${s.pay === "" || s.pay == null ? "" : s.pay}">
+        <label class="f">メモ</label><input class="t" type="text" id="sMemo" value="${esc(s.memo)}">
+        <div class="calc" id="sCalc"></div>
+      </div>
+      <div class="mbtns">
+        ${s.id ? `<button class="btn danger" data-act="deleteSale">削除</button>` : ""}
+        <button class="btn" data-act="saveSale">保存する</button>
+      </div>`);
+    calcSale();
+  }
+  function readSaleForm(){
+    const n = id => Number($(id).value) || 0;
+    return {
+      id: editingSale.id || "", reservationId: editingSale.reservationId || "",
+      date: $("sDate").value.replace(/-/g, "/"), store: $("sStore").value, cast: $("sCast").value, nomType: $("sNom").value,
+      customer: $("sCustomer").value, phone: $("sPhone").value, source: $("sSource").value,
+      course: n("sCourse"), nomination: n("sNomination"), option: n("sOption"), transport: n("sTransport"), other: n("sOther"), discount: n("sDiscount"),
+      pay: $("sPay").value === "" ? "" : n("sPay"), memo: $("sMemo").value,
+    };
+  }
+  function calcSale(){
+    if (!$("sCalc")) return;
+    const s = readSaleForm();
+    const total = s.course + s.nomination + s.option + s.transport + s.other - s.discount;
+    const auto = autoPay(s, s.nomType, s.cast);
+    const pay = s.pay === "" ? auto : s.pay;
+    $("sPay").placeholder = "自動:" + yen(auto);
+    $("sCalc").innerHTML = `<div><span>合計(お客様の支払い)</span><span>${yen(total)}</span></div>
+      <div><span>キャスト報酬${s.pay === "" ? "(自動)" : "(手入力)"}</span><span>${yen(pay)}</span></div>
+      <div class="big"><span>店舗の取り分</span><span>${yen(total - pay)}</span></div>`;
+  }
+  $("modalBody").addEventListener("input", calcSale);
+  $("modalBody").addEventListener("change", e => {
+    // キャストや指名区分を変えたら、店舗・指名料を自動で合わせる
+    if (e.target.id === "sCast") {
+      const c = (state.casts || []).find(x => x.name === e.target.value);
+      if (c && c.store) $("sStore").value = c.store;
+    }
+    if (e.target.id === "sNom" || e.target.id === "sCast") {
+      const noms = (state.prices || []).filter(p => p.cat === "指名料" && p.price != null);
+      const type = $("sNom").value;
+      const pick = type === "フリー" ? null : (type === "本指名" && noms.find(n => n.item.includes("本指名"))) || noms.find(n => !n.item.includes("本指名")) || noms[0];
+      $("sNomination").value = pick ? pick.price : 0;
+    }
+    if (e.target.id === "eCat") $("eMediaWrap").hidden = e.target.value !== "広告費";
+    calcSale();
+  });
+
+  async function openCheckout(reservationId){
+    try {
+      const j = await api({ action:"saleDraft", reservationId });
+      openSaleModal(j.sale, j.sale.id ? "会計を確認・編集" : "会計を入力");
+      if (!j.sale.id) toast("予約の内容から会計を作りました。延長などがあれば直して保存してください");
+    } catch(err) { toast(err.message, true); }
+  }
+
+  let editingExpense = null;
+  function openExpenseModal(e){
+    editingExpense = Object.assign({}, e);
+    const stores = splitList(kv("manage", "店舗一覧"));
+    const cats = splitList(kv("manage", "経費の区分"));
+    const media = splitList(kv("settings", "流入元の選択肢"));
+    openModal(`<h2>${e.id ? "経費を編集" : "経費・広告費を追加"}<button data-act="closeModal">×</button></h2>
+      <div class="item">
+        <div class="row2">
+          <div><label class="f">日付</label><input class="t" type="date" id="eDate" value="${esc(toInputDate(e.date))}"></div>
+          <div><label class="f">区分</label><select class="t" id="eCat">${opts(cats, e.cat)}</select></div>
+        </div>
+        <div id="eMediaWrap" ${e.cat === "広告費" ? "" : "hidden"}>
+          <label class="f">広告媒体(費用対効果の計算に使います)</label><select class="t" id="eMedia">${opts(media, e.media, "選択")}</select>
+        </div>
+        <div class="row2">
+          <div><label class="f">店舗</label><select class="t" id="eStore">${opts(stores, e.store, "共通(全店)")}</select></div>
+          ${numIn("eAmount", "金額(円)", e.amount)}
+        </div>
+        <label class="f">メモ</label><input class="t" type="text" id="eMemo" value="${esc(e.memo)}" placeholder="例:Instagram広告 9月分">
+      </div>
+      <div class="mbtns">
+        ${e.id ? `<button class="btn danger" data-act="deleteExpense">削除</button>` : ""}
+        <button class="btn" data-act="saveExpense">保存する</button>
+      </div>`);
+  }
+
+  function openCastDetail(name){
+    const m = money;
+    if (!m) return;
+    const list = m.sales.filter(s => s.cast === name);
+    const c = m.byCast.find(x => x.cast === name) || {};
+    openModal(`<h2>${esc(name)} の給与明細<button data-act="closeModal">×</button></h2>
+      <p class="hint">${esc(m.from)} 〜 ${esc(m.to)}</p>
+      <div class="kpis">
+        <div class="kpi"><span>給料合計</span><b>${yen(c.pay)}</b></div>
+        <div class="kpi"><span>売上</span><b>${yen(c.sales)}</b></div>
+        <div class="kpi"><span>接客</span><b>${c.count || 0}件</b><small>指名${c.nominated || 0}・本指名${c.honshimei || 0}</small></div>
+      </div>
+      <div class="tbl-wrap"><table class="tbl">
+        <tr><th>日付</th><th>区分</th><th>お客様</th><th>売上</th><th>給料</th></tr>
+        ${list.map(s => `<tr><td>${esc(s.date.slice(5))}</td><td>${esc(s.nomType)}</td><td style="text-align:left">${esc(s.customer)}</td><td>${yen(s.total)}</td><td>${yen(s.pay)}</td></tr>`).join("")}
+        <tr class="sum"><td>合計</td><td></td><td></td><td>${yen(c.sales)}</td><td>${yen(c.pay)}</td></tr>
+      </table></div>`);
+  }
+
+  // モーダル内のボタン
+  $("modalBody").addEventListener("click", async e => {
+    const b = e.target.closest("[data-act]");
+    if (!b) return;
+    const act = b.dataset.act;
+    if (act === "closeModal") { closeModal(); return; }
+    try {
+      if (act === "saveSale") {
+        const s = readSaleForm();
+        if (!s.date) { toast("日付を入れてください", true); return; }
+        b.disabled = true;
+        await api({ action:"saveSale", sale: s });
+        closeModal(); toast("売上を保存しました");
+      } else if (act === "deleteSale") {
+        if (!confirm("この売上を削除しますか?")) return;
+        await api({ action:"deleteSale", id: editingSale.id });
+        closeModal(); toast("削除しました");
+      } else if (act === "saveExpense") {
+        const x = { id: editingExpense.id || "", date: $("eDate").value.replace(/-/g, "/"), cat: $("eCat").value,
+          media: $("eMedia").value, store: $("eStore").value, amount: Number($("eAmount").value) || 0, memo: $("eMemo").value };
+        if (!x.date || !x.amount) { toast("日付と金額を入れてください", true); return; }
+        b.disabled = true;
+        await api({ action:"saveExpense", expense: x });
+        closeModal(); toast("経費を保存しました");
+      } else if (act === "deleteExpense") {
+        if (!confirm("この経費を削除しますか?")) return;
+        await api({ action:"deleteExpense", id: editingExpense.id });
+        closeModal(); toast("削除しました");
+      } else {
+        return;
+      }
+      money = null; moneyKey = "";
+      renderAll();
+    } catch(err) {
+      b.disabled = false;
+      toast(err.message, true);
+    }
+  });
+
   // 日付の変換(2026/10/01 ⇔ 2026-10-01)
   function toInputDate(d){
     const m = String(d || "").match(/(\d{4})[\/\-.年](\d{1,2})[\/\-.月](\d{1,2})/);
@@ -744,7 +1160,7 @@
   }
 
   // ===== 出勤の編集 =====
-  function setShift(cast, date, start, end){
+  function setShift(cast, date, start, end, status){
     state.shifts = (state.shifts || []).filter(s => !(s.cast === cast && s.date === date));
     if (start) {
       if (!end) {
@@ -752,7 +1168,7 @@
         const i = TIMES.indexOf(start);
         end = TIMES[Math.min(i + 10, TIMES.length - 1)];
       }
-      state.shifts.push({ date, cast, start, end });
+      state.shifts.push({ date, cast, start, end, status: status || "" });
     }
     markDirty("shifts");
   }
@@ -794,7 +1210,7 @@
     if (add) {
       const sec = add.dataset.add;
       const blank = {
-        casts:  { show:true, name:"", age:"", height:"", tags:"", types:"", photo:"", comment:"", x:"", instagram:"", tiktok:"", email:"", code:"", lineUser:"" },
+        casts:  { show:true, name:"", age:"", height:"", tags:"", types:"", photo:"", comment:"", x:"", instagram:"", tiktok:"", email:"", code:"", lineUser:"", store: splitList(kv("manage", "店舗一覧"))[0] || "", rate:"" },
         news:   { date: state.today, text:"" },
         prices: { cat:"オプション", item:"", price:"", unit:"", note:"" },
         faqs:   { q:"", a:"" },
@@ -807,6 +1223,28 @@
     }
 
     switch (act) {
+      // ---- お金 ----
+      case "pPrev": movePeriod(-1); return;
+      case "pNext": movePeriod(1); return;
+      case "pMonth": { const [y, m] = curPeriod().from.split("/").map(Number); period = monthRange(y, m); renderAll(); return; }
+      case "pYear": { const y = +curPeriod().from.split("/")[0]; period = { mode:"year", from: `${y}/01/01`, to: `${y}/12/31` }; renderAll(); return; }
+      case "pRange": period = Object.assign({}, curPeriod(), { mode:"range" }); renderAll(); return;
+      case "newSale": {
+        const stores = splitList(kv("manage", "店舗一覧"));
+        openSaleModal({ id:"", date: state.today, store: stores[0] || "", cast:"", nomType:"フリー", customer:"", phone:"", source:"",
+          course:0, nomination:0, option:0, transport:0, other:0, discount:0, pay:"", memo:"" });
+        return;
+      }
+      case "editSale": { const s = money && money.sales.find(x => x.id === b.dataset.id); if (s) openSaleModal(s); return; }
+      case "newExpense": {
+        const cats = splitList(kv("manage", "経費の区分"));
+        openExpenseModal({ id:"", date: state.today, cat: cats[0] || "広告費", store:"", media:"", amount:"", memo:"" });
+        return;
+      }
+      case "editExpense": { const x = money && money.expenses.find(y => y.id === b.dataset.id); if (x) openExpenseModal(x); return; }
+      case "castDetail": openCastDetail(b.dataset.cast); return;
+      case "checkout": openCheckout(b.dataset.id); return;
+      // ---- ここまで ----
       case "showCustRes":
         resPhone = b.dataset.phone; resFilter = "すべて"; current = "reservations";
         renderAll(); window.scrollTo(0, 0); return;
@@ -840,7 +1278,7 @@
       case "copyPrevDay": {
         const date = addDays(weekStart, shiftDay);
         const prev = addDays(date, -1);
-        state.shifts = (state.shifts || []).filter(s => s.date !== date).concat(shiftsOn(prev).map(s => Object.assign({}, s, { date })));
+        state.shifts = (state.shifts || []).filter(s => s.date !== date).concat(shiftsOn(prev).map(s => Object.assign({}, s, { date, status: "" })));
         markDirty("shifts"); renderAll(); toast("前の日と同じ出勤にしました"); return;
       }
       case "copyToWeek": {
@@ -850,7 +1288,7 @@
         for (let k = 0; k < 7; k++) {
           const d = addDays(weekStart, k);
           if (d === date) continue;
-          state.shifts = state.shifts.filter(s => s.date !== d).concat(src.map(s => Object.assign({}, s, { date: d })));
+          state.shifts = state.shifts.filter(s => s.date !== d).concat(src.map(s => Object.assign({}, s, { date: d, status: "" })));
         }
         markDirty("shifts"); renderAll(); toast("1週間にコピーしました"); return;
       }
@@ -863,10 +1301,30 @@
         try { const j = await api({ action:"testMail" }); toast(j.to + " にテストメールを送りました"); }
         catch(err) { toast(err.message, true); }
         return;
+      case "saveLineChannel":
+        try {
+          const j = await api({ action:"setLineChannel", channelId: $("lineChId").value, channelSecret: $("lineChSecret").value });
+          state.line = { ready: j.ready, mode: j.mode, channelId: j.channelId, webhookKey: j.webhookKey };
+          if (j.basicId && !kv("settings", "LINE公式ID")) {
+            const s = state.settings.find(x => x.key === "LINE公式ID");
+            if (s) { s.value = j.basicId; markDirty("settings"); }
+          }
+          renderAll();
+          toast("LINEと連携しました。Webhook URLをLINE Developersに貼ってください");
+        } catch(err) { toast(err.message, true); }
+        return;
+      case "unlinkLine":
+        if (!confirm("LINE連携を解除しますか?(LINEでの自動送信が止まります)")) return;
+        try {
+          const j = await api({ action:"setLineToken", lineToken: "" });
+          state.line = { ready: false, mode: "", channelId: "", webhookKey: j.webhookKey };
+          renderAll(); toast("LINE連携を解除しました");
+        } catch(err) { toast(err.message, true); }
+        return;
       case "saveLineToken":
         try {
           const j = await api({ action:"setLineToken", lineToken: $("lineTokenInput").value });
-          state.line = { ready: j.ready, webhookKey: j.webhookKey };
+          state.line = { ready: j.ready, mode: j.mode, webhookKey: j.webhookKey };
           if (j.basicId && !kv("settings", "LINE公式ID")) {
             const s = state.settings.find(x => x.key === "LINE公式ID");
             if (s) { s.value = j.basicId; markDirty("settings"); }
@@ -900,12 +1358,20 @@
   $("panel").addEventListener("change", async e => {
     const el = e.target;
 
+    // 集計の期間指定
+    if (el.id === "pFrom" || el.id === "pTo") {
+      const f = $("pFrom").value.replace(/-/g, "/"), t = $("pTo").value.replace(/-/g, "/");
+      if (f && t && f <= t) { period = { mode:"range", from: f, to: t }; renderAll(); }
+      return;
+    }
+
     // 出勤の開始・終了
     if (el.dataset.shift) {
       const date = addDays(weekStart, shiftDay);
       const cur = (state.shifts || []).find(s => s.cast === el.dataset.shift && s.date === date) || {};
-      if (el.dataset.k === "start") setShift(el.dataset.shift, date, el.value, cur.end);
-      else if (cur.start) setShift(el.dataset.shift, date, cur.start, el.value);
+      if (el.dataset.k === "start") setShift(el.dataset.shift, date, el.value, cur.end, cur.status);
+      else if (el.dataset.k === "status") { if (cur.start) setShift(el.dataset.shift, date, cur.start, cur.end, el.value); }
+      else if (cur.start) setShift(el.dataset.shift, date, cur.start, el.value, cur.status);
       renderAll();
       return;
     }
@@ -930,6 +1396,8 @@
           toast(el.dataset.field === "status" ? `「${r.status}」に変更しました` : el.dataset.field === "cast" ? `担当を「${r.cast}」にしました` : "メモを保存しました");
         }
         renderAll();
+        // 「完了」にしたら、そのまま会計(売上・給料)の入力へ
+        if (el.dataset.field === "status" && r.status === "完了" && before.status !== "完了") openCheckout(r.id);
       } catch(err) {
         Object.assign(r, before);
         renderAll();
