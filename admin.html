@@ -23,7 +23,7 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:"Zen Kaku Gothic New",sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6;padding-bottom:96px}
-  button,input,textarea{font:inherit;color:inherit}
+  button,input,textarea,select{font:inherit;color:inherit}
   a{color:inherit}
   [hidden]{display:none !important}
 
@@ -41,24 +41,28 @@
   .head h1{font-size:16px}
   .head .links{display:flex;gap:8px}
   .head .links a,.head .links button{font-size:12px;background:rgba(255,255,255,.14);border:none;border-radius:999px;padding:6px 12px;color:#fff;text-decoration:none;cursor:pointer}
-  .tabs{display:flex;overflow-x:auto;gap:4px;padding:0 12px;max-width:760px;margin:0 auto;scrollbar-width:none}
+  .tabs{display:flex;overflow-x:auto;gap:2px;padding:0 10px;max-width:760px;margin:0 auto;scrollbar-width:none}
   .tabs::-webkit-scrollbar{display:none}
-  .tab{flex:0 0 auto;border:none;background:none;color:rgba(255,255,255,.65);padding:10px 14px 12px;font-size:14px;font-weight:500;cursor:pointer;border-bottom:3px solid transparent;position:relative}
+  .tab{flex:0 0 auto;border:none;background:none;color:rgba(255,255,255,.65);padding:10px 11px 12px;font-size:13.5px;font-weight:500;cursor:pointer;border-bottom:3px solid transparent;position:relative}
   .tab.active{color:#fff;border-bottom-color:var(--accent)}
-  .tab.dirty::after{content:"";position:absolute;top:8px;right:6px;width:7px;height:7px;border-radius:50%;background:#f4b740}
+  .tab.dirty::after{content:"";position:absolute;top:8px;right:3px;width:7px;height:7px;border-radius:50%;background:#f4b740}
+  .tab .badge{display:inline-block;min-width:18px;height:18px;line-height:18px;border-radius:999px;background:#f4b740;color:var(--navy);font-size:11px;font-weight:700;margin-left:4px;padding:0 5px}
 
   main{max-width:760px;margin:0 auto;padding:16px}
   .hint{font-size:12px;color:var(--sub);margin-bottom:12px}
+  .sec-h{font-size:14px;font-weight:700;color:var(--navy);margin:20px 0 8px}
 
   /* ===== カード・入力 ===== */
   .item{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(35,38,58,.05)}
   .item.off{opacity:.55}
   label.f{display:block;font-size:12px;color:var(--sub);margin:10px 0 4px}
   label.f:first-child{margin-top:0}
-  input.t,textarea.t{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:16px;background:#fff}
-  input.t:focus,textarea.t:focus{outline:none;border-color:var(--navy)}
+  input.t,textarea.t,select.t{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:16px;background:#fff}
+  select.t{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%2377768a' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 12px center;padding-right:30px}
+  input.t:focus,textarea.t:focus,select.t:focus{outline:none;border-color:var(--navy)}
   textarea.t{resize:vertical;min-height:80px;line-height:1.6}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
   .desc{font-size:11px;color:var(--sub);margin-top:3px}
 
   .ctrl{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
@@ -75,6 +79,13 @@
   .sw input:checked + .knob{background:var(--ok)}
   .sw input:checked + .knob::after{left:23px}
 
+  /* チップ(タイプ選択など) */
+  .chips{display:flex;gap:6px;flex-wrap:wrap}
+  .chips.scroll{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  .chips.scroll::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-size:12.5px;cursor:pointer}
+  .chip.active{background:var(--navy);border-color:var(--navy);color:#fff}
+
   /* キャスト写真 */
   .cast-top{display:flex;gap:14px}
   .photo{flex:0 0 96px;height:128px;border-radius:12px;background:linear-gradient(145deg,#c48a8a,#2c3150) center/cover;display:flex;align-items:flex-end;justify-content:center;cursor:pointer;overflow:hidden;position:relative}
@@ -83,42 +94,32 @@
   .photo.busy::before{content:"アップ中…";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);color:#fff;font-size:12px}
   .cast-top .fields{flex:1;min-width:0}
   .photo-clear{font-size:11px;color:var(--danger);background:none;border:none;cursor:pointer;margin-top:4px;text-decoration:underline}
+  .private{background:#f7f4ef;border:1.5px dashed #d8cfc2;border-radius:12px;padding:12px;margin-top:14px}
+  .private .ttl{font-size:12px;font-weight:700;color:var(--navy)}
+  .line-st{font-size:12.5px;margin-top:8px;line-height:1.7}
+  .line-st code{font-size:13px;background:#fff;border-radius:6px;padding:1px 6px;font-weight:700;letter-spacing:.05em}
+  .ok-t{color:var(--ok);font-weight:700}
+  .warn-t{color:#b7791f;font-weight:700}
+  .mini{font-size:12px;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;cursor:pointer}
 
   .add{width:100%;padding:14px;border:2px dashed #cfc6ba;border-radius:var(--radius);background:none;color:var(--navy);font-weight:700;cursor:pointer;font-size:15px}
 
-  /* ===== 保存バー ===== */
-  .savebar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(255,255,255,.96);border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom))}
-  .savebar .in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px}
-  .savebar .st{flex:1;font-size:12px;color:var(--sub)}
-  .savebar .st.dirty{color:#b7791f;font-weight:700}
-  .btn{border:none;border-radius:999px;padding:14px 26px;font-weight:700;font-size:15px;cursor:pointer;background:var(--navy);color:#fff}
-  .btn:disabled{background:#b9b8c4;cursor:default}
-  .btn.full{width:100%}
-
-  .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;font-size:13px;z-index:40;max-width:90vw;text-align:center;opacity:0;transition:.25s;pointer-events:none}
-  .toast.show{opacity:1}
-  .toast.err{background:var(--danger)}
-  .center{text-align:center;color:var(--sub);padding:40px 0}
-
-  /* ===== 予約 ===== */
-  .tab .badge{display:inline-block;min-width:18px;height:18px;line-height:18px;border-radius:999px;background:#f4b740;color:var(--navy);font-size:11px;font-weight:700;margin-left:4px;padding:0 5px}
+  /* ===== 予約・応募 ===== */
   .res-bar{display:flex;gap:8px;align-items:center;margin-bottom:12px}
-  .chips{display:flex;gap:6px;overflow-x:auto;flex:1;scrollbar-width:none}
-  .chips::-webkit-scrollbar{display:none}
-  .chip{flex:0 0 auto;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-size:12px;cursor:pointer}
-  .chip.active{background:var(--navy);border-color:var(--navy);color:#fff}
+  .res-bar .chips{flex:1}
   .reload{flex:0 0 auto;border:none;background:none;font-size:12px;color:var(--navy);text-decoration:underline;cursor:pointer}
   .res-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
   .res-when{font-size:17px;font-weight:700;color:var(--navy);line-height:1.4}
   .res-when small{display:block;font-size:12px;font-weight:500;color:var(--sub)}
   .res-status{padding:7px 10px;border-radius:999px;border:none;font-weight:700;font-size:13px;cursor:pointer}
   .st-新規{background:#fdecc8;color:#8a5a00}
-  .st-対応中{background:#dbe7fb;color:#1f4f9c}
-  .st-確定{background:#d5f0e3;color:#1d7a50}
+  .st-対応中,.st-連絡済み{background:#dbe7fb;color:#1f4f9c}
+  .st-面接予定{background:#e7dcf7;color:#5b3a92}
+  .st-確定,.st-採用{background:#d5f0e3;color:#1d7a50}
   .st-完了{background:#e7e6ea;color:#55546a}
-  .st-キャンセル{background:#f6dcdc;color:#9c2f2f}
+  .st-キャンセル,.st-不採用,.st-辞退{background:#f6dcdc;color:#9c2f2f}
   .res-name{font-size:16px;font-weight:700;margin-top:10px}
-  .res-name small{font-size:11px;font-weight:500;color:var(--sub);margin-left:6px}
+  .res-name small{font-size:12px;font-weight:500;color:var(--sub);margin-left:6px}
   dl.res{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13.5px;margin-top:8px}
   dl.res dt{color:var(--sub)}
   dl.res dd{word-break:break-all}
@@ -129,6 +130,8 @@
   .visit.new{background:#fdecc8;color:#8a5a00}
   .visit.rep{background:#d5f0e3;color:#1d7a50}
   .visit.warn{background:#f6dcdc;color:#9c2f2f}
+  .visit.line{background:#d9f7e4;color:#07863a}
+  .notified{font-size:12px;background:#eef6f1;border-radius:8px;padding:6px 10px;margin-top:8px;color:#1d7a50}
 
   /* ===== 顧客 ===== */
   .search{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:999px;font-size:16px;margin-bottom:12px;background:#fff}
@@ -136,6 +139,43 @@
   .cust-stats div{flex:1;background:var(--bg);border-radius:10px;padding:8px 4px;text-align:center;font-size:11px;color:var(--sub)}
   .cust-stats b{display:block;font-size:18px;color:var(--navy)}
   .cust-link{border:none;background:none;color:#1f4f9c;text-decoration:underline;font-size:12px;cursor:pointer;margin-top:8px}
+
+  /* ===== 出勤 ===== */
+  .week{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .week b{font-size:15px;color:var(--navy)}
+  .days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:12px}
+  .dayb{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:6px 0;font-size:11px;cursor:pointer;line-height:1.35;text-align:center}
+  .dayb b{display:block;font-size:14px}
+  .dayb.active{background:var(--navy);border-color:var(--navy);color:#fff}
+  .dayb.sun b{color:#c0504d}.dayb.sat b{color:#3b6cc4}
+  .dayb.active b{color:#fff}
+  .dayb .cnt{display:block;font-size:10px;opacity:.75}
+  .shift-row{display:grid;grid-template-columns:1fr 100px 100px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+  .shift-row:last-child{border-bottom:none}
+  .shift-row .nm{font-weight:700;font-size:14px}
+  .shift-row select{padding:9px 8px;font-size:15px}
+  .shift-row.off .nm{color:var(--sub);font-weight:500}
+  .shift-tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+
+  /* ===== 保存バー ===== */
+  .savebar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(255,255,255,.96);border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom))}
+  .savebar .in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px}
+  .savebar .st{flex:1;font-size:12px;color:var(--sub)}
+  .savebar .st.dirty{color:#b7791f;font-weight:700}
+  .btn{border:none;border-radius:999px;padding:14px 26px;font-weight:700;font-size:15px;cursor:pointer;background:var(--navy);color:#fff}
+  .btn.small{padding:10px 18px;font-size:13px}
+  .btn:disabled{background:#b9b8c4;cursor:default}
+  .btn.full{width:100%}
+
+  .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;font-size:13px;z-index:40;max-width:90vw;text-align:center;opacity:0;transition:.25s;pointer-events:none;white-space:pre-line}
+  .toast.show{opacity:1}
+  .toast.err{background:var(--danger)}
+  .center{text-align:center;color:var(--sub);padding:40px 0}
+  .ph-help{font-size:11.5px;color:var(--sub);background:var(--bg);border-radius:10px;padding:10px 12px;line-height:1.8}
+  .ph-help code{background:#fff;border-radius:4px;padding:0 4px;font-size:11.5px}
+  .copybox{display:flex;gap:6px;margin-top:6px}
+  .copybox input{flex:1;font-size:12px;padding:8px 10px;border:1.5px solid var(--line);border-radius:8px;background:#fff}
+  ol.steps{font-size:12.5px;padding-left:20px;line-height:1.9;margin-top:6px}
 </style>
 </head>
 <body>
@@ -157,18 +197,22 @@
     <div class="head">
       <h1 id="shopTitle">管理画面</h1>
       <div class="links">
-        <a href="index.html" target="_blank" rel="noopener">公開HPを見る</a>
+        <a href="index.html" target="_blank" rel="noopener">公開HP</a>
         <button id="logoutBtn">ログアウト</button>
       </div>
     </div>
     <nav class="tabs" id="tabs">
       <button class="tab active" data-tab="reservations">予約<span class="badge" id="resBadge" hidden></span></button>
+      <button class="tab" data-tab="shifts">出勤</button>
       <button class="tab" data-tab="customers">顧客</button>
+      <button class="tab" data-tab="applications">応募<span class="badge" id="appBadge" hidden></span></button>
       <button class="tab" data-tab="casts">キャスト</button>
-      <button class="tab" data-tab="news">お知らせ</button>
       <button class="tab" data-tab="prices">料金</button>
-      <button class="tab" data-tab="faqs">よくある質問</button>
+      <button class="tab" data-tab="news">お知らせ</button>
+      <button class="tab" data-tab="faqs">FAQ</button>
       <button class="tab" data-tab="settings">基本設定</button>
+      <button class="tab" data-tab="recruit">求人</button>
+      <button class="tab" data-tab="notice">自動送信</button>
     </nav>
   </header>
 
@@ -184,13 +228,21 @@
 
 <div class="toast" id="toast"></div>
 
+<datalist id="unitList">
+  <option value="〜"></option><option value="/30分"></option><option value="/60分"></option>
+  <option value="/回"></option><option value="実費"></option><option value="別途"></option>
+</datalist>
+
 <script src="config.js"></script>
 <script>
   const GAS_URL = window.GAS_URL || "";
   const TOKEN_KEY = "rk_admin_token";
-  const SECTIONS = { casts:"キャスト", news:"お知らせ", prices:"料金", faqs:"よくある質問", settings:"基本設定" };
-  const MULTILINE_KEYS = ["キャッチコピー","サブコピー","コンセプト文","料金の注意書き"];
-  const RES_STATUSES = ["新規","対応中","確定","完了","キャンセル"];
+  const SECTIONS = { shifts:"出勤", casts:"キャスト", prices:"料金", news:"お知らせ", faqs:"FAQ", settings:"基本設定", recruit:"求人", notice:"自動送信" };
+  const KV_SECTIONS = ["settings", "recruit", "notice"];
+  const MULTILINE_KEYS = ["キャッチコピー", "サブコピー", "コンセプト文", "料金の注意書き", "タイプ一覧", "紹介文", "給与", "応募資格", "待遇", "募集者"];
+  const PRICE_CATEGORIES = ["コース", "オプション", "その他"];
+  const RES_STATUSES = ["新規", "対応中", "確定", "完了", "キャンセル"];
+  const APP_STATUSES = ["新規", "連絡済み", "面接予定", "採用", "不採用", "辞退"];
   const RES_FILTERS = {
     "未対応": r => r.status === "新規" || r.status === "対応中",
     "確定":   r => r.status === "確定",
@@ -198,19 +250,38 @@
     "キャンセル": r => r.status === "キャンセル",
     "すべて": () => true,
   };
+  const APP_FILTERS = {
+    "未対応": r => ["新規", "連絡済み", "面接予定"].includes(r.status),
+    "採用": r => r.status === "採用",
+    "不採用・辞退": r => r.status === "不採用" || r.status === "辞退",
+    "すべて": () => true,
+  };
+  // 出勤時間の選択肢(8:00〜翌5:00 を30分刻み。24時以降は 25:00 のように書く)
+  const TIMES = [];
+  for (let h = 8; h <= 29; h++) ["00", "30"].forEach(m => { if (!(h === 29 && m === "30")) TIMES.push(String(h).padStart(2, "0") + ":" + m); });
+  const AGES = []; for (let a = 18; a <= 45; a++) AGES.push(String(a));
+  const HEIGHTS = []; for (let h = 150; h <= 200; h++) HEIGHTS.push(String(h));
 
   let token = "";
   let state = null;          // 編集中のデータ
   let current = "reservations"; // 表示中のタブ
   let resFilter = "未対応";
+  let appFilter = "未対応";
   let custQuery = "";
-  let resPhone = "";  // 顧客タブから「予約履歴を見る」で絞り込む電話番号
+  let resPhone = "";         // 顧客タブから「予約履歴を見る」で絞り込む電話番号
+  let weekStart = "";        // 出勤タブで表示中の週の初日
+  let shiftDay = 0;          // 出勤タブで選択中の曜日(0〜6)
   const dirty = new Set();   // 未保存のセクション
 
   // ===== 共通 =====
   const $ = id => document.getElementById(id);
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const safeUrl = u => /^https:\/\//.test(u || "") ? u : "";
+  const splitList = s => String(s || "").split(/[,、,\n]/).map(x => x.trim()).filter(Boolean);
+  function ymd(d){ return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,"0")}/${String(d.getDate()).padStart(2,"0")}`; }
+  function addDays(s, n){ const p = s.split("/").map(Number); return ymd(new Date(p[0], p[1]-1, p[2]+n)); }
+  function wd(s){ const p = s.split("/").map(Number); return new Date(p[0], p[1]-1, p[2]).getDay(); }
+  const WD = "日月火水木金土";
 
   function storeGet(){ try { return localStorage.getItem(TOKEN_KEY) || ""; } catch(e){ return ""; } }
   function storeSet(v){ try { v ? localStorage.setItem(TOKEN_KEY, v) : localStorage.removeItem(TOKEN_KEY); } catch(e){} }
@@ -221,7 +292,7 @@
     t.textContent = msg;
     t.className = "toast show" + (isErr ? " err" : "");
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.className = "toast", isErr ? 5000 : 2600);
+    toastTimer = setTimeout(() => t.className = "toast", isErr ? 5000 : 3200);
   }
 
   async function api(body){
@@ -272,6 +343,7 @@
     $("panel").innerHTML = `<div class="center">読み込み中…</div>`;
     const j = await api({ action:"load" });
     state = j.data;
+    if (!weekStart) weekStart = state.today;
     dirty.clear();
     renderAll();
   }
@@ -290,22 +362,28 @@
       t.classList.toggle("active", t.dataset.tab === current);
       t.classList.toggle("dirty", dirty.has(t.dataset.tab));
     });
-    const shop = (state.settings.find(s => s.key === "店名") || {}).value;
-    $("shopTitle").textContent = (shop || "HP") + " 管理画面";
+    $("shopTitle").textContent = (kv("settings", "店名") || "HP") + " 管理画面";
     $("panel").innerHTML = RENDER[current]();
     updateBadge();
     updateSaveBar();
   }
 
+  function kv(sec, key){
+    const x = (state[sec] || []).find(s => s.key === key);
+    return x ? x.value : "";
+  }
+
   function updateBadge(){
     const n = (state.reservations || []).filter(r => r.status === "新規").length;
-    $("resBadge").textContent = n;
-    $("resBadge").hidden = n === 0;
+    $("resBadge").textContent = n; $("resBadge").hidden = n === 0;
+    const a = (state.applications || []).filter(r => r.status === "新規").length;
+    $("appBadge").textContent = a; $("appBadge").hidden = a === 0;
   }
 
   function markDirty(sec){
     dirty.add(sec);
-    document.querySelector(`.tab[data-tab="${sec}"]`).classList.add("dirty");
+    const tab = document.querySelector(`.tab[data-tab="${sec}"]`);
+    if (tab) tab.classList.add("dirty");
     updateSaveBar();
   }
 
@@ -330,47 +408,56 @@
     </div>`;
   }
 
-  const input = (sec, i, k, v, ph, type) =>
-    `<input class="t" type="${type || "text"}" data-sec="${sec}" data-i="${i}" data-k="${k}" value="${esc(v)}" placeholder="${esc(ph || "")}">`;
+  const input = (sec, i, k, v, ph, type, extra) =>
+    `<input class="t" type="${type || "text"}" data-sec="${sec}" data-i="${i}" data-k="${k}" value="${esc(v)}" placeholder="${esc(ph || "")}" ${extra || ""}>`;
   const textarea = (sec, i, k, v, ph) =>
     `<textarea class="t" data-sec="${sec}" data-i="${i}" data-k="${k}" placeholder="${esc(ph || "")}">${esc(v)}</textarea>`;
+  // プルダウン(今の値が選択肢に無くても消えないように残す)
+  const select = (sec, i, k, v, options, blankLabel) => {
+    const opts = options.slice();
+    if (v && !opts.includes(v)) opts.unshift(v);
+    return `<select class="t" data-sec="${sec}" data-i="${i}" data-k="${k}">` +
+      (blankLabel != null ? `<option value="">${esc(blankLabel)}</option>` : "") +
+      opts.map(o => `<option value="${esc(o)}" ${o === v ? "selected" : ""}>${esc(o)}</option>`).join("") + `</select>`;
+  };
 
   // ===== 各タブの画面 =====
   const RENDER = {
+    // ---------- 予約 ----------
     reservations(){
       const all = (state.reservations || []).filter(r => !resPhone || r.phone === resPhone);
       const list = all.filter(RES_FILTERS[resFilter]);
       const custMap = {};
       (state.customers || []).forEach(c => custMap[c.phone] = c);
+      const castNames = (state.casts || []).map(c => c.name);
       const visitBadge = r => {
         const c = custMap[r.phone];
-        if (!c || c.reserved <= 1) return `<span class="visit new">新規のお客様</span>`;
-        return `<span class="visit rep">予約${c.reserved}回・利用${c.visited}回</span>` +
-          (c.canceled ? `<span class="visit warn">キャンセル${c.canceled}回</span>` : "");
+        let h = (!c || c.reserved <= 1) ? `<span class="visit new">新規のお客様</span>`
+          : `<span class="visit rep">予約${c.reserved}回・利用${c.visited}回</span>` + (c.canceled ? `<span class="visit warn">キャンセル${c.canceled}回</span>` : "");
+        if (r.lineLinked) h += `<span class="visit line">LINE通知OK</span>`;
+        return h;
       };
-      const phoneBar = resPhone
-        ? `<div class="item" style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center;font-size:13px">📞 ${esc(resPhone)} の予約だけ表示中<button class="cust-link" style="margin:0" data-act="clearPhoneFilter">解除</button></div>`
-        : "";
-      const chips = Object.keys(RES_FILTERS).map(k => {
-        const n = all.filter(RES_FILTERS[k]).length;
-        return `<button class="chip ${k === resFilter ? "active" : ""}" data-filter="${k}">${k}(${n})</button>`;
-      }).join("");
-
       const contactLink = r => {
         const c = esc(r.contact);
-        if (r.method === "電話") return `<a href="tel:${esc(r.contact.replace(/[^\d+]/g, ""))}">${c}</a>`;
         if (r.method === "メール") return `<a href="mailto:${c}">${c}</a>`;
         return c;
       };
       const week = d => {
         const m = String(d).match(/(\d{4})\/(\d{1,2})\/(\d{1,2})/);
-        return m ? "(" + "日月火水木金土"[new Date(+m[1], m[2] - 1, +m[3]).getDay()] + ")" : "";
+        return m ? "(" + WD[new Date(+m[1], m[2] - 1, +m[3]).getDay()] + ")" : "";
       };
+      const phoneBar = resPhone
+        ? `<div class="item" style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center;font-size:13px">📞 ${esc(resPhone)} の予約だけ表示中<button class="cust-link" style="margin:0" data-act="clearPhoneFilter">解除</button></div>`
+        : "";
+      const chips = Object.keys(RES_FILTERS).map(k => `<button class="chip ${k === resFilter ? "active" : ""}" data-filter="${k}">${k}(${all.filter(RES_FILTERS[k]).length})</button>`).join("");
 
-      return phoneBar + `<div class="res-bar"><div class="chips">${chips}</div><button class="reload" data-act="reloadRes">更新</button></div>` +
-        (list.length ? list.map(r => `<div class="item">
+      return phoneBar + `<div class="res-bar"><div class="chips scroll">${chips}</div><button class="reload" data-act="reloadRes">更新</button></div>` +
+        `<p class="hint">「確定」にすると、お客様と担当キャストに確定のお知らせが自動で届きます(「自動送信」タブで設定)。</p>` +
+        (list.length ? list.map(r => {
+          const shift = (state.shifts || []).find(s => s.cast === r.cast && s.date === r.date);
+          return `<div class="item">
           <div class="res-head">
-            <div class="res-when">${esc(r.date)}${week(r.date)} ${esc(r.time)}〜<small>${esc(r.duration)} / 指名:${esc(r.cast)}</small></div>
+            <div class="res-when">${esc(r.date)}${week(r.date)} ${esc(r.time)}〜<small>${esc(r.course)}${r.total ? " / " + esc(r.total) : ""}</small></div>
             <select class="res-status st-${esc(r.status)}" data-rid="${esc(r.id)}" data-field="status">
               ${RES_STATUSES.map(s => `<option ${s === r.status ? "selected" : ""}>${s}</option>`).join("")}
             </select>
@@ -379,27 +466,112 @@
           <dl class="res">
             ${r.phone ? `<dt>電話</dt><dd><a href="tel:${esc(r.phone)}">${esc(r.phone)}</a></dd>` : ""}
             <dt>${esc(r.method)}</dt><dd>${contactLink(r)}</dd>
+            <dt>オプション</dt><dd>${esc(r.options) || "なし"}</dd>
             <dt>待ち合わせ</dt><dd>${esc(r.place) || "未記入"}</dd>
+            <dt>予約番号</dt><dd>${esc(r.number)}</dd>
           </dl>
           ${r.request ? `<div class="res-req">${esc(r.request)}</div>` : ""}
+          <label class="f">担当キャスト${shift ? `(この日 ${esc(shift.start)}〜${esc(shift.end)} 出勤)` : ""}</label>
+          <select class="t" data-rid="${esc(r.id)}" data-field="cast">
+            ${["おまかせ"].concat(castNames).concat(castNames.includes(r.cast) || r.cast === "おまかせ" || !r.cast ? [] : [r.cast])
+              .map(n => `<option value="${esc(n)}" ${n === (r.cast || "おまかせ") ? "selected" : ""}>${esc(n === "おまかせ" ? "おまかせ(未定)" : n)}</option>`).join("")}
+          </select>
           <label class="f">店舗メモ(お客様には見えません)</label>
           <textarea class="t" data-rid="${esc(r.id)}" data-field="memo" placeholder="対応内容など" style="min-height:60px">${esc(r.memo)}</textarea>
+          ${r.notified ? `<div class="notified">📨 自動送信:${esc(r.notified)}</div>` : ""}
           <div class="res-foot">受付:${esc(r.received)}</div>
-        </div>`).join("")
+        </div>`;
+        }).join("")
         : `<div class="center">${resFilter}の予約はありません</div>`);
     },
 
+    // ---------- 出勤 ----------
+    shifts(){
+      const days = [...Array(7)].map((_, i) => addDays(weekStart, i));
+      const date = days[shiftDay];
+      const casts = (state.casts || []).filter(c => c.show || (state.shifts || []).some(s => s.cast === c.name && s.date === date));
+      const dayBtns = days.map((d, i) => {
+        const w = wd(d);
+        const cnt = (state.shifts || []).filter(s => s.date === d).length;
+        return `<button class="dayb ${i === shiftDay ? "active" : ""} ${w === 0 ? "sun" : w === 6 ? "sat" : ""}" data-day="${i}">
+          <b>${+d.split("/")[2]}</b>${WD[w]}<span class="cnt">${cnt ? cnt + "人" : "-"}</span></button>`;
+      }).join("");
+      const rows = casts.map(c => {
+        const s = (state.shifts || []).find(x => x.cast === c.name && x.date === date);
+        const opt = (v, blank) => `<option value="">${blank}</option>` + TIMES.map(t => `<option ${t === v ? "selected" : ""}>${t}</option>`).join("");
+        return `<div class="shift-row ${s ? "" : "off"}">
+          <div class="nm">${esc(c.name)}${c.show ? "" : '<small style="color:var(--sub)">(非表示)</small>'}</div>
+          <select class="t" data-shift="${esc(c.name)}" data-k="start">${opt(s && s.start, "休み")}</select>
+          <select class="t" data-shift="${esc(c.name)}" data-k="end" ${s ? "" : "disabled"}>${opt(s && s.end, "終了")}</select>
+        </div>`;
+      }).join("");
+      const p = weekStart.split("/");
+      const q = addDays(weekStart, 6).split("/");
+      return `<div class="week">
+          <button class="mini" data-act="weekPrev">‹ 前の週</button>
+          <b>${+p[1]}/${+p[2]} 〜 ${+q[1]}/${+q[2]}</b>
+          <button class="mini" data-act="weekNext">次の週 ›</button>
+        </div>
+        <div class="days">${dayBtns}</div>
+        <div class="item">
+          <div class="sec-h" style="margin-top:0">${+date.split("/")[1]}/${+date.split("/")[2]}(${WD[wd(date)]})の出勤</div>
+          <div class="shift-tools">
+            <button class="mini" data-act="copyPrevDay">前の日と同じにする</button>
+            <button class="mini" data-act="copyToWeek">この日の出勤を1週間ぜんぶにコピー</button>
+            <button class="mini" data-act="clearDay">この日を全員休みにする</button>
+          </div>
+          ${rows || `<div class="center">キャストがいません</div>`}
+        </div>
+        <p class="hint">開始時間を選ぶと出勤、「休み」にすると休みになります。24時を過ぎる場合は 25:00(=翌1:00)のように選んでください。<br>公開HPには今日から7日分が表示されます。</p>`;
+    },
+
+    // ---------- 顧客 ----------
     customers(){
       return `<p class="hint">予約フォームの電話番号ごとにまとめたお客様の一覧です(利用回数は「完了」にした予約の数)。</p>
         <input class="search" type="search" id="custSearch" placeholder="名前・電話番号で検索" value="${esc(custQuery)}">
         <div id="custList">${customerList()}</div>`;
     },
 
+    // ---------- 応募 ----------
+    applications(){
+      const all = state.applications || [];
+      const list = all.filter(APP_FILTERS[appFilter]);
+      const chips = Object.keys(APP_FILTERS).map(k => `<button class="chip ${k === appFilter ? "active" : ""}" data-appfilter="${k}">${k}(${all.filter(APP_FILTERS[k]).length})</button>`).join("");
+      return `<div class="res-bar"><div class="chips scroll">${chips}</div><button class="reload" data-act="reloadRes">更新</button></div>
+        <p class="hint">写真はGoogleドライブの非公開フォルダに保存されています(このGoogleアカウントでログインしている時だけ見られます)。</p>` +
+        (list.length ? list.map(a => `<div class="item">
+          <div class="res-head">
+            <div class="res-when">${esc(a.name)} <small>${esc(a.age)}歳${a.height ? " / " + esc(a.height) + "cm" : ""}${a.job ? " / " + esc(a.job) : ""}</small></div>
+            <select class="res-status st-${esc(a.status)}" data-aid="${esc(a.id)}" data-field="status">
+              ${APP_STATUSES.map(s => `<option ${s === a.status ? "selected" : ""}>${s}</option>`).join("")}
+            </select>
+          </div>
+          <div style="margin-top:6px">${a.experience ? `<span class="visit rep" style="margin-left:0">${esc(a.experience)}</span>` : ""}${a.lineLinked ? `<span class="visit line">LINE連携済み</span>` : ""}</div>
+          <dl class="res">
+            <dt>電話</dt><dd><a href="tel:${esc(a.phone)}">${esc(a.phone)}</a></dd>
+            <dt>${esc(a.method)}</dt><dd>${a.method === "メール" ? `<a href="mailto:${esc(a.contact)}">${esc(a.contact)}</a>` : esc(a.contact)}</dd>
+            <dt>お住まい</dt><dd>${esc(a.area) || "未記入"}</dd>
+            <dt>勤務希望</dt><dd>${esc(a.schedule)}${a.days ? "(" + esc(a.days) + ")" : ""}</dd>
+            <dt>面接希望</dt><dd>${esc(a.interview) || "未記入"}</dd>
+            ${a.sns ? `<dt>SNS</dt><dd>${esc(a.sns)}</dd>` : ""}
+            <dt>写真</dt><dd>${safeUrl(a.photoFace) ? `<a href="${esc(a.photoFace)}" target="_blank" rel="noopener">顔写真</a>` : "なし"}${safeUrl(a.photoBody) ? ` / <a href="${esc(a.photoBody)}" target="_blank" rel="noopener">全身写真</a>` : ""}</dd>
+          </dl>
+          ${a.message ? `<div class="res-req">${esc(a.message)}</div>` : ""}
+          <label class="f">店舗メモ(応募者には見えません)</label>
+          <textarea class="t" data-aid="${esc(a.id)}" data-field="memo" placeholder="面接日・所感など" style="min-height:60px">${esc(a.memo)}</textarea>
+          <div class="res-foot">受付:${esc(a.received)} / 応募番号:${esc(a.number)}</div>
+        </div>`).join("") : `<div class="center">${appFilter}の応募はありません</div>`);
+    },
+
+    // ---------- キャスト ----------
     casts(){
       const list = state.casts;
+      const types = splitList(kv("settings", "タイプ一覧"));
       return `<p class="hint">写真をタップすると変更できます(自動で縦長3:4に切り抜き・縮小されます)。「HPに表示」をオフにするとHPから非表示になります(データは残ります)。</p>` +
         list.map((c, i) => {
           const photo = safeUrl(c.photo);
+          const myTypes = splitList(c.types);
+          const allTypes = types.concat(myTypes.filter(t => !types.includes(t)));
           return `<div class="item ${c.show ? "" : "off"}">
             <div class="cast-top">
               <div>
@@ -412,13 +584,29 @@
               <div class="fields">
                 <label class="f">名前</label>${input("casts", i, "name", c.name, "例:ハルト")}
                 <div class="row2">
-                  <div><label class="f">年齢</label>${input("casts", i, "age", c.age, "24", "number")}</div>
-                  <div><label class="f">身長(cm)</label>${input("casts", i, "height", c.height, "178", "number")}</div>
+                  <div><label class="f">年齢</label>${select("casts", i, "age", c.age, AGES, "未設定")}</div>
+                  <div><label class="f">身長(cm)</label>${select("casts", i, "height", c.height, HEIGHTS, "未設定")}</div>
                 </div>
               </div>
             </div>
-            <label class="f">タグ(カンマ区切り)</label>${input("casts", i, "tags", c.tags, "聞き上手,カフェ好き,癒し系")}
+            <label class="f">タイプ(タップで選択・複数OK。HPのタイプ検索に使われます)</label>
+            <div class="chips">${allTypes.map(t => `<button class="chip ${myTypes.includes(t) ? "active" : ""}" data-act="type" data-i="${i}" data-ty="${esc(t)}">${esc(t)}</button>`).join("")}</div>
+            <label class="f">タグ(カンマ区切り)</label>${input("casts", i, "tags", c.tags, "聞き上手,カフェ好き")}
             <label class="f">ひとこと</label>${textarea("casts", i, "comment", c.comment, "お客様へのひとこと")}
+            <label class="f">SNS(URLを貼り付け。空欄なら表示しない)</label>
+            <div class="row3">
+              ${input("casts", i, "x", c.x, "X", "url")}
+              ${input("casts", i, "instagram", c.instagram, "Instagram", "url")}
+              ${input("casts", i, "tiktok", c.tiktok, "TikTok", "url")}
+            </div>
+            <div class="private">
+              <div class="ttl">🔒 非公開(HPには出ません):予約確定のお知らせ先</div>
+              <label class="f">メールアドレス</label>${input("casts", i, "email", c.email, "cast@example.com", "email")}
+              <div class="line-st">LINE:${c.resetLine ? `<span class="warn-t">保存すると新しい登録コードを発行します</span>`
+                : c.lineUser ? `<span class="ok-t">登録済み ✓</span> <button class="mini" data-act="resetLine" data-i="${i}">登録を解除</button>`
+                : c.code ? `<span class="warn-t">未登録</span><br>キャスト本人に、お店の公式LINEへ「キャスト登録 <code>${esc(c.code)}</code>」と送ってもらうと登録されます。`
+                : `<span class="warn-t">未登録</span>(保存すると登録コードが発行されます)`}</div>
+            </div>
             <div class="ctrl">
               <label class="sw"><input type="checkbox" data-sec="casts" data-i="${i}" data-k="show" ${c.show ? "checked" : ""}><span class="knob"></span>HPに表示</label>
               ${ctrlButtons("casts", i, list.length)}
@@ -428,6 +616,26 @@
         `<button class="add" data-add="casts">+ キャストを追加</button>`;
     },
 
+    // ---------- 料金 ----------
+    prices(){
+      const list = state.prices;
+      return `<p class="hint">「コース」は予約フォームで1つ選ぶもの、「オプション」は追加で選べるもの、「その他」は料金表に載せるだけのもの(交通費など)です。<br>「指名料」という名前のオプションは、お客様がキャストを指名すると自動で加算されます。</p>` +
+        list.map((p, i) => `<div class="item">
+          <div class="row2">
+            <div><label class="f">区分</label>${select("prices", i, "cat", p.cat, PRICE_CATEGORIES)}</div>
+            <div><label class="f">金額(円)</label>${input("prices", i, "price", p.price == null ? "" : p.price, "空欄=金額なし", "number", 'inputmode="numeric" min="0" step="100"')}</div>
+          </div>
+          <label class="f">項目名</label>${input("prices", i, "item", p.item, "例:120分コース")}
+          <div class="row2">
+            <div><label class="f">単位(選択 or 自由入力)</label>${input("prices", i, "unit", p.unit, "例:/30分", "text", 'list="unitList"')}</div>
+            <div><label class="f">説明</label>${input("prices", i, "note", p.note, "例:一番人気")}</div>
+          </div>
+          <div class="ctrl"><span></span>${ctrlButtons("prices", i, list.length)}</div>
+        </div>`).join("") +
+        `<button class="add" data-add="prices">+ 料金項目を追加</button>`;
+    },
+
+    // ---------- お知らせ ----------
     news(){
       const list = state.news;
       return `<p class="hint">上にあるものからHPに表示されます(最大5件)。</p>` +
@@ -439,17 +647,7 @@
         </div>`).join("");
     },
 
-    prices(){
-      const list = state.prices;
-      return `<p class="hint">金額は「¥5,000〜」のように自由に書けます。</p>` +
-        list.map((p, i) => `<div class="item">
-          <label class="f">項目</label>${input("prices", i, "item", p.item, "例:デート料金(60分)")}
-          <label class="f">金額</label>${input("prices", i, "price", p.price, "例:¥5,000〜")}
-          <div class="ctrl"><span></span>${ctrlButtons("prices", i, list.length)}</div>
-        </div>`).join("") +
-        `<button class="add" data-add="prices">+ 料金項目を追加</button>`;
-    },
-
+    // ---------- FAQ ----------
     faqs(){
       const list = state.faqs;
       return list.map((f, i) => `<div class="item">
@@ -460,24 +658,67 @@
         `<button class="add" data-add="faqs">+ 質問を追加</button>`;
     },
 
-    settings(){
-      return `<div class="item">` + state.settings.map((s, i) => {
-        const multi = MULTILINE_KEYS.includes(s.key) || /\n/.test(s.value);
-        return `<label class="f">${esc(s.key)}</label>` +
-          (multi ? textarea("settings", i, "value", s.value) : input("settings", i, "value", s.value)) +
-          (s.desc ? `<div class="desc">${esc(s.desc)}</div>` : "");
-      }).join("") + `</div>`;
+    settings(){ return `<p class="hint">HPの英語・中国語・韓国語ページには、ここの文章が自動翻訳されて表示されます(訳の手直しはスプレッドシートの「翻訳」シートで)。</p>` + kvForm("settings"); },
+    recruit(){ return `<p class="hint">求人ページ(recruit.html)に表示される内容です。</p>` + kvForm("recruit"); },
+
+    // ---------- 自動送信 ----------
+    notice(){
+      const line = state.line || {};
+      const hook = line.webhookKey ? GAS_URL + (GAS_URL.includes("?") ? "&" : "?") + "line=" + line.webhookKey : "";
+      return `<div class="item">
+          <div class="sec-h" style="margin-top:0">📧 メール</div>
+          <p class="hint" style="margin-bottom:6px">送信元:<b>${esc(state.mailFrom || "")}</b>(GASを作ったGoogleアカウント)<br>
+          ※お客様にこのアドレスが見えます。個人のアドレスの場合は、お店専用のGoogleアカウントで作り直すのがおすすめです。</p>
+          <button class="mini" data-act="testMail">自分あてにテスト送信</button>
+        </div>
+        <div class="item">
+          <div class="sec-h" style="margin-top:0">💬 LINE(公式アカウント)</div>
+          <div class="line-st">状態:${line.ready ? `<span class="ok-t">連携済み ✓</span>` : `<span class="warn-t">未連携</span>`}</div>
+          <label class="f">チャネルアクセストークン(長期)</label>
+          <div class="copybox"><input type="password" id="lineTokenInput" placeholder="${line.ready ? "変更する時だけ入力" : "LINE Developersでコピーしたトークン"}" autocomplete="off"><button class="mini" data-act="saveLineToken">保存</button></div>
+          ${hook ? `<label class="f">Webhook URL(LINE Developersに貼る)</label>
+          <div class="copybox"><input type="text" readonly value="${esc(hook)}" id="hookUrl"><button class="mini" data-act="copyHook">コピー</button></div>` : ""}
+          <ol class="steps">
+            <li>LINE Official Account Manager で公式アカウントを作り、設定 → Messaging API を「利用する」</li>
+            <li>LINE Developers でそのチャネルを開き、「Messaging API設定」の一番下で<b>チャネルアクセストークン(長期)</b>を発行 → 上に貼って保存</li>
+            <li>表示された<b>Webhook URL</b>をLINE Developersの「Webhook URL」に貼り、「Webhookの利用」をオン</li>
+            <li>LINE Official Account Manager の応答設定で「Webhook」をオン(応答メッセージはオフ推奨)</li>
+            <li>「基本設定」タブの<b>LINE公式ID</b>(@から始まるID)を入力して保存</li>
+          </ol>
+          <p class="hint" style="margin-top:8px">※LINE Developersの「検証」ボタンはエラーになることがありますが、実際のメッセージは届きます。<br>
+          ※お客様は予約後に表示されるボタンから予約番号を送るだけで、確定のお知らせをLINEで受け取れます。キャストは「キャスト」タブの登録コードで登録します。<br>
+          ※LINEの無料プランは月200通まで(お客様とキャストへの確定のお知らせ1件で2通)。</p>
+        </div>
+        <div class="sec-h">✉️ 送る文章</div>
+        <div class="ph-help">文章の中の <code>{名前}</code> <code>{日付}</code> <code>{時間}</code> <code>{コース}</code> <code>{オプション}</code> <code>{キャスト}</code> <code>{待ち合わせ}</code> <code>{料金}</code> <code>{ご要望}</code> <code>{ご利用}</code> <code>{予約番号}</code> <code>{応募番号}</code> <code>{店名}</code> は、自動で中身に置き換わります。</div>
+        <div style="height:10px"></div>` + kvForm("notice");
     },
   };
+
+  // 「項目 / 内容 / 説明」の編集フォーム。説明が「選択:A,B|説明」ならプルダウンにする
+  function kvForm(sec){
+    return `<div class="item">` + (state[sec] || []).map((s, i) => {
+      let desc = s.desc || "";
+      let field;
+      const m = desc.match(/^選択:([^|]*)\|?(.*)$/);
+      if (m) {
+        field = select(sec, i, "value", s.value, m[1].split(",").map(x => x.trim()).filter(Boolean));
+        desc = m[2];
+      } else if (sec === "notice" || MULTILINE_KEYS.includes(s.key) || /\n/.test(s.value)) {
+        field = textarea(sec, i, "value", s.value);
+      } else {
+        field = input(sec, i, "value", s.value, "", /URL$/.test(s.key) ? "url" : "text");
+      }
+      return `<label class="f">${esc(s.key)}</label>${field}${desc ? `<div class="desc">${esc(desc)}</div>` : ""}`;
+    }).join("") + `</div>`;
+  }
 
   function customerList(){
     const q = custQuery.trim().replace(/-/g, "");
     const list = (state.customers || []).filter(c => !q || c.name.includes(q) || c.phone.includes(q));
     if (!list.length) return `<div class="center">${q ? "該当するお客様はいません" : "まだ予約がありません"}</div>`;
     return list.map(c => {
-      const contact = c.method === "メール"
-        ? `<a href="mailto:${esc(c.contact)}">${esc(c.contact)}</a>`
-        : esc(c.contact);
+      const contact = c.method === "メール" ? `<a href="mailto:${esc(c.contact)}">${esc(c.contact)}</a>` : esc(c.contact);
       return `<div class="item">
         <div class="res-name" style="margin-top:0">${esc(c.name || "(名前未登録)")} 様</div>
         <dl class="res">
@@ -501,10 +742,21 @@
     const m = String(d || "").match(/(\d{4})[\/\-.年](\d{1,2})[\/\-.月](\d{1,2})/);
     return m ? `${m[1]}-${m[2].padStart(2,"0")}-${m[3].padStart(2,"0")}` : "";
   }
-  function today(){
-    const d = new Date();
-    return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,"0")}/${String(d.getDate()).padStart(2,"0")}`;
+
+  // ===== 出勤の編集 =====
+  function setShift(cast, date, start, end){
+    state.shifts = (state.shifts || []).filter(s => !(s.cast === cast && s.date === date));
+    if (start) {
+      if (!end) {
+        // 終了が未設定なら、開始の5時間後を仮に入れる
+        const i = TIMES.indexOf(start);
+        end = TIMES[Math.min(i + 10, TIMES.length - 1)];
+      }
+      state.shifts.push({ date, cast, start, end });
+    }
+    markDirty("shifts");
   }
+  function shiftsOn(date){ return (state.shifts || []).filter(s => s.date === date); }
 
   // ===== 入力の反映 =====
   $("panel").addEventListener("input", e => {
@@ -523,46 +775,28 @@
     markDirty(sec);
   });
 
-  // ===== ボタン(追加・並び替え・削除) =====
+  // ===== ボタン =====
   $("panel").addEventListener("click", async e => {
     const chip = e.target.closest("[data-filter]");
-    if (chip) {
-      resFilter = chip.dataset.filter;
-      renderAll();
-      return;
-    }
-    const custBtn = e.target.closest('[data-act="showCustRes"]');
-    if (custBtn) {
-      resPhone = custBtn.dataset.phone;
-      resFilter = "すべて";
-      current = "reservations";
-      renderAll();
-      window.scrollTo(0, 0);
-      return;
-    }
-    if (e.target.closest('[data-act="clearPhoneFilter"]')) {
-      resPhone = "";
-      renderAll();
-      return;
-    }
-    if (e.target.closest('[data-act="reloadRes"]')) {
-      try {
-        const j = await api({ action:"load" });
-        state.reservations = j.data.reservations;  // 編集中の他のタブは残す
-        state.customers = j.data.customers;
-        renderAll();
-        toast("最新の予約を読み込みました");
-      } catch(err) { toast(err.message, true); }
-      return;
-    }
+    if (chip) { resFilter = chip.dataset.filter; renderAll(); return; }
+    const achip = e.target.closest("[data-appfilter]");
+    if (achip) { appFilter = achip.dataset.appfilter; renderAll(); return; }
+    const dayb = e.target.closest("[data-day]");
+    if (dayb) { shiftDay = +dayb.dataset.day; renderAll(); return; }
 
+    const b = e.target.closest("[data-act]");
     const add = e.target.closest("[data-add]");
+    if (!b && !add) return;
+    if (b) e.preventDefault();
+    const act = b && b.dataset.act;
+    const i = b ? +b.dataset.i : 0;
+
     if (add) {
       const sec = add.dataset.add;
       const blank = {
-        casts:  { show:true, name:"", age:"", height:"", tags:"", photo:"", comment:"" },
-        news:   { date: today(), text:"" },
-        prices: { item:"", price:"" },
+        casts:  { show:true, name:"", age:"", height:"", tags:"", types:"", photo:"", comment:"", x:"", instagram:"", tiktok:"", email:"", code:"", lineUser:"" },
+        news:   { date: state.today, text:"" },
+        prices: { cat:"オプション", item:"", price:"", unit:"", note:"" },
         faqs:   { q:"", a:"" },
       }[sec];
       if (sec === "news") state.news.unshift(blank); else state[sec].push(blank);
@@ -572,21 +806,85 @@
       return;
     }
 
-    const b = e.target.closest("[data-act]");
-    if (!b) return;
-    e.preventDefault();
-    const act = b.dataset.act;
-    const i = +b.dataset.i;
-
-    if (act === "clearPhoto") {
-      state.casts[i].photo = "";
-      markDirty("casts");
-      renderAll();
-      return;
+    switch (act) {
+      case "showCustRes":
+        resPhone = b.dataset.phone; resFilter = "すべて"; current = "reservations";
+        renderAll(); window.scrollTo(0, 0); return;
+      case "clearPhoneFilter":
+        resPhone = ""; renderAll(); return;
+      case "reloadRes":
+        try {
+          const j = await api({ action:"load" });
+          // 編集中の他のタブは残して、予約・応募・顧客だけ最新にする
+          state.reservations = j.data.reservations;
+          state.customers = j.data.customers;
+          state.applications = j.data.applications;
+          renderAll();
+          toast("最新の情報を読み込みました");
+        } catch(err) { toast(err.message, true); }
+        return;
+      case "clearPhoto":
+        state.casts[i].photo = ""; markDirty("casts"); renderAll(); return;
+      case "type": {
+        const c = state.casts[i];
+        const list = splitList(c.types);
+        const ty = b.dataset.ty;
+        c.types = (list.includes(ty) ? list.filter(x => x !== ty) : list.concat(ty)).join(",");
+        markDirty("casts"); renderAll(); return;
+      }
+      case "resetLine":
+        if (!confirm("このキャストのLINE登録を解除して、新しい登録コードを発行しますか?(保存すると反映)")) return;
+        state.casts[i].resetLine = true; markDirty("casts"); renderAll(); return;
+      case "weekPrev": weekStart = addDays(weekStart, -7); renderAll(); return;
+      case "weekNext": weekStart = addDays(weekStart, 7); renderAll(); return;
+      case "copyPrevDay": {
+        const date = addDays(weekStart, shiftDay);
+        const prev = addDays(date, -1);
+        state.shifts = (state.shifts || []).filter(s => s.date !== date).concat(shiftsOn(prev).map(s => Object.assign({}, s, { date })));
+        markDirty("shifts"); renderAll(); toast("前の日と同じ出勤にしました"); return;
+      }
+      case "copyToWeek": {
+        const date = addDays(weekStart, shiftDay);
+        if (!confirm("この日の出勤を、表示中の週の7日間すべてにコピーしますか?")) return;
+        const src = shiftsOn(date);
+        for (let k = 0; k < 7; k++) {
+          const d = addDays(weekStart, k);
+          if (d === date) continue;
+          state.shifts = state.shifts.filter(s => s.date !== d).concat(src.map(s => Object.assign({}, s, { date: d })));
+        }
+        markDirty("shifts"); renderAll(); toast("1週間にコピーしました"); return;
+      }
+      case "clearDay": {
+        const date = addDays(weekStart, shiftDay);
+        state.shifts = (state.shifts || []).filter(s => s.date !== date);
+        markDirty("shifts"); renderAll(); return;
+      }
+      case "testMail":
+        try { const j = await api({ action:"testMail" }); toast(j.to + " にテストメールを送りました"); }
+        catch(err) { toast(err.message, true); }
+        return;
+      case "saveLineToken":
+        try {
+          const j = await api({ action:"setLineToken", lineToken: $("lineTokenInput").value });
+          state.line = { ready: j.ready, webhookKey: j.webhookKey };
+          if (j.basicId && !kv("settings", "LINE公式ID")) {
+            const s = state.settings.find(x => x.key === "LINE公式ID");
+            if (s) { s.value = j.basicId; markDirty("settings"); }
+          }
+          renderAll();
+          toast(j.ready ? "LINEと連携しました。Webhook URLをLINE Developersに貼ってください" : "LINE連携を解除しました");
+        } catch(err) { toast(err.message, true); }
+        return;
+      case "copyHook":
+        try { await navigator.clipboard.writeText($("hookUrl").value); toast("コピーしました"); }
+        catch(err) { $("hookUrl").select(); }
+        return;
     }
 
+    // 並び替え・削除
     const sec = b.dataset.sec;
     const list = state[sec];
+    if (!list) return;
     if (act === "up" && i > 0) [list[i-1], list[i]] = [list[i], list[i-1]];
     if (act === "down" && i < list.length - 1) [list[i+1], list[i]] = [list[i], list[i+1]];
     if (act === "del") {
@@ -598,23 +896,60 @@
     renderAll();
   });
 
-  // ===== 写真アップロード =====
+  // ===== 変更(予約・応募のステータス、出勤、写真) =====
   $("panel").addEventListener("change", async e => {
     const el = e.target;
 
-    // 予約のステータス・メモ(変えたらすぐ保存)
+    // 出勤の開始・終了
+    if (el.dataset.shift) {
+      const date = addDays(weekStart, shiftDay);
+      const cur = (state.shifts || []).find(s => s.cast === el.dataset.shift && s.date === date) || {};
+      if (el.dataset.k === "start") setShift(el.dataset.shift, date, el.value, cur.end);
+      else if (cur.start) setShift(el.dataset.shift, date, cur.start, el.value);
+      renderAll();
+      return;
+    }
+
+    // 予約のステータス・担当キャスト・メモ(変えたらすぐ保存)
     if (el.dataset.rid) {
       const r = state.reservations.find(x => x.id === el.dataset.rid);
       if (!r) return;
-      const before = { status: r.status, memo: r.memo };
+      const before = { status: r.status, memo: r.memo, cast: r.cast };
       r[el.dataset.field] = el.value;
-      if (el.dataset.field === "status") el.className = "res-status st-" + el.value;
+      if (el.dataset.field === "status" && el.value === "確定" && (!r.cast || r.cast === "おまかせ")) {
+        if (!confirm("担当キャストが「おまかせ(未定)」のままです。\nこのまま確定すると、キャストにはお知らせが届きません。確定しますか?")) {
+          Object.assign(r, before); renderAll(); return;
+        }
+      }
       try {
-        await api({ action:"updateReservation", id: r.id, status: r.status, memo: r.memo });
-        toast(el.dataset.field === "status" ? `「${r.status}」に変更しました` : "メモを保存しました");
-        if (el.dataset.field === "status") { updateBadge(); if (!RES_FILTERS[resFilter](r)) renderAll(); }
+        const j = await api({ action:"updateReservation", id: r.id, status: r.status, memo: r.memo, cast: el.dataset.field === "cast" ? r.cast : "" });
+        if (j.notified) {
+          r.notified = j.notified;
+          toast("「確定」にしました\n" + j.notified);
+        } else {
+          toast(el.dataset.field === "status" ? `「${r.status}」に変更しました` : el.dataset.field === "cast" ? `担当を「${r.cast}」にしました` : "メモを保存しました");
+        }
+        renderAll();
       } catch(err) {
         Object.assign(r, before);
+        renderAll();
+        toast("更新できませんでした:" + err.message, true);
+      }
+      return;
+    }
+
+    // 応募のステータス・メモ
+    if (el.dataset.aid) {
+      const a = state.applications.find(x => x.id === el.dataset.aid);
+      if (!a) return;
+      const before = { status: a.status, memo: a.memo };
+      a[el.dataset.field] = el.value;
+      try {
+        await api({ action:"updateApplication", id: a.id, status: a.status, memo: a.memo });
+        toast(el.dataset.field === "status" ? `「${a.status}」に変更しました` : "メモを保存しました");
+        renderAll();
+      } catch(err) {
+        Object.assign(a, before);
         renderAll();
         toast("更新できませんでした:" + err.message, true);
       }
@@ -641,7 +976,6 @@
   });
 
   // 画像を 縦横比ratio(幅÷高さ)で中央を切り抜き → 長辺max pxに縮小 → JPEGにする
-  // (スマホの大きい写真や横長の写真でも、HPのカードにぴったり収まるサイズになる)
   function resizeImage(file, max, quality, ratio){
     return new Promise((resolve, reject) => {
       const img = new Image();
@@ -672,13 +1006,14 @@
     btn.textContent = "保存中…";
     try {
       for (const sec of [...dirty]) {
-        const items = sec === "settings"
-          ? Object.fromEntries(state.settings.map(s => [s.key, s.value]))
-          : state[sec];
+        let items;
+        if (KV_SECTIONS.includes(sec)) items = Object.fromEntries(state[sec].map(s => [s.key, s.value]));
+        else if (sec === "shifts") items = { from: addDays(state.today, -7), to: addDays(state.today, 45), list: state.shifts.filter(s => s.date >= addDays(state.today, -7) && s.date <= addDays(state.today, 45)) };
+        else items = state[sec];
         await api({ action:"save", section: sec, items });
         dirty.delete(sec);
       }
-      // 空の行などを除いた最新の状態を読み直す
+      // 登録コードの発行などを反映した最新の状態を読み直す
       const j = await api({ action:"load" });
       state = j.data;
       renderAll();
