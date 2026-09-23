@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>管理画面|レンタル彼氏HP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f1ec;
+    --card:#ffffff;
+    --ink:#23263a;
+    --sub:#77768a;
+    --line:#e3ddd4;
+    --navy:#2c3150;
+    --accent:#c48a8a;
+    --danger:#c0504d;
+    --ok:#2e9e6b;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Zen Kaku Gothic New",sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6;padding-bottom:96px}
+  button,input,textarea{font:inherit;color:inherit}
+  a{color:inherit}
+  [hidden]{display:none !important}
+
+  /* ===== ログイン ===== */
+  .login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+  .login-box{background:var(--card);border-radius:20px;padding:32px 24px;width:100%;max-width:360px;box-shadow:0 10px 30px rgba(35,38,58,.08);text-align:center}
+  .login-box h1{font-size:20px;color:var(--navy);margin-bottom:4px}
+  .login-box p{font-size:12px;color:var(--sub);margin-bottom:22px}
+  .login-box input{width:100%;padding:14px;border:1.5px solid var(--line);border-radius:12px;font-size:16px;margin-bottom:12px}
+  .err{color:var(--danger);font-size:13px;margin-top:10px;min-height:1.2em}
+
+  /* ===== ヘッダー・タブ ===== */
+  header{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff}
+  .head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;max-width:760px;margin:0 auto}
+  .head h1{font-size:16px}
+  .head .links{display:flex;gap:8px}
+  .head .links a,.head .links button{font-size:12px;background:rgba(255,255,255,.14);border:none;border-radius:999px;padding:6px 12px;color:#fff;text-decoration:none;cursor:pointer}
+  .tabs{display:flex;overflow-x:auto;gap:4px;padding:0 12px;max-width:760px;margin:0 auto;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto;border:none;background:none;color:rgba(255,255,255,.65);padding:10px 14px 12px;font-size:14px;font-weight:500;cursor:pointer;border-bottom:3px solid transparent;position:relative}
+  .tab.active{color:#fff;border-bottom-color:var(--accent)}
+  .tab.dirty::after{content:"";position:absolute;top:8px;right:6px;width:7px;height:7px;border-radius:50%;background:#f4b740}
+
+  main{max-width:760px;margin:0 auto;padding:16px}
+  .hint{font-size:12px;color:var(--sub);margin-bottom:12px}
+
+  /* ===== カード・入力 ===== */
+  .item{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(35,38,58,.05)}
+  .item.off{opacity:.55}
+  label.f{display:block;font-size:12px;color:var(--sub);margin:10px 0 4px}
+  label.f:first-child{margin-top:0}
+  input.t,textarea.t{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:16px;background:#fff}
+  input.t:focus,textarea.t:focus{outline:none;border-color:var(--navy)}
+  textarea.t{resize:vertical;min-height:80px;line-height:1.6}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .desc{font-size:11px;color:var(--sub);margin-top:3px}
+
+  .ctrl{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+  .ctrl .order{display:flex;gap:6px}
+  .ic{width:40px;height:40px;border-radius:10px;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-size:15px}
+  .ic.del{color:var(--danger)}
+  .ic:disabled{opacity:.3}
+
+  /* 表示スイッチ */
+  .sw{display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer}
+  .sw input{display:none}
+  .sw .knob{width:46px;height:26px;border-radius:999px;background:#ccc;position:relative;transition:.2s}
+  .sw .knob::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
+  .sw input:checked + .knob{background:var(--ok)}
+  .sw input:checked + .knob::after{left:23px}
+
+  /* キャスト写真 */
+  .cast-top{display:flex;gap:14px}
+  .photo{flex:0 0 96px;height:128px;border-radius:12px;background:linear-gradient(145deg,#c48a8a,#2c3150) center/cover;display:flex;align-items:flex-end;justify-content:center;cursor:pointer;overflow:hidden;position:relative}
+  .photo span{width:100%;text-align:center;font-size:11px;color:#fff;background:rgba(0,0,0,.45);padding:4px 0}
+  .photo input{display:none}
+  .photo.busy::before{content:"アップ中…";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);color:#fff;font-size:12px}
+  .cast-top .fields{flex:1;min-width:0}
+  .photo-clear{font-size:11px;color:var(--danger);background:none;border:none;cursor:pointer;margin-top:4px;text-decoration:underline}
+
+  .add{width:100%;padding:14px;border:2px dashed #cfc6ba;border-radius:var(--radius);background:none;color:var(--navy);font-weight:700;cursor:pointer;font-size:15px}
+
+  /* ===== 保存バー ===== */
+  .savebar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(255,255,255,.96);border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom))}
+  .savebar .in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px}
+  .savebar .st{flex:1;font-size:12px;color:var(--sub)}
+  .savebar .st.dirty{color:#b7791f;font-weight:700}
+  .btn{border:none;border-radius:999px;padding:14px 26px;font-weight:700;font-size:15px;cursor:pointer;background:var(--navy);color:#fff}
+  .btn:disabled{background:#b9b8c4;cursor:default}
+  .btn.full{width:100%}
+
+  .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;font-size:13px;z-index:40;max-width:90vw;text-align:center;opacity:0;transition:.25s;pointer-events:none}
+  .toast.show{opacity:1}
+  .toast.err{background:var(--danger)}
+  .center{text-align:center;color:var(--sub);padding:40px 0}
+
+  /* ===== 予約 ===== */
+  .tab .badge{display:inline-block;min-width:18px;height:18px;line-height:18px;border-radius:999px;background:#f4b740;color:var(--navy);font-size:11px;font-weight:700;margin-left:4px;padding:0 5px}
+  .res-bar{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+  .chips{display:flex;gap:6px;overflow-x:auto;flex:1;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-size:12px;cursor:pointer}
+  .chip.active{background:var(--navy);border-color:var(--navy);color:#fff}
+  .reload{flex:0 0 auto;border:none;background:none;font-size:12px;color:var(--navy);text-decoration:underline;cursor:pointer}
+  .res-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .res-when{font-size:17px;font-weight:700;color:var(--navy);line-height:1.4}
+  .res-when small{display:block;font-size:12px;font-weight:500;color:var(--sub)}
+  .res-status{padding:7px 10px;border-radius:999px;border:none;font-weight:700;font-size:13px;cursor:pointer}
+  .st-新規{background:#fdecc8;color:#8a5a00}
+  .st-対応中{background:#dbe7fb;color:#1f4f9c}
+  .st-確定{background:#d5f0e3;color:#1d7a50}
+  .st-完了{background:#e7e6ea;color:#55546a}
+  .st-キャンセル{background:#f6dcdc;color:#9c2f2f}
+  .res-name{font-size:16px;font-weight:700;margin-top:10px}
+  .res-name small{font-size:11px;font-weight:500;color:var(--sub);margin-left:6px}
+  dl.res{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13.5px;margin-top:8px}
+  dl.res dt{color:var(--sub)}
+  dl.res dd{word-break:break-all}
+  dl.res a{color:#1f4f9c}
+  .res-req{background:var(--bg);border-radius:10px;padding:10px 12px;font-size:13.5px;margin-top:10px;white-space:pre-wrap;word-break:break-word}
+  .res-foot{font-size:11px;color:var(--sub);margin-top:10px}
+  .visit{display:inline-block;font-size:11px;font-weight:700;border-radius:999px;padding:2px 9px;margin-left:6px;vertical-align:2px}
+  .visit.new{background:#fdecc8;color:#8a5a00}
+  .visit.rep{background:#d5f0e3;color:#1d7a50}
+  .visit.warn{background:#f6dcdc;color:#9c2f2f}
+
+  /* ===== 顧客 ===== */
+  .search{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:999px;font-size:16px;margin-bottom:12px;background:#fff}
+  .cust-stats{display:flex;gap:8px;margin-top:10px}
+  .cust-stats div{flex:1;background:var(--bg);border-radius:10px;padding:8px 4px;text-align:center;font-size:11px;color:var(--sub)}
+  .cust-stats b{display:block;font-size:18px;color:var(--navy)}
+  .cust-link{border:none;background:none;color:#1f4f9c;text-decoration:underline;font-size:12px;cursor:pointer;margin-top:8px}
+</style>
+</head>
+<body>
+
+<!-- ===== ログイン画面 ===== -->
+<div class="login" id="loginView">
+  <form class="login-box" id="loginForm">
+    <h1>管理画面</h1>
+    <p>レンタル彼氏HPの内容を編集できます</p>
+    <input type="password" id="pw" placeholder="パスワード" autocomplete="current-password" required>
+    <button class="btn full" id="loginBtn">ログイン</button>
+    <div class="err" id="loginErr"></div>
+  </form>
+</div>
+
+<!-- ===== 管理画面 ===== -->
+<div id="appView" hidden>
+  <header>
+    <div class="head">
+      <h1 id="shopTitle">管理画面</h1>
+      <div class="links">
+        <a href="index.html" target="_blank" rel="noopener">公開HPを見る</a>
+        <button id="logoutBtn">ログアウト</button>
+      </div>
+    </div>
+    <nav class="tabs" id="tabs">
+      <button class="tab active" data-tab="reservations">予約<span class="badge" id="resBadge" hidden></span></button>
+      <button class="tab" data-tab="customers">顧客</button>
+      <button class="tab" data-tab="casts">キャスト</button>
+      <button class="tab" data-tab="news">お知らせ</button>
+      <button class="tab" data-tab="prices">料金</button>
+      <button class="tab" data-tab="faqs">よくある質問</button>
+      <button class="tab" data-tab="settings">基本設定</button>
+    </nav>
+  </header>
+
+  <main id="panel"><div class="center">読み込み中…</div></main>
+
+  <div class="savebar">
+    <div class="in">
+      <div class="st" id="saveStatus">変更はありません</div>
+      <button class="btn" id="saveBtn" disabled>保存する</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="config.js"></script>
+<script>
+  const GAS_URL = window.GAS_URL || "";
+  const TOKEN_KEY = "rk_admin_token";
+  const SECTIONS = { casts:"キャスト", news:"お知らせ", prices:"料金", faqs:"よくある質問", settings:"基本設定" };
+  const MULTILINE_KEYS = ["キャッチコピー","サブコピー","コンセプト文","料金の注意書き"];
+  const RES_STATUSES = ["新規","対応中","確定","完了","キャンセル"];
+  const RES_FILTERS = {
+    "未対応": r => r.status === "新規" || r.status === "対応中",
+    "確定":   r => r.status === "確定",
+    "完了":   r => r.status === "完了",
+    "キャンセル": r => r.status === "キャンセル",
+    "すべて": () => true,
+  };
+
+  let token = "";
+  let state = null;          // 編集中のデータ
+  let current = "reservations"; // 表示中のタブ
+  let resFilter = "未対応";
+  let custQuery = "";
+  let resPhone = "";  // 顧客タブから「予約履歴を見る」で絞り込む電話番号
+  const dirty = new Set();   // 未保存のセクション
+
+  // ===== 共通 =====
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const safeUrl = u => /^https:\/\//.test(u || "") ? u : "";
+
+  function storeGet(){ try { return localStorage.getItem(TOKEN_KEY) || ""; } catch(e){ return ""; } }
+  function storeSet(v){ try { v ? localStorage.setItem(TOKEN_KEY, v) : localStorage.removeItem(TOKEN_KEY); } catch(e){} }
+
+  let toastTimer;
+  function toast(msg, isErr){
+    const t = $("toast");
+    t.textContent = msg;
+    t.className = "toast show" + (isErr ? " err" : "");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.className = "toast", isErr ? 5000 : 2600);
+  }
+
+  async function api(body){
+    if (!GAS_URL) throw new Error("config.js に GAS_URL が設定されていません");
+    const res = await fetch(GAS_URL, { method:"POST", body: JSON.stringify(Object.assign({ token }, body)) });
+    const j = await res.json();
+    if (j.auth === false) { logout(true); throw new Error(j.error); }
+    if (!j.ok) throw new Error(j.error || "エラーが発生しました");
+    return j;
+  }
+
+  // ===== ログイン / ログアウト =====
+  $("loginForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    $("loginErr").textContent = "";
+    $("loginBtn").disabled = true;
+    $("loginBtn").textContent = "確認中…";
+    try {
+      const j = await api({ action:"login", password: $("pw").value });
+      token = j.token; storeSet(token);
+      $("pw").value = "";
+      await startApp();
+    } catch(err) {
+      $("loginErr").textContent = err.message;
+    } finally {
+      $("loginBtn").disabled = false;
+      $("loginBtn").textContent = "ログイン";
+    }
+  });
+
+  function logout(expired){
+    if (!expired && token) api({ action:"logout" }).catch(() => {});
+    token = ""; storeSet("");
+    state = null; dirty.clear();
+    $("appView").hidden = true;
+    $("loginView").hidden = false;
+    if (expired) $("loginErr").textContent = "ログインの有効期限が切れました。もう一度ログインしてください";
+  }
+
+  $("logoutBtn").addEventListener("click", () => {
+    if (dirty.size && !confirm("保存していない変更があります。ログアウトしますか?")) return;
+    logout(false);
+  });
+
+  async function startApp(){
+    $("loginView").hidden = true;
+    $("appView").hidden = false;
+    $("panel").innerHTML = `<div class="center">読み込み中…</div>`;
+    const j = await api({ action:"load" });
+    state = j.data;
+    dirty.clear();
+    renderAll();
+  }
+
+  // ===== タブ =====
+  $("tabs").addEventListener("click", e => {
+    const b = e.target.closest(".tab");
+    if (!b) return;
+    current = b.dataset.tab;
+    renderAll();
+    window.scrollTo(0, 0);
+  });
+
+  function renderAll(){
+    document.querySelectorAll(".tab").forEach(t => {
+      t.classList.toggle("active", t.dataset.tab === current);
+      t.classList.toggle("dirty", dirty.has(t.dataset.tab));
+    });
+    const shop = (state.settings.find(s => s.key === "店名") || {}).value;
+    $("shopTitle").textContent = (shop || "HP") + " 管理画面";
+    $("panel").innerHTML = RENDER[current]();
+    updateBadge();
+    updateSaveBar();
+  }
+
+  function updateBadge(){
+    const n = (state.reservations || []).filter(r => r.status === "新規").length;
+    $("resBadge").textContent = n;
+    $("resBadge").hidden = n === 0;
+  }
+
+  function markDirty(sec){
+    dirty.add(sec);
+    document.querySelector(`.tab[data-tab="${sec}"]`).classList.add("dirty");
+    updateSaveBar();
+  }
+
+  function updateSaveBar(){
+    const st = $("saveStatus");
+    if (dirty.size) {
+      st.textContent = "未保存:" + [...dirty].map(s => SECTIONS[s]).join("、");
+      st.className = "st dirty";
+    } else {
+      st.textContent = "変更はありません";
+      st.className = "st";
+    }
+    $("saveBtn").disabled = dirty.size === 0;
+  }
+
+  // 並び替え・削除ボタン
+  function ctrlButtons(sec, i, len){
+    return `<div class="order">
+      <button class="ic" data-act="up" data-sec="${sec}" data-i="${i}" ${i === 0 ? "disabled" : ""} aria-label="上へ">↑</button>
+      <button class="ic" data-act="down" data-sec="${sec}" data-i="${i}" ${i === len - 1 ? "disabled" : ""} aria-label="下へ">↓</button>
+      <button class="ic del" data-act="del" data-sec="${sec}" data-i="${i}" aria-label="削除">🗑</button>
+    </div>`;
+  }
+
+  const input = (sec, i, k, v, ph, type) =>
+    `<input class="t" type="${type || "text"}" data-sec="${sec}" data-i="${i}" data-k="${k}" value="${esc(v)}" placeholder="${esc(ph || "")}">`;
+  const textarea = (sec, i, k, v, ph) =>
+    `<textarea class="t" data-sec="${sec}" data-i="${i}" data-k="${k}" placeholder="${esc(ph || "")}">${esc(v)}</textarea>`;
+
+  // ===== 各タブの画面 =====
+  const RENDER = {
+    reservations(){
+      const all = (state.reservations || []).filter(r => !resPhone || r.phone === resPhone);
+      const list = all.filter(RES_FILTERS[resFilter]);
+      const custMap = {};
+      (state.customers || []).forEach(c => custMap[c.phone] = c);
+      const visitBadge = r => {
+        const c = custMap[r.phone];
+        if (!c || c.reserved <= 1) return `<span class="visit new">新規のお客様</span>`;
+        return `<span class="visit rep">予約${c.reserved}回・利用${c.visited}回</span>` +
+          (c.canceled ? `<span class="visit warn">キャンセル${c.canceled}回</span>` : "");
+      };
+      const phoneBar = resPhone
+        ? `<div class="item" style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center;font-size:13px">📞 ${esc(resPhone)} の予約だけ表示中<button class="cust-link" style="margin:0" data-act="clearPhoneFilter">解除</button></div>`
+        : "";
+      const chips = Object.keys(RES_FILTERS).map(k => {
+        const n = all.filter(RES_FILTERS[k]).length;
+        return `<button class="chip ${k === resFilter ? "active" : ""}" data-filter="${k}">${k}(${n})</button>`;
+      }).join("");
+
+      const contactLink = r => {
+        const c = esc(r.contact);
+        if (r.method === "電話") return `<a href="tel:${esc(r.contact.replace(/[^\d+]/g, ""))}">${c}</a>`;
+        if (r.method === "メール") return `<a href="mailto:${c}">${c}</a>`;
+        return c;
+      };
+      const week = d => {
+        const m = String(d).match(/(\d{4})\/(\d{1,2})\/(\d{1,2})/);
+        return m ? "(" + "日月火水木金土"[new Date(+m[1], m[2] - 1, +m[3]).getDay()] + ")" : "";
+      };
+
+      return phoneBar + `<div class="res-bar"><div class="chips">${chips}</div><button class="reload" data-act="reloadRes">更新</button></div>` +
+        (list.length ? list.map(r => `<div class="item">
+          <div class="res-head">
+            <div class="res-when">${esc(r.date)}${week(r.date)} ${esc(r.time)}〜<small>${esc(r.duration)} / 指名:${esc(r.cast)}</small></div>
+            <select class="res-status st-${esc(r.status)}" data-rid="${esc(r.id)}" data-field="status">
+              ${RES_STATUSES.map(s => `<option ${s === r.status ? "selected" : ""}>${s}</option>`).join("")}
+            </select>
+          </div>
+          <div class="res-name">${esc(r.name)} 様${visitBadge(r)}</div>
+          <dl class="res">
+            ${r.phone ? `<dt>電話</dt><dd><a href="tel:${esc(r.phone)}">${esc(r.phone)}</a></dd>` : ""}
+            <dt>${esc(r.method)}</dt><dd>${contactLink(r)}</dd>
+            <dt>待ち合わせ</dt><dd>${esc(r.place) || "未記入"}</dd>
+          </dl>
+          ${r.request ? `<div class="res-req">${esc(r.request)}</div>` : ""}
+          <label class="f">店舗メモ(お客様には見えません)</label>
+          <textarea class="t" data-rid="${esc(r.id)}" data-field="memo" placeholder="対応内容など" style="min-height:60px">${esc(r.memo)}</textarea>
+          <div class="res-foot">受付:${esc(r.received)}</div>
+        </div>`).join("")
+        : `<div class="center">${resFilter}の予約はありません</div>`);
+    },
+
+    customers(){
+      return `<p class="hint">予約フォームの電話番号ごとにまとめたお客様の一覧です(利用回数は「完了」にした予約の数)。</p>
+        <input class="search" type="search" id="custSearch" placeholder="名前・電話番号で検索" value="${esc(custQuery)}">
+        <div id="custList">${customerList()}</div>`;
+    },
+
+    casts(){
+      const list = state.casts;
+      return `<p class="hint">写真をタップすると変更できます(自動で縦長3:4に切り抜き・縮小されます)。「HPに表示」をオフにするとHPから非表示になります(データは残ります)。</p>` +
+        list.map((c, i) => {
+          const photo = safeUrl(c.photo);
+          return `<div class="item ${c.show ? "" : "off"}">
+            <div class="cast-top">
+              <div>
+                <label class="photo" id="ph${i}" style="${photo ? `background-image:url('${esc(photo)}')` : ""}">
+                  <input type="file" accept="image/*" data-upload="${i}">
+                  <span>${photo ? "写真を変更" : "写真を追加"}</span>
+                </label>
+                ${photo ? `<button class="photo-clear" data-act="clearPhoto" data-i="${i}">写真を外す</button>` : ""}
+              </div>
+              <div class="fields">
+                <label class="f">名前</label>${input("casts", i, "name", c.name, "例:ハルト")}
+                <div class="row2">
+                  <div><label class="f">年齢</label>${input("casts", i, "age", c.age, "24", "number")}</div>
+                  <div><label class="f">身長(cm)</label>${input("casts", i, "height", c.height, "178", "number")}</div>
+                </div>
+              </div>
+            </div>
+            <label class="f">タグ(カンマ区切り)</label>${input("casts", i, "tags", c.tags, "聞き上手,カフェ好き,癒し系")}
+            <label class="f">ひとこと</label>${textarea("casts", i, "comment", c.comment, "お客様へのひとこと")}
+            <div class="ctrl">
+              <label class="sw"><input type="checkbox" data-sec="casts" data-i="${i}" data-k="show" ${c.show ? "checked" : ""}><span class="knob"></span>HPに表示</label>
+              ${ctrlButtons("casts", i, list.length)}
+            </div>
+          </div>`;
+        }).join("") +
+        `<button class="add" data-add="casts">+ キャストを追加</button>`;
+    },
+
+    news(){
+      const list = state.news;
+      return `<p class="hint">上にあるものからHPに表示されます(最大5件)。</p>` +
+        `<button class="add" data-add="news" style="margin-bottom:12px">+ お知らせを追加</button>` +
+        list.map((n, i) => `<div class="item">
+          <label class="f">日付</label>${input("news", i, "date", toInputDate(n.date), "", "date")}
+          <label class="f">内容</label>${textarea("news", i, "text", n.text, "お知らせの内容")}
+          <div class="ctrl"><span></span>${ctrlButtons("news", i, list.length)}</div>
+        </div>`).join("");
+    },
+
+    prices(){
+      const list = state.prices;
+      return `<p class="hint">金額は「¥5,000〜」のように自由に書けます。</p>` +
+        list.map((p, i) => `<div class="item">
+          <label class="f">項目</label>${input("prices", i, "item", p.item, "例:デート料金(60分)")}
+          <label class="f">金額</label>${input("prices", i, "price", p.price, "例:¥5,000〜")}
+          <div class="ctrl"><span></span>${ctrlButtons("prices", i, list.length)}</div>
+        </div>`).join("") +
+        `<button class="add" data-add="prices">+ 料金項目を追加</button>`;
+    },
+
+    faqs(){
+      const list = state.faqs;
+      return list.map((f, i) => `<div class="item">
+          <label class="f">質問</label>${input("faqs", i, "q", f.q, "例:キャンセルはできますか?")}
+          <label class="f">回答</label>${textarea("faqs", i, "a", f.a, "回答")}
+          <div class="ctrl"><span></span>${ctrlButtons("faqs", i, list.length)}</div>
+        </div>`).join("") +
+        `<button class="add" data-add="faqs">+ 質問を追加</button>`;
+    },
+
+    settings(){
+      return `<div class="item">` + state.settings.map((s, i) => {
+        const multi = MULTILINE_KEYS.includes(s.key) || /\n/.test(s.value);
+        return `<label class="f">${esc(s.key)}</label>` +
+          (multi ? textarea("settings", i, "value", s.value) : input("settings", i, "value", s.value)) +
+          (s.desc ? `<div class="desc">${esc(s.desc)}</div>` : "");
+      }).join("") + `</div>`;
+    },
+  };
+
+  function customerList(){
+    const q = custQuery.trim().replace(/-/g, "");
+    const list = (state.customers || []).filter(c => !q || c.name.includes(q) || c.phone.includes(q));
+    if (!list.length) return `<div class="center">${q ? "該当するお客様はいません" : "まだ予約がありません"}</div>`;
+    return list.map(c => {
+      const contact = c.method === "メール"
+        ? `<a href="mailto:${esc(c.contact)}">${esc(c.contact)}</a>`
+        : esc(c.contact);
+      return `<div class="item">
+        <div class="res-name" style="margin-top:0">${esc(c.name || "(名前未登録)")} 様</div>
+        <dl class="res">
+          <dt>電話</dt><dd><a href="tel:${esc(c.phone)}">${esc(c.phone)}</a></dd>
+          ${c.contact ? `<dt>${esc(c.method)}</dt><dd>${contact}</dd>` : ""}
+          <dt>初回予約日</dt><dd>${esc(c.firstDate)}</dd>
+          <dt>最終予約日</dt><dd>${esc(c.lastDate)}</dd>
+        </dl>
+        <div class="cust-stats">
+          <div><b>${c.reserved}</b>予約</div>
+          <div><b>${c.visited}</b>利用</div>
+          <div><b>${c.canceled}</b>キャンセル</div>
+        </div>
+        <button class="cust-link" data-act="showCustRes" data-phone="${esc(c.phone)}">この方の予約履歴を見る →</button>
+      </div>`;
+    }).join("");
+  }
+
+  // 日付の変換(2026/10/01 ⇔ 2026-10-01)
+  function toInputDate(d){
+    const m = String(d || "").match(/(\d{4})[\/\-.年](\d{1,2})[\/\-.月](\d{1,2})/);
+    return m ? `${m[1]}-${m[2].padStart(2,"0")}-${m[3].padStart(2,"0")}` : "";
+  }
+  function today(){
+    const d = new Date();
+    return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,"0")}/${String(d.getDate()).padStart(2,"0")}`;
+  }
+
+  // ===== 入力の反映 =====
+  $("panel").addEventListener("input", e => {
+    const el = e.target;
+    if (el.id === "custSearch") {
+      custQuery = el.value;
+      $("custList").innerHTML = customerList();  // 入力欄はそのまま、一覧だけ書き換える
+      return;
+    }
+    const sec = el.dataset.sec;
+    if (!sec) return;
+    let v = el.type === "checkbox" ? el.checked : el.value;
+    if (el.type === "date") v = v.replace(/-/g, "/");
+    state[sec][+el.dataset.i][el.dataset.k] = v;
+    if (sec === "casts" && el.dataset.k === "show") el.closest(".item").classList.toggle("off", !v);
+    markDirty(sec);
+  });
+
+  // ===== ボタン(追加・並び替え・削除) =====
+  $("panel").addEventListener("click", async e => {
+    const chip = e.target.closest("[data-filter]");
+    if (chip) {
+      resFilter = chip.dataset.filter;
+      renderAll();
+      return;
+    }
+    const custBtn = e.target.closest('[data-act="showCustRes"]');
+    if (custBtn) {
+      resPhone = custBtn.dataset.phone;
+      resFilter = "すべて";
+      current = "reservations";
+      renderAll();
+      window.scrollTo(0, 0);
+      return;
+    }
+    if (e.target.closest('[data-act="clearPhoneFilter"]')) {
+      resPhone = "";
+      renderAll();
+      return;
+    }
+    if (e.target.closest('[data-act="reloadRes"]')) {
+      try {
+        const j = await api({ action:"load" });
+        state.reservations = j.data.reservations;  // 編集中の他のタブは残す
+        state.customers = j.data.customers;
+        renderAll();
+        toast("最新の予約を読み込みました");
+      } catch(err) { toast(err.message, true); }
+      return;
+    }
+
+    const add = e.target.closest("[data-add]");
+    if (add) {
+      const sec = add.dataset.add;
+      const blank = {
+        casts:  { show:true, name:"", age:"", height:"", tags:"", photo:"", comment:"" },
+        news:   { date: today(), text:"" },
+        prices: { item:"", price:"" },
+        faqs:   { q:"", a:"" },
+      }[sec];
+      if (sec === "news") state.news.unshift(blank); else state[sec].push(blank);
+      markDirty(sec);
+      renderAll();
+      if (sec !== "news") window.scrollTo(0, document.body.scrollHeight);
+      return;
+    }
+
+    const b = e.target.closest("[data-act]");
+    if (!b) return;
+    e.preventDefault();
+    const act = b.dataset.act;
+    const i = +b.dataset.i;
+
+    if (act === "clearPhoto") {
+      state.casts[i].photo = "";
+      markDirty("casts");
+      renderAll();
+      return;
+    }
+
+    const sec = b.dataset.sec;
+    const list = state[sec];
+    if (act === "up" && i > 0) [list[i-1], list[i]] = [list[i], list[i-1]];
+    if (act === "down" && i < list.length - 1) [list[i+1], list[i]] = [list[i], list[i+1]];
+    if (act === "del") {
+      const label = list[i].name || list[i].item || list[i].q || list[i].text || "この項目";
+      if (!confirm(`「${String(label).slice(0, 20)}」を削除しますか?\n(「保存する」を押すまではHPに反映されません)`)) return;
+      list.splice(i, 1);
+    }
+    markDirty(sec);
+    renderAll();
+  });
+
+  // ===== 写真アップロード =====
+  $("panel").addEventListener("change", async e => {
+    const el = e.target;
+
+    // 予約のステータス・メモ(変えたらすぐ保存)
+    if (el.dataset.rid) {
+      const r = state.reservations.find(x => x.id === el.dataset.rid);
+      if (!r) return;
+      const before = { status: r.status, memo: r.memo };
+      r[el.dataset.field] = el.value;
+      if (el.dataset.field === "status") el.className = "res-status st-" + el.value;
+      try {
+        await api({ action:"updateReservation", id: r.id, status: r.status, memo: r.memo });
+        toast(el.dataset.field === "status" ? `「${r.status}」に変更しました` : "メモを保存しました");
+        if (el.dataset.field === "status") { updateBadge(); if (!RES_FILTERS[resFilter](r)) renderAll(); }
+      } catch(err) {
+        Object.assign(r, before);
+        renderAll();
+        toast("更新できませんでした:" + err.message, true);
+      }
+      return;
+    }
+
+    if (!el.dataset.upload) return;
+    const i = +el.dataset.upload;
+    const file = el.files[0];
+    if (!file) return;
+    const box = $("ph" + i);
+    box.classList.add("busy");
+    try {
+      const dataUrl = await resizeImage(file, 900, 0.85, 3 / 4);
+      const j = await api({ action:"upload", dataUrl });
+      state.casts[i].photo = j.url;
+      markDirty("casts");
+      renderAll();
+      toast("写真をアップしました。「保存する」でHPに反映されます");
+    } catch(err) {
+      box.classList.remove("busy");
+      toast(err.message, true);
+    }
+  });
+
+  // 画像を 縦横比ratio(幅÷高さ)で中央を切り抜き → 長辺max pxに縮小 → JPEGにする
+  // (スマホの大きい写真や横長の写真でも、HPのカードにぴったり収まるサイズになる)
+  function resizeImage(file, max, quality, ratio){
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        let sx = 0, sy = 0, sw = img.width, sh = img.height;
+        if (ratio) {
+          if (sw / sh > ratio) { sw = Math.round(sh * ratio); sx = Math.round((img.width - sw) / 2); }
+          else { sh = Math.round(sw / ratio); sy = Math.round((img.height - sh) / 2); }
+        }
+        const scale = Math.min(1, max / Math.max(sw, sh));
+        const c = document.createElement("canvas");
+        c.width = Math.round(sw * scale);
+        c.height = Math.round(sh * scale);
+        c.getContext("2d").drawImage(img, sx, sy, sw, sh, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url);
+        resolve(c.toDataURL("image/jpeg", quality));
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("画像を読み込めませんでした")); };
+      img.src = url;
+    });
+  }
+
+  // ===== 保存 =====
+  $("saveBtn").addEventListener("click", async () => {
+    const btn = $("saveBtn");
+    btn.disabled = true;
+    btn.textContent = "保存中…";
+    try {
+      for (const sec of [...dirty]) {
+        const items = sec === "settings"
+          ? Object.fromEntries(state.settings.map(s => [s.key, s.value]))
+          : state[sec];
+        await api({ action:"save", section: sec, items });
+        dirty.delete(sec);
+      }
+      // 空の行などを除いた最新の状態を読み直す
+      const j = await api({ action:"load" });
+      state = j.data;
+      renderAll();
+      toast("保存しました。公開HPに反映されています");
+    } catch(err) {
+      toast("保存できませんでした:" + err.message, true);
+    } finally {
+      btn.textContent = "保存する";
+      updateSaveBar();
+    }
+  });
+
+  window.addEventListener("beforeunload", e => {
+    if (dirty.size) { e.preventDefault(); e.returnValue = ""; }
+  });
+
+  // ===== 起動 =====
+  if (!GAS_URL) {
+    $("loginErr").textContent = "config.js に GAS_URL が設定されていません";
+  } else {
+    token = storeGet();
+    if (token) startApp().catch(err => { logout(true); $("loginErr").textContent = err.message; });
+  }
+</script>
+</body>
+</html>

@@ -36,6 +36,7 @@
   img{max-width:100%;display:block}
   .wrap{max-width:1040px;margin:0 auto;padding:0 20px}
   .en{font-family:"Cormorant Garamond",serif;letter-spacing:.08em}
+  .loading{grid-column:1/-1;text-align:center;color:var(--sub);font-size:13px;padding:20px 0}
 
   /* ===== ヘッダー ===== */
   header{
@@ -82,6 +83,13 @@
   .sec-title .ja{font-size:12px;color:var(--accent-dk);letter-spacing:.2em}
   .alt{background:var(--bg2)}
 
+  /* ===== お知らせ ===== */
+  .news-sec{padding:40px 0}
+  .news{max-width:700px;margin:0 auto;background:var(--card);border-radius:var(--radius);padding:8px 22px;box-shadow:0 4px 14px rgba(35,38,58,.05)}
+  .news-item{display:flex;gap:14px;padding:12px 0;border-bottom:1px dashed #ddd3c8;font-size:13.5px}
+  .news-item:last-child{border-bottom:none}
+  .news-item .date{color:var(--accent-dk);white-space:nowrap;font-family:"Cormorant Garamond",serif;font-size:15px;font-weight:600}
+
   /* ===== コンセプト ===== */
   .concept p{max-width:640px;margin:0 auto;text-align:center}
   .scenes{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:36px}
@@ -104,15 +112,15 @@
   .cast .info{padding:12px 14px 16px}
   .cast .name{font-weight:700;font-size:16px}
   .cast .meta{font-size:12px;color:var(--sub)}
+  .cast .comment{font-size:12px;margin-top:6px;line-height:1.6}
   .cast .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
   .cast .tags span{font-size:10.5px;background:var(--bg2);border-radius:999px;padding:2px 9px}
 
   /* ===== 料金 ===== */
   .price-box{background:var(--card);border-radius:var(--radius);padding:28px 22px;max-width:640px;margin:0 auto;box-shadow:0 4px 14px rgba(35,38,58,.05)}
-  .price-row{display:flex;justify-content:space-between;align-items:baseline;padding:14px 0;border-bottom:1px dashed #ddd3c8}
+  .price-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:14px 0;border-bottom:1px dashed #ddd3c8}
   .price-row:last-child{border-bottom:none}
-  .price-row .yen{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:600;color:var(--navy)}
-  .price-row .yen small{font-family:"Zen Kaku Gothic New";font-size:12px;color:var(--sub);margin-left:2px}
+  .price-row .yen{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:600;color:var(--navy);white-space:nowrap}
   .note{font-size:12px;color:var(--sub);margin-top:16px;line-height:1.7}
 
   /* ===== ご利用の流れ ===== */
@@ -150,6 +158,46 @@
   .reserve .btn-ghost{border-color:#fff;color:#fff}
   .reserve .btn-ghost:hover{background:#fff;color:var(--navy)}
   .hours{margin-top:22px;font-size:12px;opacity:.7}
+  .or{margin:36px 0 0;font-size:13px;opacity:.8}
+
+  /* ===== 予約フォーム ===== */
+  .rform,.thanks{
+    background:var(--card);color:var(--ink);text-align:left;
+    border-radius:var(--radius);padding:26px 20px;max-width:640px;margin:28px auto 0;
+  }
+  .fg{margin-bottom:16px}
+  .fg > label,.fg > .lb{display:block;font-size:13px;font-weight:700;margin-bottom:6px}
+  .fg b{font-size:10px;background:var(--accent);color:#fff;border-radius:4px;padding:1px 6px;margin-left:6px;vertical-align:2px}
+  .rform input[type=text],.rform input[type=date],.rform select,.rform textarea{
+    width:100%;padding:12px;border:1.5px solid #e0d7cc;border-radius:10px;
+    font:inherit;font-size:16px;background:#fff;color:var(--ink);
+  }
+  .rform select{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%236b6a78' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 12px center}
+  .rform textarea{min-height:100px;resize:vertical}
+  .rform input:focus,.rform select:focus,.rform textarea:focus{outline:none;border-color:var(--navy)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .seg{display:flex;gap:6px;margin-bottom:8px}
+  .seg label{flex:1;cursor:pointer}
+  .seg input{position:absolute;opacity:0;pointer-events:none}
+  .seg span{display:block;text-align:center;padding:10px 4px;border:1.5px solid #e0d7cc;border-radius:10px;font-size:13px;font-weight:500}
+  .seg input:checked + span{background:var(--navy);border-color:var(--navy);color:#fff}
+  .seg input:focus-visible + span{outline:2px solid var(--accent)}
+  .chk{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;margin:10px 0;cursor:pointer}
+  .chk input{width:20px;height:20px;margin-top:2px;flex:0 0 auto;accent-color:var(--navy)}
+  .chk a{text-decoration:underline;color:var(--accent-dk)}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+  .btn-submit{width:100%;margin-top:14px;background:var(--accent-dk);color:#fff;border:none;cursor:pointer;font-family:inherit}
+  .btn-submit:disabled{opacity:.6;cursor:default}
+  .fs{border:none;margin:0;padding:0;min-width:0}
+  .fs:disabled{display:none}
+  .repeat-note{font-size:12px;color:var(--accent-dk);margin-top:6px;line-height:1.6}
+  .sub-s{display:block;font-size:11px;color:var(--sub)}
+  .form-note{font-size:11.5px;color:var(--sub);margin-top:12px;line-height:1.7}
+  .form-msg{font-size:13px;margin-top:10px;min-height:1em;text-align:center}
+  .form-msg.err{color:#c0504d}
+  .thanks{text-align:center;padding:40px 22px}
+  .thanks .en{font-size:30px;color:var(--navy);display:block}
+  .thanks p{font-size:14px;color:var(--sub);margin-top:10px;opacity:1}
 
   footer{text-align:center;padding:30px 20px;font-size:11px;color:var(--sub)}
 
@@ -159,7 +207,10 @@
     padding:10px 16px calc(10px + env(safe-area-inset-bottom));
     background:rgba(250,246,241,.95);border-top:1px solid rgba(35,38,58,.08);
   }
-  .fixed-cta .btn{width:100%;min-width:0}
+  .fixed-cta{display:flex;gap:8px}
+  .fixed-cta .btn{flex:1;min-width:0;padding:14px 8px;font-size:14px}
+  .btn-reserve{background:var(--accent-dk);color:#fff;box-shadow:0 6px 18px rgba(168,111,112,.25)}
+  .btn-reserve:hover{transform:translateY(-2px)}
 
   /* ===== PC ===== */
   @media (min-width:768px){
@@ -180,7 +231,7 @@
 
 <header>
   <div class="wrap head">
-    <a href="#top" class="logo en">Lueur<small>レンタル彼氏</small></a>
+    <a href="#top" class="logo en"><span class="js-shop">Lueur</span><small>レンタル彼氏</small></a>
     <nav>
       <ul>
         <li><a href="#concept">コンセプト</a></li>
@@ -197,13 +248,21 @@
 <!-- ヒーロー -->
 <section class="hero" id="top">
   <div class="wrap">
-    <div class="catch-en en">A special day, just for you.</div>
-    <h1>特別な一日を、<br>あなたと。</h1>
-    <p>カフェ、ショッピング、映画、ちょっとした話し相手まで。<br>あなたの「こんな一日を過ごしたい」を叶えます。</p>
+    <div class="catch-en en" id="catchEn">A special day, just for you.</div>
+    <h1 id="catch">特別な一日を、<br>あなたと。</h1>
+    <p id="subCopy">カフェ、ショッピング、映画、ちょっとした話し相手まで。<br>あなたの「こんな一日を過ごしたい」を叶えます。</p>
     <div class="btns">
-      <a href="#reserve" class="btn btn-line">LINEで予約・相談する</a>
-      <a href="#cast" class="btn btn-ghost">キャストを見る</a>
+      <a href="#reserve" class="btn btn-reserve">予約フォームへ</a>
+      <a href="#reserve" class="btn btn-line js-line">LINEで相談する</a>
     </div>
+  </div>
+</section>
+
+<!-- お知らせ(データがあるときだけ表示) -->
+<section class="news-sec" id="newsSec" hidden>
+  <div class="wrap">
+    <div class="sec-title" style="margin-bottom:20px"><span class="en">News</span><span class="ja">お知らせ</span></div>
+    <div class="news" id="newsList"></div>
   </div>
 </section>
 
@@ -211,7 +270,7 @@
 <section class="concept" id="concept">
   <div class="wrap">
     <div class="sec-title"><span class="en">Concept</span><span class="ja">コンセプト</span></div>
-    <p>Lueur(リュウール)はフランス語で「やさしい光」。<br>
+    <p id="conceptText">Lueur(リュウール)はフランス語で「やさしい光」。<br>
     忙しい毎日の中で、ほっとできる時間をお届けしたい。<br>
     はじめての方でも安心してご利用いただけるよう、<br>丁寧なヒアリングと明朗な料金でお迎えします。</p>
     <div class="scenes">
@@ -227,7 +286,7 @@
 <section class="alt" id="cast">
   <div class="wrap">
     <div class="sec-title"><span class="en">Cast</span><span class="ja">キャスト紹介</span></div>
-    <div class="cast-grid" id="castGrid"></div>
+    <div class="cast-grid" id="castGrid"><div class="loading">読み込み中…</div></div>
   </div>
 </section>
 
@@ -236,15 +295,8 @@
   <div class="wrap">
     <div class="sec-title"><span class="en">Price</span><span class="ja">料金システム</span></div>
     <div class="price-box">
-      <div class="price-row"><span>デート料金(60分)</span><span class="yen">¥5,000<small>〜</small></span></div>
-      <div class="price-row"><span>延長(30分ごと)</span><span class="yen">¥2,500</span></div>
-      <div class="price-row"><span>指名料</span><span class="yen">¥1,000</span></div>
-      <div class="price-row"><span>初回限定 お試し(60分)</span><span class="yen">¥4,000</span></div>
-      <p class="note">
-        ※ご利用は120分〜となります(初回お試しを除く)。<br>
-        ※キャストの交通費、デート中の飲食代・施設利用料はお客様のご負担となります。<br>
-        ※料金はデート当日、開始時にキャストへ現金でお支払いください。
-      </p>
+      <div id="priceList"><div class="loading">読み込み中…</div></div>
+      <p class="note" id="priceNote"></p>
     </div>
   </div>
 </section>
@@ -284,13 +336,7 @@
 <section class="alt" id="faq">
   <div class="wrap">
     <div class="sec-title"><span class="en">FAQ</span><span class="ja">よくある質問</span></div>
-    <div class="faq">
-      <details><summary><span>はじめてでも大丈夫ですか?</span></summary><p>ご利用の多くがはじめての方です。緊張される方もキャストがリードしますので、安心してお越しください。</p></details>
-      <details><summary><span>予約はいつまでにすればいいですか?</span></summary><p>ご希望日の前日までのご予約をおすすめしています。当日のご予約はキャストの空き状況によります。</p></details>
-      <details><summary><span>キャンセルはできますか?</span></summary><p>前日までは無料です。当日のキャンセルはデート料金の50%、無断キャンセルは100%をキャンセル料として頂戴します。</p></details>
-      <details><summary><span>どのエリアで利用できますか?</span></summary><p>○○駅周辺を中心に対応しています。エリア外の場合は別途交通費で対応できることもありますので、お気軽にご相談ください。</p></details>
-      <details><summary><span>デート以外のお願いもできますか?</span></summary><p>話し相手、買い物の付き添い、イベントの同行なども承ります。ルールの範囲内でご相談ください。</p></details>
-    </div>
+    <div class="faq" id="faqList"><div class="loading">読み込み中…</div></div>
   </div>
 </section>
 
@@ -298,50 +344,371 @@
 <section class="reserve" id="reserve">
   <div class="wrap">
     <div class="sec-title"><span class="en">Reserve</span><span class="ja">ご予約・お問い合わせ</span></div>
-    <p>ご予約・ご相談はすべて公式LINEで受け付けています。<br>お気軽にメッセージをお送りください。</p>
-    <div class="btns">
-      <!-- ▼ 公式LINEのURLに差し替え -->
-      <a href="https://lin.ee/XXXXXXX" class="btn btn-line" target="_blank" rel="noopener">LINEで予約する</a>
-      <!-- ▼ InstagramのURLに差し替え -->
-      <a href="https://www.instagram.com/XXXXXXX/" class="btn btn-ghost" target="_blank" rel="noopener">Instagramを見る</a>
+    <p>下のフォームから予約リクエストをお送りください。<br>空き状況を確認のうえ、スタッフからご連絡します。</p>
+
+    <form class="rform" id="rform" novalidate>
+      <div class="fg">
+        <span class="lb">ご利用は</span>
+        <div class="seg">
+          <label><input type="radio" name="first" value="はじめて" checked><span>はじめて</span></label>
+          <label><input type="radio" name="first" value="2回目以降"><span>2回目以降</span></label>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label for="fPhone" id="phoneLabel">電話番号<b>必須</b></label>
+        <input type="tel" id="fPhone" name="phone" maxlength="15" required placeholder="例:09012345678" autocomplete="tel" inputmode="tel">
+        <p class="repeat-note" id="repeatNote" hidden>前回ご予約いただいた電話番号を入力してください。お名前・連絡先は前回の内容を引き継ぎます。</p>
+      </div>
+
+      <!-- はじめての方だけ入力(2回目以降は disabled になり送信されない) -->
+      <fieldset class="fs" id="newOnly">
+        <div class="fg">
+          <label for="fName">お名前(ニックネーム可)<b>必須</b></label>
+          <input type="text" id="fName" name="name" maxlength="50" required autocomplete="nickname">
+        </div>
+
+        <div class="fg">
+          <span class="lb">電話以外のご連絡先<b>必須</b></span>
+          <div class="seg">
+            <label><input type="radio" name="method" value="LINE" checked><span>LINE</span></label>
+            <label><input type="radio" name="method" value="メール"><span>メール</span></label>
+          </div>
+          <input type="text" id="fContact" name="contact" maxlength="100" required placeholder="LINE IDを入力" aria-label="LINE IDまたはメールアドレス">
+        </div>
+      </fieldset>
+
+      <div class="grid2">
+        <div class="fg">
+          <label for="fDate">希望日<b>必須</b></label>
+          <input type="date" id="fDate" name="date" required>
+        </div>
+        <div class="fg">
+          <label for="fTime">開始時間<b>必須</b></label>
+          <select id="fTime" name="time" required><option value="">選択</option></select>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="fg">
+          <label for="fDuration">ご利用時間</label>
+          <select id="fDuration" name="duration">
+            <option>60分</option><option>90分</option><option selected>120分</option><option>150分</option>
+            <option>180分</option><option>240分</option><option>300分以上</option><option>相談したい</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label for="fCast">指名キャスト</label>
+          <select id="fCast" name="cast"><option>おまかせ</option></select>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label for="fPlace">待ち合わせ場所(駅名など)</label>
+        <input type="text" id="fPlace" name="place" maxlength="100" placeholder="例:○○駅 東口">
+      </div>
+
+      <div class="fg">
+        <label for="fRequest">デート内容・ご要望</label>
+        <textarea id="fRequest" name="request" maxlength="1000" placeholder="例:カフェでゆっくりお話ししたいです"></textarea>
+      </div>
+
+      <!-- ボット対策(人には見えない欄) -->
+      <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+      <label class="chk"><input type="checkbox" name="agree18" required>18歳以上です</label>
+      <label class="chk"><input type="checkbox" name="agreeRules" required><span><a href="#rules">ご利用にあたってのお願い</a>を読み、同意します</span></label>
+      <label class="chk"><input type="checkbox" id="fRemember" checked><span>次回のために、この端末に電話番号・お名前・連絡先を保存する<small class="sub-s">(共用の端末ではチェックを外してください)</small></span></label>
+
+      <button class="btn btn-submit" id="fSubmit">予約リクエストを送信</button>
+      <p class="form-msg" id="formMsg"></p>
+      <p class="form-note">※送信した時点では予約は確定していません。スタッフからの連絡をもって確定となります。<br>※ご入力いただいた情報は、ご予約の連絡以外には使用しません。</p>
+    </form>
+
+    <div class="thanks" id="thanks" hidden>
+      <span class="en">Thank you!</span>
+      <p>予約リクエストを受け付けました。<br>空き状況を確認のうえ、ご指定の連絡先へご連絡します。<br>しばらくお待ちください。</p>
     </div>
-    <div class="hours">受付時間 12:00〜22:00(年中無休)</div>
+
+    <p class="or">LINEでのご相談・ご予約も受け付けています</p>
+    <div class="btns">
+      <a href="#reserve" class="btn btn-line js-line">LINEで相談する</a>
+      <a href="#" class="btn btn-ghost" id="instaBtn" target="_blank" rel="noopener" hidden>Instagramを見る</a>
+    </div>
+    <div class="hours" id="hours">受付時間 12:00〜22:00(年中無休)</div>
   </div>
 </section>
 
-<footer>&copy; <span id="year"></span> Lueur All Rights Reserved.</footer>
+<footer>&copy; <span id="year"></span> <span class="js-shop">Lueur</span> All Rights Reserved.</footer>
 
 <!-- スマホ用 下固定ボタン -->
-<div class="fixed-cta"><a href="#reserve" class="btn btn-line">LINEで予約・相談する</a></div>
+<div class="fixed-cta">
+  <a href="#reserve" class="btn btn-reserve">予約する</a>
+  <a href="#reserve" class="btn btn-line js-line">LINEで相談</a>
+</div>
 
+<script src="config.js"></script>
 <script>
-  // ===== キャスト情報(ここを編集すれば一覧が変わる) =====
-  // photo: 画像ファイル名(例 "img/haruto.jpg")。空なら頭文字+グラデーションで表示
-  const CASTS = [
-    { name:"ハルト", age:24, height:178, tags:["聞き上手","カフェ好き","癒し系"], photo:"", color:["#c48a8a","#2c3150"] },
-    { name:"ソウタ", age:22, height:175, tags:["明るい","映画好き","リード上手"], photo:"", color:["#8aa4c4","#2c3150"] },
-    { name:"レン",   age:26, height:181, tags:["大人っぽい","ショッピング","紳士"], photo:"", color:["#b7a17d","#3a2f45"] },
-    { name:"ユウキ", age:23, height:173, tags:["甘え上手","テーマパーク","笑顔"], photo:"", color:["#d4a5b8","#4a3a5a"] },
-  ];
+  // GAS_URL は config.js で設定(空のままだと下のサンプルデータで表示)
+  const GAS_URL = window.GAS_URL || "";
 
-  const grid = document.getElementById("castGrid");
-  grid.innerHTML = CASTS.map(c => {
-    const bg = c.photo
-      ? `background-image:url('${c.photo}')`
-      : `background:linear-gradient(145deg,${c.color[0]},${c.color[1]})`;
-    const initial = c.photo ? "" : c.name.charAt(0);
-    return `
-      <div class="cast">
-        <div class="photo" style="${bg}">${initial}</div>
-        <div class="info">
-          <div class="name">${c.name}</div>
-          <div class="meta">${c.age}歳 / ${c.height}cm</div>
-          <div class="tags">${c.tags.map(t => `<span>${t}</span>`).join("")}</div>
-        </div>
-      </div>`;
-  }).join("");
+  // ===== サンプルデータ(GAS_URLが空のときだけ使う) =====
+  const SAMPLE = {
+    settings: {
+      "店名": "Lueur", "店名カナ": "リュウール",
+      "キャッチコピー(英語)": "A special day, just for you.",
+      "キャッチコピー": "特別な一日を、\nあなたと。",
+      "サブコピー": "カフェ、ショッピング、映画、ちょっとした話し相手まで。\nあなたの「こんな一日を過ごしたい」を叶えます。",
+      "コンセプト文": "Lueur(リュウール)はフランス語で「やさしい光」。\n忙しい毎日の中で、ほっとできる時間をお届けしたい。\nはじめての方でも安心してご利用いただけるよう、\n丁寧なヒアリングと明朗な料金でお迎えします。",
+      "LINE_URL": "", "Instagram_URL": "",
+      "受付時間": "受付時間 12:00〜22:00(年中無休)",
+      "料金の注意書き": "※ご利用は120分〜となります(初回お試しを除く)。\n※キャストの交通費、デート中の飲食代・施設利用料はお客様のご負担となります。\n※料金はデート当日、開始時にキャストへ現金でお支払いください。"
+    },
+    casts: [
+      { name:"ハルト", age:"24", height:"178", tags:["聞き上手","カフェ好き","癒し系"], photo:"", comment:"のんびりお話しするのが好きです。" },
+      { name:"ソウタ", age:"22", height:"175", tags:["明るい","映画好き","リード上手"], photo:"", comment:"はじめての方も大歓迎!" },
+      { name:"レン",   age:"26", height:"181", tags:["大人っぽい","ショッピング","紳士"], photo:"", comment:"落ち着いたデートならお任せください。" },
+      { name:"ユウキ", age:"23", height:"173", tags:["甘え上手","テーマパーク","笑顔"], photo:"", comment:"一緒にはしゃぎましょう!" }
+    ],
+    prices: [
+      { item:"デート料金(60分)", price:"¥5,000〜" },
+      { item:"延長(30分ごと)", price:"¥2,500" },
+      { item:"指名料", price:"¥1,000" },
+      { item:"初回限定 お試し(60分)", price:"¥4,000" }
+    ],
+    faqs: [
+      { q:"はじめてでも大丈夫ですか?", a:"ご利用の多くがはじめての方です。緊張される方もキャストがリードしますので、安心してお越しください。" },
+      { q:"予約はいつまでにすればいいですか?", a:"ご希望日の前日までのご予約をおすすめしています。当日のご予約はキャストの空き状況によります。" },
+      { q:"キャンセルはできますか?", a:"前日までは無料です。当日のキャンセルはデート料金の50%、無断キャンセルは100%をキャンセル料として頂戴します。" },
+      { q:"どのエリアで利用できますか?", a:"○○駅周辺を中心に対応しています。エリア外の場合は別途交通費で対応できることもありますので、お気軽にご相談ください。" },
+      { q:"デート以外のお願いもできますか?", a:"話し相手、買い物の付き添い、イベントの同行なども承ります。ルールの範囲内でご相談ください。" }
+    ],
+    news: [ { date:"2026/10/01", text:"ホームページをオープンしました!" } ]
+  };
 
-  document.getElementById("year").textContent = new Date().getFullYear();
+  // 写真がないキャストの背景色(順番に使う)
+  const COLORS = [["#c48a8a","#2c3150"],["#8aa4c4","#2c3150"],["#b7a17d","#3a2f45"],["#d4a5b8","#4a3a5a"]];
+
+  // ===== 共通関数 =====
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const br = s => esc(s).replace(/\n/g, "<br>");
+  const safeUrl = u => /^https:\/\//.test(u || "") ? u : "";
+
+  // ===== 画面に反映 =====
+  function render(data) {
+    const s = data.settings || {};
+    const shop = s["店名"] || "Lueur";
+
+    document.querySelectorAll(".js-shop").forEach(el => el.textContent = shop);
+    document.title = `レンタル彼氏 ${shop}${s["店名カナ"] ? `(${s["店名カナ"]})` : ""}|${(s["キャッチコピー"] || "").replace(/\n/g, "")}`;
+    if (s["キャッチコピー(英語)"]) $("catchEn").textContent = s["キャッチコピー(英語)"];
+    if (s["キャッチコピー"]) $("catch").innerHTML = br(s["キャッチコピー"]);
+    if (s["サブコピー"]) $("subCopy").innerHTML = br(s["サブコピー"]);
+    if (s["コンセプト文"]) $("conceptText").innerHTML = br(s["コンセプト文"]);
+    if (s["受付時間"]) $("hours").textContent = s["受付時間"];
+    $("priceNote").innerHTML = br(s["料金の注意書き"] || "");
+
+    // LINEボタン(URL未設定なら予約欄へスクロールするだけ)
+    const line = safeUrl(s["LINE_URL"]);
+    if (line) document.querySelectorAll(".js-line").forEach(a => {
+      a.href = line; a.target = "_blank"; a.rel = "noopener";
+    });
+
+    const insta = safeUrl(s["Instagram_URL"]);
+    if (insta) { $("instaBtn").href = insta; $("instaBtn").hidden = false; }
+
+    // お知らせ
+    const news = data.news || [];
+    $("newsSec").hidden = news.length === 0;
+    $("newsList").innerHTML = news.map(n =>
+      `<div class="news-item"><span class="date">${esc(n.date)}</span><span>${br(n.text)}</span></div>`
+    ).join("");
+
+    // キャスト
+    const casts = data.casts || [];
+    $("castGrid").innerHTML = casts.length ? casts.map((c, i) => {
+      const photo = safeUrl(c.photo);
+      const col = COLORS[i % COLORS.length];
+      const bg = photo
+        ? `background-image:url('${esc(photo)}')`
+        : `background:linear-gradient(145deg,${col[0]},${col[1]})`;
+      const meta = [c.age && `${esc(c.age)}歳`, c.height && `${esc(c.height)}cm`].filter(Boolean).join(" / ");
+      return `
+        <div class="cast">
+          <div class="photo" style="${bg}">${photo ? "" : esc(String(c.name).charAt(0))}</div>
+          <div class="info">
+            <div class="name">${esc(c.name)}</div>
+            ${meta ? `<div class="meta">${meta}</div>` : ""}
+            ${c.comment ? `<div class="comment">${br(c.comment)}</div>` : ""}
+            <div class="tags">${(c.tags || []).map(t => `<span>${esc(t)}</span>`).join("")}</div>
+          </div>
+        </div>`;
+    }).join("") : `<div class="loading">ただいまキャスト準備中です</div>`;
+
+    // 予約フォームの指名キャスト
+    $("fCast").innerHTML = `<option>おまかせ</option>` + casts.map(c => `<option>${esc(c.name)}</option>`).join("");
+
+    // 料金
+    $("priceList").innerHTML = (data.prices || []).map(p =>
+      `<div class="price-row"><span>${esc(p.item)}</span><span class="yen">${esc(p.price)}</span></div>`
+    ).join("");
+
+    // FAQ
+    $("faqList").innerHTML = (data.faqs || []).map(f =>
+      `<details><summary><span>${esc(f.q)}</span></summary><p>${br(f.a)}</p></details>`
+    ).join("");
+  }
+
+  function showError() {
+    const msg = `<div class="loading">情報を読み込めませんでした。時間をおいて再読み込みしてください。</div>`;
+    $("castGrid").innerHTML = msg;
+    $("priceList").innerHTML = msg;
+    $("faqList").innerHTML = msg;
+  }
+
+  // ===== 予約フォーム =====
+  const form = $("rform");
+  const formStart = Date.now();
+
+  // 開始時間(10:00〜22:00 を30分刻み)
+  for (let h = 10; h <= 22; h++) {
+    ["00", "30"].forEach(m => {
+      if (h === 22 && m === "30") return;
+      $("fTime").insertAdjacentHTML("beforeend", `<option>${h}:${m}</option>`);
+    });
+  }
+
+  // 希望日は今日以降
+  (() => {
+    const d = new Date();
+    $("fDate").min = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  })();
+
+  // 連絡方法に合わせて入力欄を切り替え
+  const CONTACT_UI = {
+    "LINE":  { ph:"LINE IDを入力", type:"text" },
+    "メール": { ph:"メールアドレスを入力", type:"email" },
+  };
+  form.querySelectorAll('input[name="method"]').forEach(r => r.addEventListener("change", () => {
+    const ui = CONTACT_UI[r.value];
+    $("fContact").placeholder = ui.ph;
+    $("fContact").type = ui.type;
+  }));
+
+  // はじめて / 2回目以降 の切り替え
+  function applyFirst(){
+    const repeat = form.querySelector('input[name="first"]:checked').value === "2回目以降";
+    $("newOnly").disabled = repeat;           // 名前・連絡先を隠して送信対象から外す
+    $("repeatNote").hidden = !repeat;
+  }
+  form.querySelectorAll('input[name="first"]').forEach(r => r.addEventListener("change", applyFirst));
+
+  // この端末に保存した情報(次回の入力を楽にする)
+  const SAVE_KEY = "rk_customer";
+  function loadSaved(){
+    let s = null;
+    try { s = JSON.parse(localStorage.getItem(SAVE_KEY) || "null"); } catch(e) {}
+    if (!s || !s.phone) return;
+    $("fPhone").value = s.phone || "";
+    $("fName").value = s.name || "";
+    $("fContact").value = s.contact || "";
+    const m = form.querySelector(`input[name="method"][value="${s.method === "メール" ? "メール" : "LINE"}"]`);
+    m.checked = true;
+    m.dispatchEvent(new Event("change"));
+    form.querySelector('input[name="first"][value="2回目以降"]').checked = true;
+  }
+  function saveLocal(data){
+    try {
+      if ($("fRemember").checked) {
+        // 2回目以降で名前欄を送っていない時は、前に保存していた名前・連絡先を残す
+        let old = {};
+        try { old = JSON.parse(localStorage.getItem(SAVE_KEY) || "{}") || {}; } catch(e) {}
+        localStorage.setItem(SAVE_KEY, JSON.stringify({
+          phone: data.phone,
+          name: data.name || old.name || "",
+          method: data.method || old.method || "LINE",
+          contact: data.contact || old.contact || "",
+        }));
+      } else {
+        localStorage.removeItem(SAVE_KEY);
+      }
+    } catch(e) {}
+  }
+  loadSaved();
+  applyFirst();
+
+  $("fPhone").addEventListener("input", () => $("fPhone").setCustomValidity(""));
+
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const msg = $("formMsg");
+    msg.textContent = "";
+    msg.className = "form-msg";
+
+    // 電話番号は数字が10〜11桁あるか確認(全角・ハイフン入りもOK)
+    const phoneDigits = $("fPhone").value
+      .replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
+      .replace(/\D/g, "");
+    $("fPhone").setCustomValidity(/^\d{10,11}$/.test(phoneDigits) ? "" : "電話番号を正しく入力してください(10〜11桁)");
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    if (!GAS_URL) {
+      msg.textContent = "サンプル表示中のため送信できません(config.js に GAS_URL を設定してください)";
+      msg.classList.add("err");
+      return;
+    }
+
+    const fd = Object.fromEntries(new FormData(form));
+    const payload = Object.assign(fd, {
+      phone: phoneDigits,
+      agree18: form.agree18.checked,
+      agreeRules: form.agreeRules.checked,
+      elapsed: Date.now() - formStart,
+    });
+    // 2回目以降でも、この端末に保存した名前・連絡先があれば一緒に送る(履歴が見つからない時の保険)
+    if ($("newOnly").disabled && $("fName").value.trim() && $("fContact").value.trim()) {
+      Object.assign(payload, {
+        name: $("fName").value.trim(),
+        method: form.querySelector('input[name="method"]:checked').value,
+        contact: $("fContact").value.trim(),
+      });
+    }
+
+    const btn = $("fSubmit");
+    btn.disabled = true;
+    btn.textContent = "送信中…";
+    try {
+      const res = await fetch(GAS_URL, { method:"POST", body: JSON.stringify({ action:"reserve", form: payload }) });
+      const j = await res.json();
+      if (!j.ok) throw new Error(j.error);
+      saveLocal(payload);
+      form.hidden = true;
+      $("thanks").hidden = false;
+      $("thanks").scrollIntoView({ behavior:"smooth", block:"center" });
+    } catch (err) {
+      // 通信エラー(TypeError)は英語メッセージになるので日本語に置き換える
+      msg.textContent = (err instanceof TypeError || !err.message)
+        ? "送信できませんでした。通信状況を確認して、もう一度お試しください"
+        : err.message;
+      msg.classList.add("err");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "予約リクエストを送信";
+    }
+  });
+
+  // ===== 読み込み =====
+  if (GAS_URL) {
+    fetch(GAS_URL).then(r => r.json()).then(render).catch(showError);
+  } else {
+    render(SAMPLE);
+  }
+
+  $("year").textContent = new Date().getFullYear();
 </script>
 </body>
 </html>
