@@ -27,155 +27,205 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#faf6f1;
-    --bg2:#f2ebe3;
-    --ink:#23263a;
-    --sub:#6b6a78;
+    --bg:#ffffff;
+    --bg2:#f7f4ef;
+    --bg3:#efe9e1;
+    --ink:#2a2a33;
+    --sub:#7a7884;
     --accent:#c48a8a;
     --accent-dk:#a86f70;
     --navy:#2c3150;
+    --gold:#b59a72;
     --line:#06c755;
     --card:#ffffff;
-    --radius:18px;
+    --border:#ece6de;
+    --radius:16px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  body{
-    font-family:"Zen Kaku Gothic New",sans-serif;
-    background:var(--bg);color:var(--ink);
-    line-height:1.85;font-size:15px;
-    padding-bottom:76px; /* 下固定ボタン分 */
-  }
+  body{font-family:"Zen Kaku Gothic New",sans-serif;background:var(--bg);color:var(--ink);line-height:1.85;font-size:15px;padding-bottom:76px}
+  body.lock{overflow:hidden}
   a{color:inherit;text-decoration:none}
-  .wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
   .en{font-family:"Cormorant Garamond",serif;letter-spacing:.08em}
   .loading{grid-column:1/-1;text-align:center;color:var(--sub);font-size:13px;padding:20px 0}
   [hidden]{display:none !important}
 
   /* ===== ヘッダー ===== */
-  header{
-    position:sticky;top:0;z-index:50;
-    background:rgba(250,246,241,.92);backdrop-filter:blur(8px);
-    border-bottom:1px solid rgba(35,38,58,.06);
-  }
-  .head{display:flex;align-items:center;justify-content:space-between;gap:10px;height:60px}
-  .logo{font-size:26px;font-weight:600;color:var(--navy);white-space:nowrap}
-  .logo small{font-family:"Zen Kaku Gothic New";font-size:10px;letter-spacing:.1em;color:var(--sub);margin-left:6px}
-  .head-right{display:flex;align-items:center;gap:22px}
-  nav ul{display:none;list-style:none;gap:20px;font-size:13px;letter-spacing:.05em}
-  nav a:hover{color:var(--accent-dk)}
-  .lang{appearance:none;border:1.5px solid rgba(35,38,58,.15);background:#fff;border-radius:999px;padding:5px 12px;font:inherit;font-size:12px;color:var(--ink);cursor:pointer}
+  header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+  .head{display:flex;align-items:center;justify-content:space-between;gap:10px;height:62px}
+  .logo{font-size:27px;font-weight:600;color:var(--navy);white-space:nowrap}
+  .logo small{font-family:"Zen Kaku Gothic New";font-size:10px;letter-spacing:.12em;color:var(--sub);margin-left:6px}
+  .head-right{display:flex;align-items:center;gap:14px}
+  nav.pc ul{display:none;list-style:none;gap:18px;font-size:12.5px;letter-spacing:.06em;align-items:center}
+  nav.pc a:hover{color:var(--accent-dk)}
+  .nav-recruit{border:1.5px solid var(--accent);color:var(--accent-dk);border-radius:999px;padding:3px 12px}
+  .lang{appearance:none;border:1.5px solid var(--border);background:#fff;border-radius:999px;padding:5px 12px;font:inherit;font-size:12px;color:var(--ink);cursor:pointer}
+  .menu-btn{width:40px;height:40px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px}
+  .menu-btn span{display:block;width:22px;height:2px;background:var(--navy);border-radius:2px}
+  .drawer{position:fixed;inset:0;z-index:70;background:rgba(20,20,30,.45)}
+  .drawer .in{position:absolute;right:0;top:0;bottom:0;width:78%;max-width:320px;background:#fff;padding:24px 26px;overflow-y:auto}
+  .drawer .in a{display:block;padding:13px 0;border-bottom:1px solid var(--border);font-size:15px}
+  .drawer .in a small{font-family:"Cormorant Garamond",serif;color:var(--gold);font-size:13px;margin-left:8px;letter-spacing:.1em}
+  .drawer .close{border:none;background:none;font-size:26px;color:var(--sub);float:right;cursor:pointer;line-height:1}
 
-  /* ===== ヒーロー ===== */
-  .hero{
-    padding:72px 0 80px;text-align:center;
-    background:
-      radial-gradient(circle at 20% 20%, rgba(196,138,138,.22), transparent 55%),
-      radial-gradient(circle at 85% 75%, rgba(44,49,80,.14), transparent 50%),
-      var(--bg);
-  }
-  .hero .catch-en{font-size:15px;color:var(--accent-dk);font-style:italic}
-  .hero h1{font-size:30px;font-weight:700;line-height:1.5;margin:14px 0 18px;color:var(--navy);letter-spacing:.06em}
-  .hero p{color:var(--sub);font-size:14px}
-  .hero .btns{margin-top:34px;display:flex;flex-direction:column;gap:12px;align-items:center}
-  .btn{
-    display:inline-flex;align-items:center;justify-content:center;gap:8px;
-    min-width:260px;padding:15px 28px;border-radius:999px;border:none;cursor:pointer;
-    font-family:inherit;font-weight:700;font-size:15px;letter-spacing:.05em;transition:.2s;
-  }
-  .btn-line{background:var(--line);color:#fff;box-shadow:0 6px 18px rgba(6,199,85,.25)}
+  /* ===== ボタン ===== */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:240px;padding:15px 28px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-weight:700;font-size:15px;letter-spacing:.05em;transition:.2s}
+  .btn-line{background:var(--line);color:#fff;box-shadow:0 6px 18px rgba(6,199,85,.22)}
+  .btn-reserve{background:var(--navy);color:#fff;box-shadow:0 6px 18px rgba(44,49,80,.2)}
   .btn-line:hover,.btn-reserve:hover{transform:translateY(-2px)}
-  .btn-reserve{background:var(--accent-dk);color:#fff;box-shadow:0 6px 18px rgba(168,111,112,.25)}
   .btn-ghost{border:1.5px solid var(--navy);color:var(--navy);background:none}
+  .btn-ghost:hover{background:var(--navy);color:#fff}
 
   /* ===== セクション共通 ===== */
-  section{padding:76px 0}
+  section{padding:80px 0}
   .sec-title{text-align:center;margin-bottom:40px}
-  .sec-title .en{display:block;font-size:34px;color:var(--navy);line-height:1.2}
-  .sec-title .ja{font-size:12px;color:var(--accent-dk);letter-spacing:.2em}
+  .sec-title .en{display:block;font-size:38px;color:var(--navy);line-height:1.15;letter-spacing:.14em}
+  .sec-title .ja{display:inline-block;font-size:12.5px;color:var(--sub);letter-spacing:.2em;margin-top:6px;position:relative;padding:0 26px}
+  .sec-title .ja::before,.sec-title .ja::after{content:"";position:absolute;top:50%;width:16px;height:1px;background:var(--gold)}
+  .sec-title .ja::before{left:0}.sec-title .ja::after{right:0}
   .alt{background:var(--bg2)}
 
+  /* ===== バナー ===== */
+  .banners{position:relative;background:var(--bg2)}
+  .bn-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+  .bn-track::-webkit-scrollbar{display:none}
+  .bn{flex:0 0 100%;scroll-snap-align:start;aspect-ratio:16/7;max-height:480px;background:center/cover no-repeat var(--bg2);display:block}
+  .bn-dots{position:absolute;left:0;right:0;bottom:10px;display:flex;justify-content:center;gap:6px}
+  .bn-dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.55);box-shadow:0 0 3px rgba(0,0,0,.3)}
+  .bn-dots span.on{background:#fff}
+
+  /* ===== ヒーロー ===== */
+  .hero{padding:56px 0 64px;background:linear-gradient(180deg,#fff 0%,var(--bg2) 100%);overflow:hidden}
+  .hero .grid{display:grid;gap:36px;align-items:center}
+  .hero .txt{text-align:center}
+  .hero .catch-en{font-size:16px;color:var(--gold);font-style:italic;letter-spacing:.12em}
+  .hero h1{font-size:30px;font-weight:700;line-height:1.55;margin:14px 0 16px;color:var(--navy);letter-spacing:.08em}
+  .hero p{color:var(--sub);font-size:14px}
+  .hero .btns{margin-top:28px;display:flex;flex-direction:column;gap:12px;align-items:center}
+  .collage{display:grid;grid-template-columns:1.25fr 1fr;grid-template-rows:1fr 1fr;gap:10px;max-width:460px;margin:0 auto;width:100%;aspect-ratio:1/1}
+  .collage a{border-radius:18px;background:center/cover no-repeat;position:relative;overflow:hidden;display:flex;align-items:flex-end;box-shadow:0 10px 30px rgba(44,49,80,.12)}
+  .collage a:first-child{grid-row:1 / 3}
+  .collage a span{width:100%;padding:18px 12px 10px;background:linear-gradient(transparent,rgba(0,0,0,.45));color:#fff;font-size:13px;font-weight:700;letter-spacing:.06em}
+  .collage a .ini{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:"Cormorant Garamond",serif;font-size:56px;color:rgba(255,255,255,.9)}
+
   /* ===== お知らせ ===== */
-  .news-sec{padding:40px 0}
-  .news{max-width:700px;margin:0 auto;background:var(--card);border-radius:var(--radius);padding:8px 22px;box-shadow:0 4px 14px rgba(35,38,58,.05)}
-  .news-item{display:flex;gap:14px;padding:12px 0;border-bottom:1px dashed #ddd3c8;font-size:13.5px}
-  .news-item:last-child{border-bottom:none}
-  .news-item .date{color:var(--accent-dk);white-space:nowrap;font-family:"Cormorant Garamond",serif;font-size:15px;font-weight:600}
+  .news-sec{padding:36px 0}
+  .news{max-width:760px;margin:0 auto;border-top:1px solid var(--border)}
+  .news-item{display:flex;gap:16px;padding:14px 4px;border-bottom:1px solid var(--border);font-size:13.5px}
+  .news-item .date{color:var(--gold);white-space:nowrap;font-family:"Cormorant Garamond",serif;font-size:15px;font-weight:600}
 
-  /* ===== コンセプト ===== */
-  .concept p{max-width:640px;margin:0 auto;text-align:center}
-  .scenes{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:36px}
-  .scene{background:var(--card);border-radius:var(--radius);padding:20px 12px;text-align:center;font-size:13px;font-weight:500;box-shadow:0 4px 14px rgba(35,38,58,.05)}
-  .scene .ico{font-size:26px;display:block;margin-bottom:4px}
-
-  /* ===== キャスト ===== */
-  .filters{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:18px;scrollbar-width:none}
+  /* ===== キャスト一覧 ===== */
+  .filters{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:20px;scrollbar-width:none;justify-content:flex-start}
   .filters::-webkit-scrollbar{display:none}
-  .fchip{flex:0 0 auto;border:1.5px solid #ddd3c8;background:#fff;border-radius:999px;padding:7px 14px;font:inherit;font-size:12.5px;cursor:pointer;color:var(--ink)}
+  .fchip{flex:0 0 auto;border:1.5px solid var(--border);background:#fff;border-radius:999px;padding:7px 15px;font:inherit;font-size:12.5px;cursor:pointer;color:var(--ink)}
   .fchip.on{background:var(--navy);border-color:var(--navy);color:#fff}
   .fchip.today{border-color:var(--accent)}
   .fchip.today.on{background:var(--accent-dk);border-color:var(--accent-dk)}
-  .cast-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-  .cast{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:0 4px 14px rgba(35,38,58,.06)}
-  .cast .photo{
-    aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;position:relative;
-    font-family:"Cormorant Garamond",serif;font-size:44px;color:#fff;background-size:cover;background-position:center;
-  }
+  .cast-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 12px}
+  .cast{cursor:pointer;background:none;border:none;text-align:left;font:inherit;color:inherit;padding:0;display:block}
+  .cast .photo{aspect-ratio:3/4;border-radius:14px;background-size:cover;background-position:center;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:"Cormorant Garamond",serif;font-size:48px;color:#fff;transition:.3s}
+  .cast:hover .photo{transform:translateY(-3px);box-shadow:0 12px 26px rgba(44,49,80,.15)}
   .cast .on-today{position:absolute;left:8px;top:8px;background:var(--accent-dk);color:#fff;font-family:"Zen Kaku Gothic New";font-size:10.5px;font-weight:700;border-radius:999px;padding:3px 9px;line-height:1.5}
-  .cast .info{padding:12px 14px 16px}
-  .cast .name{font-weight:700;font-size:16px}
-  .cast .meta{font-size:12px;color:var(--sub)}
+  .cast .star{position:absolute;right:8px;top:8px;background:rgba(255,255,255,.92);color:var(--gold);font-family:"Zen Kaku Gothic New";font-size:10.5px;font-weight:700;border-radius:999px;padding:3px 9px;line-height:1.5}
+  .cast .info{padding:10px 2px 0}
+  .cast .name{font-weight:700;font-size:16px;letter-spacing:.04em}
+  .cast .meta{font-size:11.5px;color:var(--sub);margin-left:6px;font-weight:400}
   .cast .types{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
-  .cast .types span{font-size:10.5px;background:var(--navy);color:#fff;border-radius:999px;padding:2px 9px}
-  .cast .comment{font-size:12px;margin-top:6px;line-height:1.6}
-  .cast .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
-  .cast .tags span{font-size:10.5px;background:var(--bg2);border-radius:999px;padding:2px 9px}
-  .cast .sns{display:flex;gap:6px;margin-top:10px}
-  .cast .sns a{font-size:10.5px;font-weight:700;border:1.5px solid #ddd3c8;border-radius:999px;padding:2px 9px}
+  .cast .types span{font-size:10.5px;border:1px solid var(--navy);color:var(--navy);border-radius:999px;padding:1px 8px}
+  .cast .comment{font-size:12px;color:var(--sub);margin-top:6px;line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+  /* ===== 今月の注目キャスト ===== */
+  .featured{display:grid;gap:22px}
+  .feat{display:grid;grid-template-columns:1fr;background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 14px 40px rgba(44,49,80,.08);cursor:pointer;border:none;text-align:left;font:inherit;color:inherit;padding:0}
+  .feat .ph{aspect-ratio:4/5;background:center/cover no-repeat;position:relative;display:flex;align-items:center;justify-content:center;font-family:"Cormorant Garamond",serif;font-size:72px;color:#fff}
+  .feat .ph .month{position:absolute;left:14px;top:14px;background:#fff;color:var(--gold);font-family:"Cormorant Garamond",serif;font-size:14px;letter-spacing:.14em;border-radius:999px;padding:3px 14px}
+  .feat .tx{padding:22px 22px 26px}
+  .feat .tx .lb{font-family:"Cormorant Garamond",serif;color:var(--gold);letter-spacing:.2em;font-size:13px}
+  .feat .tx h3{font-size:24px;letter-spacing:.08em;color:var(--navy);margin:4px 0 8px}
+  .feat .tx p{font-size:13.5px;color:var(--sub);line-height:1.9;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+  .feat .tx .more{display:inline-block;margin-top:14px;font-size:13px;font-weight:700;color:var(--navy);border-bottom:1.5px solid var(--navy);padding-bottom:2px}
+
+  /* ===== 写メ日記 ===== */
+  .diary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .dcard{background:var(--card);border-radius:14px;overflow:hidden;cursor:pointer;box-shadow:0 4px 14px rgba(35,38,58,.06);text-align:left;border:none;font:inherit;color:inherit;padding:0}
+  .dcard .ph{aspect-ratio:1/1;background:center/cover no-repeat;position:relative;display:flex;align-items:center;justify-content:center;color:#fff;font-family:"Cormorant Garamond",serif;font-size:36px}
+  .dcard .ph .n{position:absolute;right:6px;top:6px;background:rgba(0,0,0,.5);color:#fff;font-family:"Zen Kaku Gothic New";font-size:10.5px;border-radius:999px;padding:1px 7px}
+  .dcard .tx{padding:10px 12px 12px}
+  .dcard .who{font-size:12.5px;font-weight:700}
+  .dcard .when{font-size:10.5px;color:var(--sub);margin-left:4px;font-weight:400}
+  .dcard .body{font-size:12px;color:var(--sub);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:2px}
+  .dmodal{position:fixed;inset:0;background:rgba(20,22,40,.7);z-index:90;display:flex;align-items:center;justify-content:center;padding:16px}
+  .dbox{background:var(--card);border-radius:18px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto}
+  .dbox .imgs{display:flex;overflow-x:auto;scroll-snap-type:x mandatory}
+  .dbox .imgs img{flex:0 0 100%;width:100%;scroll-snap-align:start;display:block;max-height:65vh;object-fit:contain;background:#111}
+  .dbox .in{padding:14px 18px 18px}
+  .dbox .in p{font-size:14px;line-height:1.8;margin-top:6px;white-space:pre-wrap}
+  .dbox .close{display:block;margin:0 auto 16px;border:none;background:var(--bg2);border-radius:999px;padding:8px 22px;font:inherit;cursor:pointer}
+
+  /* ===== サービス紹介 ===== */
+  .about .lead{max-width:680px;margin:0 auto;text-align:center;font-size:15px;line-height:2.1}
+  .scenes{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:36px}
+  .scene{background:var(--bg2);border-radius:var(--radius);padding:22px 12px;text-align:center;font-size:13px;font-weight:500}
+  .scene .ico{font-size:26px;display:block;margin-bottom:4px}
+
+  /* ===== 遊び方・ご予約(6ステップ) ===== */
+  .steps{display:grid;gap:14px;counter-reset:step}
+  .step{background:#fff;border-radius:var(--radius);padding:22px 20px;border:1px solid var(--border);position:relative}
+  .step .no{font-family:"Cormorant Garamond",serif;font-size:14px;color:var(--gold);letter-spacing:.18em}
+  .step .no b{font-size:34px;font-weight:600;margin-left:6px;color:var(--navy);letter-spacing:0}
+  .step h3{font-size:16px;margin:4px 0 2px;color:var(--navy)}
+  .step .sub-en{font-family:"Cormorant Garamond",serif;font-size:13px;color:var(--sub);font-style:italic}
+  .step p{font-size:13px;color:var(--sub);margin-top:8px;line-height:1.8}
+
+  /* ===== 過ごし方(コンセプト) ===== */
+  .concepts{display:grid;gap:18px}
+  .concept-card{border-radius:20px;overflow:hidden;background:#fff;box-shadow:0 10px 30px rgba(44,49,80,.07)}
+  .concept-card .top{padding:30px 24px 22px;color:#fff;position:relative}
+  .concept-card .top .ico{font-size:34px}
+  .concept-card .top h3{font-size:19px;letter-spacing:.1em;margin-top:6px}
+  .concept-card .top .sub-en{font-family:"Cormorant Garamond",serif;font-size:14px;opacity:.85;font-style:italic;letter-spacing:.1em}
+  .concept-card p{padding:18px 24px 24px;font-size:13.5px;color:var(--sub);line-height:1.9}
+  .cc1 .top{background:linear-gradient(135deg,#b59a72,#8c7352)}
+  .cc2 .top{background:linear-gradient(135deg,#c48a8a,#8f5e6a)}
+  .cc3 .top{background:linear-gradient(135deg,#6f7fae,#2c3150)}
 
   /* ===== 出勤表 ===== */
   .days{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px;scrollbar-width:none}
   .days::-webkit-scrollbar{display:none}
-  .day{flex:1 0 64px;border:1.5px solid #ddd3c8;background:#fff;border-radius:12px;padding:8px 4px;font:inherit;font-size:12px;cursor:pointer;line-height:1.4;color:var(--ink)}
+  .day{flex:1 0 64px;border:1.5px solid var(--border);background:#fff;border-radius:12px;padding:8px 4px;font:inherit;font-size:12px;cursor:pointer;line-height:1.4;color:var(--ink)}
   .day b{display:block;font-size:16px}
   .day.on{background:var(--navy);border-color:var(--navy);color:#fff}
   .day.sat b{color:#3b6cc4}.day.sun b{color:#c0504d}
   .day.on b{color:#fff}
-  .sched{display:grid;gap:10px;max-width:700px;margin:0 auto}
-  .sched-item{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:14px;padding:10px 14px}
-  .sched-item .ph{width:46px;height:46px;border-radius:50%;background-size:cover;background-position:center;flex:0 0 auto;display:flex;align-items:center;justify-content:center;color:#fff;font-family:"Cormorant Garamond",serif;font-size:20px}
+  .sched{display:grid;gap:10px;max-width:760px;margin:0 auto}
+  .sched-item{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:10px 14px;cursor:pointer}
+  .sched-item .ph{width:50px;height:50px;border-radius:50%;background-size:cover;background-position:center;flex:0 0 auto;display:flex;align-items:center;justify-content:center;color:#fff;font-family:"Cormorant Garamond",serif;font-size:20px}
   .sched-item .nm{font-weight:700;flex:1}
-  .sched-item .tm{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:600;color:var(--navy)}
+  .sched-item .tm{font-family:"Cormorant Garamond",serif;font-size:19px;font-weight:600;color:var(--navy)}
 
   /* ===== 料金 ===== */
-  .price-box{background:var(--card);border-radius:var(--radius);padding:24px 22px;max-width:640px;margin:0 auto;box-shadow:0 4px 14px rgba(35,38,58,.05)}
-  .price-cat{font-size:12px;font-weight:700;color:var(--accent-dk);letter-spacing:.15em;margin-top:18px;padding-bottom:4px;border-bottom:2px solid var(--bg2)}
+  .price-box{background:#fff;border-radius:var(--radius);padding:26px 22px;max-width:680px;margin:0 auto;border:1px solid var(--border)}
+  .price-cat{font-size:12px;font-weight:700;color:var(--gold);letter-spacing:.18em;margin-top:22px;padding-bottom:4px;border-bottom:1.5px solid var(--bg3)}
   .price-cat:first-child{margin-top:0}
-  .price-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:12px 0;border-bottom:1px dashed #ddd3c8}
+  .price-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:12px 0;border-bottom:1px dashed var(--border)}
   .price-row:last-child{border-bottom:none}
   .price-row small{display:block;font-size:11.5px;color:var(--sub);line-height:1.5}
   .price-row .yen{font-family:"Cormorant Garamond",serif;font-size:23px;font-weight:600;color:var(--navy);white-space:nowrap}
   .price-row .yen small{display:inline;font-family:"Zen Kaku Gothic New";font-size:12px;margin-left:2px}
   .note{font-size:12px;color:var(--sub);margin-top:16px;line-height:1.7}
 
-  /* ===== ご利用の流れ ===== */
-  .flow{display:grid;gap:14px;max-width:640px;margin:0 auto;counter-reset:step}
-  .step{display:flex;gap:16px;background:var(--card);border-radius:var(--radius);padding:18px 20px;align-items:flex-start}
-  .step::before{counter-increment:step;content:counter(step,decimal-leading-zero);font-family:"Cormorant Garamond",serif;font-size:30px;color:var(--accent);line-height:1;min-width:40px}
-  .step h3{font-size:15px}
-  .step p{font-size:13px;color:var(--sub)}
-
   /* ===== ルール ===== */
-  .rules{max-width:640px;margin:0 auto;background:var(--card);border-radius:var(--radius);padding:24px 22px;border-left:4px solid var(--accent)}
+  .rules{max-width:680px;margin:0 auto;background:#fff;border-radius:var(--radius);padding:24px 22px;border:1px solid var(--border);border-left:4px solid var(--accent)}
   .rules ul{list-style:none;display:grid;gap:8px;font-size:13.5px}
   .rules li::before{content:"✕";color:var(--accent-dk);font-weight:700;margin-right:8px}
 
   /* ===== FAQ ===== */
-  .faq{max-width:700px;margin:0 auto;display:grid;gap:10px}
-  details{background:var(--card);border-radius:14px;padding:4px 20px}
+  .faq{max-width:760px;margin:0 auto;display:grid;gap:10px}
+  details{background:#fff;border-radius:14px;padding:4px 20px;border:1px solid var(--border)}
   summary{cursor:pointer;list-style:none;padding:14px 0;font-weight:500;display:flex;justify-content:space-between;gap:10px}
   summary::-webkit-details-marker{display:none}
-  summary::before{content:"Q.";font-family:"Cormorant Garamond",serif;color:var(--accent-dk);font-size:18px;font-weight:600}
+  summary::before{content:"Q.";font-family:"Cormorant Garamond",serif;color:var(--gold);font-size:18px;font-weight:600}
   summary span{flex:1}
   summary::after{content:"+";font-size:20px;color:var(--sub);transition:.2s}
   details[open] summary::after{transform:rotate(45deg)}
@@ -184,7 +234,7 @@
   /* ===== 予約 ===== */
   .reserve{text-align:center;background:var(--navy);color:#fff}
   .reserve .sec-title .en{color:#fff}
-  .reserve .sec-title .ja{color:#e7b9b9}
+  .reserve .sec-title .ja{color:#e7d6bd}
   .reserve > .wrap > p{font-size:14px;opacity:.85}
   .reserve .btns{margin-top:18px;display:flex;flex-direction:column;gap:12px;align-items:center}
   .hours{margin-top:18px;font-size:12px;opacity:.7}
@@ -192,14 +242,11 @@
   .sns-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:22px}
   .sns-row a{font-size:12.5px;font-weight:700;border:1.5px solid rgba(255,255,255,.5);border-radius:999px;padding:6px 16px}
   .sns-row a:hover{background:#fff;color:var(--navy)}
-
-  .rform,.thanks{background:var(--card);color:var(--ink);text-align:left;border-radius:var(--radius);padding:26px 20px;max-width:640px;margin:28px auto 0}
+  .rform,.thanks{background:#fff;color:var(--ink);text-align:left;border-radius:var(--radius);padding:26px 20px;max-width:640px;margin:28px auto 0}
   .fg{margin-bottom:16px}
   .fg > label,.fg > .lb{display:block;font-size:13px;font-weight:700;margin-bottom:6px}
   .fg b{font-size:10px;background:var(--accent);color:#fff;border-radius:4px;padding:1px 6px;margin-left:6px;vertical-align:2px}
-  .rform input[type=text],.rform input[type=tel],.rform input[type=email],.rform input[type=date],.rform select,.rform textarea{
-    width:100%;padding:12px;border:1.5px solid #e0d7cc;border-radius:10px;font:inherit;font-size:16px;background:#fff;color:var(--ink);
-  }
+  .rform input[type=text],.rform input[type=tel],.rform input[type=email],.rform input[type=date],.rform select,.rform textarea{width:100%;padding:12px;border:1.5px solid #e0d7cc;border-radius:10px;font:inherit;font-size:16px;background:#fff;color:var(--ink)}
   .rform select{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%236b6a78' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 12px center;padding-right:30px}
   .rform textarea{min-height:100px;resize:vertical}
   .rform input:focus,.rform select:focus,.rform textarea:focus{outline:none;border-color:var(--navy)}
@@ -215,8 +262,7 @@
   .opt input{width:18px;height:18px;accent-color:var(--navy)}
   .opt span{flex:1}
   .opt em{font-style:normal;font-weight:700;color:var(--navy)}
-  .opt.fixed{opacity:.75}
-  .estimate{background:var(--bg);border-radius:12px;padding:14px 16px;margin-bottom:16px}
+  .estimate{background:var(--bg2);border-radius:12px;padding:14px 16px;margin-bottom:16px}
   .est-lines{font-size:12.5px;color:var(--sub);border-bottom:1px dashed #ddd3c8;padding-bottom:8px;margin-bottom:8px}
   .est-lines div{display:flex;justify-content:space-between;gap:10px}
   .est-total{display:flex;justify-content:space-between;align-items:baseline}
@@ -239,31 +285,91 @@
   .thanks{text-align:center;padding:40px 22px}
   .thanks .en{font-size:30px;color:var(--navy);display:block}
   .thanks p{font-size:14px;color:var(--sub);margin-top:10px}
-  .thanks .num{display:inline-block;margin-top:14px;font-size:13px;background:var(--bg);border-radius:10px;padding:8px 16px}
+  .thanks .num{display:inline-block;margin-top:14px;font-size:13px;background:var(--bg2);border-radius:10px;padding:8px 16px}
   .thanks .num b{font-family:"Cormorant Garamond",serif;font-size:24px;letter-spacing:.15em;color:var(--navy);margin-left:6px}
   .thanks .btn{margin-top:18px}
   .thanks small{display:block;font-size:11.5px;color:var(--sub);margin-top:8px}
+  .recruit-card{display:block;max-width:640px;margin:36px auto 0;border:1.5px solid rgba(255,255,255,.35);border-radius:var(--radius);padding:18px 20px;text-align:center;transition:.2s}
+  .recruit-card:hover{background:rgba(255,255,255,.08)}
+  .recruit-card .en{display:block;font-size:14px;color:#e7d6bd;font-style:italic}
+  .recruit-card b{display:block;font-size:18px;margin:2px 0}
+  .recruit-card small{font-size:12px;opacity:.8}
 
   footer{text-align:center;padding:30px 20px;font-size:11px;color:var(--sub)}
   footer a{text-decoration:underline;margin:0 6px}
 
   /* ===== スマホ下固定ボタン ===== */
-  .fixed-cta{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:8px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(250,246,241,.95);border-top:1px solid rgba(35,38,58,.08)}
+  .fixed-cta{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:8px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.95);border-top:1px solid var(--border)}
   .fixed-cta .btn{flex:1;min-width:0;padding:14px 8px;font-size:14px}
+
+  /* ===== キャスト個別ページ ===== */
+  .cpage{position:fixed;inset:0;z-index:80;background:#fff;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .cpage .bar{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 12px;background:rgba(255,255,255,.95);border-bottom:1px solid var(--border)}
+  .cpage .back{border:none;background:none;font:inherit;font-size:14px;color:var(--navy);cursor:pointer;padding:8px}
+  .cpage .inner{max-width:980px;margin:0 auto;padding:0 0 110px}
+  .cp-grid{display:grid;gap:0}
+  .gallery{position:relative}
+  .gal-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+  .gal-track::-webkit-scrollbar{display:none}
+  .gal-track div{flex:0 0 100%;aspect-ratio:3/4;max-height:78vh;background:center/cover no-repeat;scroll-snap-align:start;display:flex;align-items:center;justify-content:center;font-family:"Cormorant Garamond",serif;font-size:90px;color:#fff}
+  .gal-dots{position:absolute;left:0;right:0;bottom:12px;display:flex;justify-content:center;gap:6px}
+  .gal-dots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.55)}
+  .gal-dots span.on{background:#fff}
+  .thumbs{display:flex;gap:6px;padding:8px 16px;overflow-x:auto}
+  .thumbs button{flex:0 0 56px;height:74px;border-radius:8px;border:2px solid transparent;background:center/cover no-repeat #eee;cursor:pointer;padding:0}
+  .thumbs button.on{border-color:var(--navy)}
+  .cp-body{padding:20px 20px 0}
+  .cp-body .lb{font-family:"Cormorant Garamond",serif;color:var(--gold);letter-spacing:.2em;font-size:13px}
+  .cp-body h2{font-size:28px;letter-spacing:.1em;color:var(--navy);line-height:1.3}
+  .cp-body .meta{font-size:13px;color:var(--sub);margin-top:2px}
+  .cp-body .types{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+  .cp-body .types span{font-size:11.5px;border:1px solid var(--navy);color:var(--navy);border-radius:999px;padding:2px 10px}
+  .cp-body .tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+  .cp-body .tags span{font-size:11.5px;background:var(--bg2);border-radius:999px;padding:2px 10px}
+  .cp-body .comment{font-size:15px;margin-top:16px;padding:14px 16px;background:var(--bg2);border-radius:14px;line-height:1.8}
+  .cp-sec{margin-top:26px}
+  .cp-sec h3{font-size:13px;letter-spacing:.18em;color:var(--gold);font-weight:700;border-bottom:1.5px solid var(--bg3);padding-bottom:6px;margin-bottom:10px}
+  .cp-sec p{font-size:14px;line-height:1.95;white-space:pre-wrap}
+  .cp-prof{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px}
+  .cp-prof dt{color:var(--sub)}
+  .cp-week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+  .cp-week div{border:1px solid var(--border);border-radius:10px;padding:6px 2px;font-size:11px;line-height:1.5}
+  .cp-week div b{display:block;font-size:13px}
+  .cp-week div.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .cp-week div small{display:block;font-size:10px;opacity:.85}
+  .cp-sns{display:flex;gap:6px;flex-wrap:wrap}
+  .cp-sns a{font-size:12px;font-weight:700;border:1.5px solid var(--border);border-radius:999px;padding:5px 14px}
+  .cp-diaries{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+  .cp-diaries button{aspect-ratio:1/1;border:none;border-radius:10px;background:center/cover no-repeat var(--bg2);cursor:pointer;font-size:11px;color:var(--sub);padding:6px;text-align:left;overflow:hidden}
+  .cp-cta{position:fixed;left:0;right:0;bottom:0;z-index:3;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);border-top:1px solid var(--border);display:flex;justify-content:center}
+  .cp-cta .btn{width:100%;max-width:520px}
 
   /* ===== PC ===== */
   @media (min-width:900px){
     body{font-size:16px;padding-bottom:0}
-    .fixed-cta{display:none}
-    nav ul{display:flex}
-    .hero{padding:120px 0 130px}
+    .fixed-cta,.menu-btn{display:none}
+    nav.pc ul{display:flex}
+    .hero{padding:80px 0 90px}
+    .hero .grid{grid-template-columns:1fr 1fr}
+    .hero .txt{text-align:left}
     .hero h1{font-size:44px}
-    .hero .btns{flex-direction:row;justify-content:center}
+    .hero .btns{flex-direction:row;align-items:flex-start}
+    .cast-grid{grid-template-columns:repeat(4,1fr);gap:28px 20px}
+    .featured{grid-template-columns:1fr 1fr}
+    .feat{grid-template-columns:1fr 1fr}
+    .feat .ph{aspect-ratio:auto;min-height:100%}
+    .diary-grid{grid-template-columns:repeat(4,1fr)}
     .scenes{grid-template-columns:repeat(4,1fr)}
-    .cast-grid{grid-template-columns:repeat(4,1fr);gap:20px}
-    .sec-title .en{font-size:44px}
+    .steps{grid-template-columns:repeat(3,1fr)}
+    .concepts{grid-template-columns:repeat(3,1fr)}
+    .sec-title .en{font-size:46px}
     .reserve .btns{flex-direction:row;justify-content:center}
+    .cp-grid{grid-template-columns:1fr 1fr;gap:36px;padding:24px 20px 0}
+    .gal-track div{border-radius:18px}
+    .thumbs{padding:8px 0}
+    .cp-body{padding:0}
   }
+  @media (min-width:900px) and (max-width:1100px){ .featured{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
@@ -272,14 +378,16 @@
   <div class="wrap head">
     <a href="#top" class="logo en"><span class="js-shop">Lueur</span><small data-i18n="logo_sub">レンタル彼氏</small></a>
     <div class="head-right">
-      <nav>
+      <nav class="pc">
         <ul>
           <li><a href="#cast" data-i18n="nav_cast">キャスト</a></li>
+          <li><a href="#diary" data-i18n="nav_diary">写メ日記</a></li>
+          <li><a href="#howto" data-i18n="nav_flow">遊び方</a></li>
           <li><a href="#schedule" data-i18n="nav_schedule">出勤表</a></li>
           <li><a href="#price" data-i18n="nav_price">料金</a></li>
-          <li><a href="#flow" data-i18n="nav_flow">ご利用の流れ</a></li>
           <li><a href="#faq" data-i18n="nav_faq">よくある質問</a></li>
           <li><a href="#reserve" data-i18n="nav_reserve">ご予約</a></li>
+          <li><a href="recruit.html" class="nav-recruit" data-i18n="nav_recruit">キャスト募集</a></li>
         </ul>
       </nav>
       <select class="lang" id="langSel" aria-label="Language">
@@ -288,36 +396,93 @@
         <option value="zh">中文</option>
         <option value="ko">한국어</option>
       </select>
+      <button class="menu-btn" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </div>
 </header>
 
+<!-- スマホ用メニュー -->
+<div class="drawer" id="drawer" hidden>
+  <div class="in">
+    <button class="close" id="drawerClose" aria-label="Close">×</button>
+    <div style="clear:both;height:6px"></div>
+    <a href="#cast"><span data-i18n="nav_cast">キャスト</span><small>CAST</small></a>
+    <a href="#featured"><span data-i18n="sec_featured">今月の注目キャスト</span><small>PICK UP</small></a>
+    <a href="#diary"><span data-i18n="nav_diary">写メ日記</span><small>DIARY</small></a>
+    <a href="#about"><span data-i18n="sec_about">サービス紹介</span><small>ABOUT</small></a>
+    <a href="#howto"><span data-i18n="nav_flow">遊び方</span><small>HOW TO</small></a>
+    <a href="#schedule"><span data-i18n="nav_schedule">出勤表</span><small>SCHEDULE</small></a>
+    <a href="#price"><span data-i18n="nav_price">料金</span><small>PRICE</small></a>
+    <a href="#faq"><span data-i18n="nav_faq">よくある質問</span><small>FAQ</small></a>
+    <a href="#reserve"><span data-i18n="nav_reserve">ご予約</span><small>RESERVE</small></a>
+    <a href="recruit.html"><span data-i18n="nav_recruit">キャスト募集</span><small>RECRUIT</small></a>
+  </div>
+</div>
+
+<!-- バナー(管理画面で登録したものだけ表示) -->
+<div class="banners" id="bannerSec" hidden>
+  <div class="bn-track" id="bnTrack"></div>
+  <div class="bn-dots" id="bnDots"></div>
+</div>
+
 <!-- ヒーロー -->
 <section class="hero" id="top">
-  <div class="wrap">
-    <div class="catch-en en" id="catchEn">A special day, just for you.</div>
-    <h1 id="catch">特別な一日を、<br>あなたと。</h1>
-    <p id="subCopy">カフェ、ショッピング、映画、ちょっとした話し相手まで。<br>あなたの「こんな一日を過ごしたい」を叶えます。</p>
-    <div class="btns">
-      <a href="#reserve" class="btn btn-reserve" data-i18n="hero_reserve">予約フォームへ</a>
-      <a href="#reserve" class="btn btn-line js-line" data-i18n="btn_line">LINEで相談する</a>
+  <div class="wrap grid">
+    <div class="txt">
+      <div class="catch-en en" id="catchEn">A special day, just for you.</div>
+      <h1 id="catch">特別な一日を、<br>あなたと。</h1>
+      <p id="subCopy">カフェ、ショッピング、映画、ちょっとした話し相手まで。<br>あなたの「こんな一日を過ごしたい」を叶えます。</p>
+      <div class="btns">
+        <a href="#cast" class="btn btn-reserve" data-i18n="hero_cast">キャストを見る</a>
+        <a href="#reserve" class="btn btn-line js-line" data-i18n="btn_line">LINEで相談する</a>
+      </div>
     </div>
+    <div class="collage" id="heroCollage"></div>
   </div>
 </section>
 
 <!-- お知らせ(データがあるときだけ表示) -->
 <section class="news-sec" id="newsSec" hidden>
   <div class="wrap">
-    <div class="sec-title" style="margin-bottom:20px"><span class="en">News</span><span class="ja" data-i18n="sec_news">お知らせ</span></div>
+    <div class="sec-title" style="margin-bottom:18px"><span class="en">NEWS</span><span class="ja" data-i18n="sec_news">お知らせ</span></div>
     <div class="news" id="newsList"></div>
   </div>
 </section>
 
-<!-- コンセプト -->
-<section class="concept" id="concept">
+<!-- キャスト一覧 -->
+<section id="cast">
   <div class="wrap">
-    <div class="sec-title"><span class="en">Concept</span><span class="ja" data-i18n="sec_concept">コンセプト</span></div>
-    <p id="conceptText">Lueur(リュウール)はフランス語で「やさしい光」。<br>
+    <div class="sec-title"><span class="en">CAST LIST</span><span class="ja" data-i18n="sec_cast">キャスト紹介</span></div>
+    <div class="filters" id="castFilters"></div>
+    <div class="cast-grid" id="castGrid"><div class="loading" data-i18n="loading">読み込み中…</div></div>
+  </div>
+</section>
+
+<!-- 今月の注目キャスト -->
+<section class="alt" id="featured" hidden>
+  <div class="wrap">
+    <div class="sec-title"><span class="en">PICK UP</span><span class="ja" data-i18n="sec_featured">今月の注目キャスト</span></div>
+    <div class="featured" id="featuredList"></div>
+  </div>
+</section>
+
+<!-- 写メ日記 -->
+<section id="diary" hidden>
+  <div class="wrap">
+    <div class="sec-title"><span class="en">CAST DIARY</span><span class="ja" data-i18n="sec_diary">写メ日記</span></div>
+    <div class="diary-grid" id="diaryGrid"></div>
+    <div style="text-align:center;margin-top:18px"><button class="btn btn-ghost" id="diaryMore" hidden data-i18n="diary_more">もっと見る</button></div>
+  </div>
+</section>
+
+<!-- 日記の拡大表示 -->
+<div class="dmodal" id="dModal" hidden><div class="dbox" id="dBox"></div></div>
+
+<!-- サービス紹介 -->
+<section class="alt about" id="about">
+  <div class="wrap">
+    <div class="sec-title"><span class="en">ABOUT US</span><span class="ja" data-i18n="sec_about">サービス紹介</span></div>
+    <p class="lead" id="conceptText">Lueur(リュウール)はフランス語で「やさしい光」。<br>
     忙しい毎日の中で、ほっとできる時間をお届けしたい。<br>
     はじめての方でも安心してご利用いただけるよう、<br>丁寧なヒアリングと明朗な料金でお迎えします。</p>
     <div class="scenes">
@@ -329,19 +494,40 @@
   </div>
 </section>
 
-<!-- キャスト -->
-<section class="alt" id="cast">
+<!-- 遊び方・ご予約(6ステップ) -->
+<section id="howto">
   <div class="wrap">
-    <div class="sec-title"><span class="en">Cast</span><span class="ja" data-i18n="sec_cast">キャスト紹介</span></div>
-    <div class="filters" id="castFilters"></div>
-    <div class="cast-grid" id="castGrid"><div class="loading" data-i18n="loading">読み込み中…</div></div>
+    <div class="sec-title"><span class="en">HOW TO BOOK</span><span class="ja" data-i18n="sec_howto">遊び方・ご予約について</span></div>
+    <div class="steps">
+      <div class="step"><div class="no">STEP<b>01</b></div><h3 data-i18n="step1_h">キャストを選ぶ</h3><div class="sub-en">Choose</div><p data-i18n="step1_p">プロフィールや写メ日記を見て、気になるキャストを探してください。迷ったら「おまかせ」もOKです。</p></div>
+      <div class="step"><div class="no">STEP<b>02</b></div><h3 data-i18n="step2_h">気軽に相談</h3><div class="sub-en">Talk</div><p data-i18n="step2_p">公式LINEで、どんなデートにしたいか気軽にご相談ください。はじめての方の不安にもお答えします。</p></div>
+      <div class="step"><div class="no">STEP<b>03</b></div><h3 data-i18n="step3_h">プランを決める</h3><div class="sub-en">Plan</div><p data-i18n="step3_p">日時・コース・待ち合わせ場所を決めます。行きたいお店や過ごし方のご希望もお聞かせください。</p></div>
+      <div class="step"><div class="no">STEP<b>04</b></div><h3 data-i18n="step4_h">予約する</h3><div class="sub-en">Book</div><p data-i18n="step4_p">予約フォームかLINEで予約リクエストを送信。空き状況を確認し、確定のご連絡をお送りします。</p></div>
+      <div class="step"><div class="no">STEP<b>05</b></div><h3 data-i18n="step5_h">デートを楽しむ</h3><div class="sub-en">Enjoy</div><p data-i18n="step5_p">当日は待ち合わせ場所でキャストがお待ちしています。肩の力を抜いて、特別な時間をお楽しみください。</p></div>
+      <div class="step"><div class="no">STEP<b>06</b></div><h3 data-i18n="step6_h">お支払い</h3><div class="sub-en">Payment</div><p data-i18n="step6_p">料金はデート開始時にお支払いください。お支払い方法はご予約時にお選びいただけます。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 過ごし方 -->
+<section class="alt" id="ourconcept">
+  <div class="wrap">
+    <div class="sec-title"><span class="en">HOW TO ENJOY</span><span class="ja" data-i18n="sec_enjoy">Lueurでの過ごし方</span></div>
+    <div class="concepts">
+      <div class="concept-card cc1"><div class="top"><div class="ico">🗺️</div><h3 data-i18n="cc1_h">街歩きのパートナー</h3><div class="sub-en">Walk around the city</div></div>
+        <p data-i18n="cc1_p">行ってみたかったカフェや話題のスポット、ひとりだと入りにくいお店にも一緒に。観光で訪れた方の街案内もお任せください。</p></div>
+      <div class="concept-card cc2"><div class="top"><div class="ico">💐</div><h3 data-i18n="cc2_h">一日だけの特別な時間</h3><div class="sub-en">A day to remember</div></div>
+        <p data-i18n="cc2_p">記念日や誕生日、なんでもない休日も。あなたのペースに合わせてエスコートし、「楽しかった」と思える一日をつくります。</p></div>
+      <div class="concept-card cc3"><div class="top"><div class="ico">☕</div><h3 data-i18n="cc3_h">話を聞いてくれる相手</h3><div class="sub-en">Someone to listen</div></div>
+        <p data-i18n="cc3_p">仕事のこと、人間関係のこと、誰かに聞いてほしい話。否定せずにじっくり耳を傾けます。話すだけで気持ちが軽くなることもあります。</p></div>
+    </div>
   </div>
 </section>
 
 <!-- 出勤表 -->
 <section id="schedule">
   <div class="wrap">
-    <div class="sec-title"><span class="en">Schedule</span><span class="ja" data-i18n="sec_schedule">出勤スケジュール</span></div>
+    <div class="sec-title"><span class="en">SCHEDULE</span><span class="ja" data-i18n="sec_schedule">出勤スケジュール</span></div>
     <div class="days" id="dayTabs"></div>
     <div class="sched" id="schedList"><div class="loading" data-i18n="loading">読み込み中…</div></div>
   </div>
@@ -350,7 +536,7 @@
 <!-- 料金 -->
 <section class="alt" id="price">
   <div class="wrap">
-    <div class="sec-title"><span class="en">Price</span><span class="ja" data-i18n="sec_price">料金システム</span></div>
+    <div class="sec-title"><span class="en">PRICE</span><span class="ja" data-i18n="sec_price">料金システム</span></div>
     <div class="price-box">
       <div id="priceList"><div class="loading" data-i18n="loading">読み込み中…</div></div>
       <p class="note" id="priceNote"></p>
@@ -358,23 +544,18 @@
   </div>
 </section>
 
-<!-- ご利用の流れ -->
-<section id="flow">
+<!-- FAQ -->
+<section id="faq">
   <div class="wrap">
-    <div class="sec-title"><span class="en">Flow</span><span class="ja" data-i18n="sec_flow">ご利用の流れ</span></div>
-    <div class="flow">
-      <div class="step"><div><h3 data-i18n="flow1_h">予約フォームかLINEでお問い合わせ</h3><p data-i18n="flow1_p">ご希望の日時・コース・キャストをお送りください。</p></div></div>
-      <div class="step"><div><h3 data-i18n="flow2_h">ご予約確定</h3><p data-i18n="flow2_p">空き状況を確認し、確定のお知らせをメールまたはLINEでお送りします。</p></div></div>
-      <div class="step"><div><h3 data-i18n="flow3_h">待ち合わせ</h3><p data-i18n="flow3_p">当日は指定の場所でキャストがお待ちしています。開始時に料金をお支払いください。</p></div></div>
-      <div class="step"><div><h3 data-i18n="flow4_h">デートをお楽しみください</h3><p data-i18n="flow4_p">終了後、よろしければLINEでご感想をお聞かせください。</p></div></div>
-    </div>
+    <div class="sec-title"><span class="en">FAQ</span><span class="ja" data-i18n="sec_faq">よくある質問</span></div>
+    <div class="faq" id="faqList"><div class="loading" data-i18n="loading">読み込み中…</div></div>
   </div>
 </section>
 
 <!-- 禁止事項 -->
 <section class="alt" id="rules">
   <div class="wrap">
-    <div class="sec-title"><span class="en">Rules</span><span class="ja" data-i18n="sec_rules">ご利用にあたってのお願い</span></div>
+    <div class="sec-title"><span class="en">RULES</span><span class="ja" data-i18n="sec_rules">ご利用にあたってのお願い</span></div>
     <div class="rules">
       <ul>
         <li data-i18n="rule1">18歳未満の方のご利用</li>
@@ -386,14 +567,6 @@
       </ul>
       <p class="note" data-i18n="rules_note">上記に該当した場合、その時点でデートを終了させていただきます(料金の返金はいたしません)。</p>
     </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section id="faq">
-  <div class="wrap">
-    <div class="sec-title"><span class="en">FAQ</span><span class="ja" data-i18n="sec_faq">よくある質問</span></div>
-    <div class="faq" id="faqList"><div class="loading" data-i18n="loading">読み込み中…</div></div>
   </div>
 </section>
 
@@ -450,6 +623,11 @@
         <select id="fCourse" name="course" required></select>
       </div>
 
+      <div class="fg" id="extWrap" hidden>
+        <label for="fExtension" data-i18n="f_extension">延長の予定</label>
+        <select id="fExtension" name="extension"></select>
+      </div>
+
       <div class="fg">
         <label for="fCast" data-i18n="f_cast">指名キャスト</label>
         <select id="fCast" name="cast"><option value="おまかせ" data-i18n="f_cast_any">おまかせ</option></select>
@@ -476,6 +654,11 @@
       <div class="fg">
         <label for="fPlace" data-i18n="f_place">待ち合わせ場所(駅名など)</label>
         <input type="text" id="fPlace" name="place" maxlength="100" data-i18n-ph="f_place_ph" placeholder="例:○○駅 東口">
+      </div>
+
+      <div class="fg" id="payWrap" hidden>
+        <label for="fPayment"><span data-i18n="f_payment">お支払い方法</span><b data-i18n="required">必須</b></label>
+        <select id="fPayment" name="payment"></select>
       </div>
 
       <div class="fg" id="sourceWrap" hidden>
@@ -516,6 +699,12 @@
     </div>
     <div class="sns-row" id="snsRow"></div>
     <div class="hours" id="hours">受付時間 12:00〜22:00(年中無休)</div>
+
+    <a class="recruit-card" href="recruit.html">
+      <span class="en">Recruit</span>
+      <b data-i18n="recruit_title">キャスト募集中</b>
+      <small data-i18n="recruit_text">未経験・学生・副業OK。自由出勤・日払いOK。詳しくはこちら →</small>
+    </a>
   </div>
 </section>
 
@@ -523,6 +712,17 @@
   <div style="margin-bottom:8px"><a href="recruit.html" data-i18n="footer_recruit">キャスト募集</a><a href="#rules" data-i18n="sec_rules">ご利用にあたってのお願い</a></div>
   &copy; <span id="year"></span> <span class="js-shop">Lueur</span> All Rights Reserved.
 </footer>
+
+<!-- キャスト個別ページ(#cast/名前 で開く) -->
+<div class="cpage" id="cPage" hidden>
+  <div class="bar">
+    <button class="back" id="cBack">‹ <span data-i18n="back">戻る</span></button>
+    <span class="en" style="font-size:20px;color:var(--navy)"><span class="js-shop">Lueur</span></span>
+    <span style="width:60px"></span>
+  </div>
+  <div class="inner" id="cInner"></div>
+  <div class="cp-cta"><button class="btn btn-reserve" id="cBook" data-i18n="book_this">このキャストで予約する</button></div>
+</div>
 
 <!-- スマホ用 下固定ボタン -->
 <div class="fixed-cta">
@@ -568,7 +768,23 @@
       or_line:"You can also ask or book on LINE", fixed_reserve:"Book", fixed_line:"LINE", footer_recruit:"Join our cast", loading:"Loading…",
       filter_all:"All", filter_today:"Working today", today:"Today", cast_preparing:"Cast profiles coming soon", sched_none:"No schedule posted for this day yet.",
       cat_course:"Courses", cat_option:"Options", cat_other:"Other", cat_nomination:"Nomination fee", cat_transport:"Travel fee", age:"y/o",
-      f_transport:"Meeting area (travel fee)", f_transport_none:"Not decided / ask", f_source:"How did you hear about us?", f_source_none:"Prefer not to say", free:"free", load_error:"Could not load data. Please reload the page later.",
+      f_transport:"Meeting area (travel fee)", f_transport_none:"Not decided / ask", f_source:"How did you hear about us?", f_source_none:"Prefer not to say", free:"free",
+      nav_diary:"Diary", nav_recruit:"Join us", sec_diary:"Photo diary", diary_more:"See more", recruit_title:"We're hiring cast members",
+      recruit_text:"No experience needed. Students & side jobs welcome. Flexible shifts, daily pay. Details →",
+      cat_extension:"Extension", f_extension:"Planned extension", f_extension_none:"No extension (decide on the day)", f_payment:"Payment method",
+      min_ago:" min ago", hour_ago:" h ago", close:"Close",
+      hero_cast:"See our cast", sec_featured:"Featured cast of the month", sec_about:"About us", sec_howto:"How to book", sec_enjoy:"Ways to enjoy",
+      step1_h:"Choose a cast member", step1_p:"Browse profiles and photo diaries to find someone you like. You can also leave it to us.",
+      step2_h:"Talk to us", step2_p:"Tell us on LINE what kind of date you'd like. We're happy to answer any first-time questions.",
+      step3_h:"Plan your date", step3_p:"Decide the date, course and meeting place. Let us know any places you'd like to visit.",
+      step4_h:"Book", step4_p:"Send a request via the form or LINE. We'll check availability and confirm your booking.",
+      step5_h:"Enjoy your date", step5_p:"Your cast member will be waiting at the meeting place. Relax and enjoy a special time.",
+      step6_h:"Payment", step6_p:"Please pay at the start of the date. You can choose a payment method when booking.",
+      cc1_h:"A partner for city walks", cc1_p:"Cafés you've wanted to try, trending spots, places that are hard to enter alone. We can also guide visitors around town.",
+      cc2_h:"A special day, just once", cc2_p:"Anniversaries, birthdays or an ordinary day off. We'll escort you at your own pace and make it a day to remember.",
+      cc3_h:"Someone who listens", cc3_p:"Work, relationships, anything you want to get off your chest. We listen without judgement — sometimes talking is all it takes.",
+      view_profile:"View profile", book_this:"Book this cast member", back:"Back", profile_title:"About me", hobby:"Hobbies", fav_date:"Favorite date",
+      this_week:"This week's schedule", sec_diary_short:"Photo diary", load_error:"Could not load data. Please reload the page later.",
       err_phone:"Please enter a valid phone number (10–11 digits)", err_sample:"Sample mode: the form cannot be sent", err_network:"Could not send. Please check your connection and try again.",
       weekdays:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
     },
@@ -600,7 +816,23 @@
       or_line:"也可以通过LINE咨询・预约", fixed_reserve:"预约", fixed_line:"LINE咨询", footer_recruit:"招募成员", loading:"加载中…",
       filter_all:"全部", filter_today:"今日出勤", today:"今日", cast_preparing:"成员信息准备中", sched_none:"该日期的出勤信息尚未公布。",
       cat_course:"套餐", cat_option:"附加选项", cat_other:"其他", cat_nomination:"指名费", cat_transport:"交通费", age:"岁",
-      f_transport:"见面区域(交通费)", f_transport_none:"未定・商量", f_source:"您是如何得知本店的?", f_source_none:"不选择", free:"免费", load_error:"无法加载信息，请稍后刷新页面。",
+      f_transport:"见面区域(交通费)", f_transport_none:"未定・商量", f_source:"您是如何得知本店的?", f_source_none:"不选择", free:"免费",
+      nav_diary:"照片日记", nav_recruit:"招募成员", sec_diary:"照片日记", diary_more:"查看更多", recruit_title:"成员招募中",
+      recruit_text:"无经验・学生・兼职均可。自由出勤・日结工资。详情请点击 →",
+      cat_extension:"延长费", f_extension:"延长预定", f_extension_none:"不延长(当天商量)", f_payment:"支付方式",
+      min_ago:"分钟前", hour_ago:"小时前", close:"关闭",
+      hero_cast:"查看成员", sec_featured:"本月推荐成员", sec_about:"服务介绍", sec_howto:"使用方法・预约", sec_enjoy:"在这里的度过方式",
+      step1_h:"选择成员", step1_p:"浏览个人资料和照片日记，找到心仪的成员。也可以交给我们安排。",
+      step2_h:"轻松咨询", step2_p:"通过LINE告诉我们您想要什么样的约会。第一次使用的疑问也欢迎咨询。",
+      step3_h:"制定计划", step3_p:"确定日期、套餐和见面地点。也欢迎告诉我们您想去的店。",
+      step4_h:"预约", step4_p:"通过表单或LINE发送预约请求。确认空档后我们会发送确定通知。",
+      step5_h:"享受约会", step5_p:"当天成员会在见面地点等您。请放松享受特别的时光。",
+      step6_h:"支付", step6_p:"请在约会开始时支付费用。支付方式可在预约时选择。",
+      cc1_h:"城市漫步的伙伴", cc1_p:"想去的咖啡馆、热门景点、一个人不好进的店都可以一起去。也可以为游客做城市向导。",
+      cc2_h:"只属于一天的特别时光", cc2_p:"纪念日、生日或普通的休息日。配合您的节奏陪伴，打造难忘的一天。",
+      cc3_h:"愿意倾听的人", cc3_p:"工作、人际关系，任何想说的话。我们会耐心倾听，不加评判。",
+      view_profile:"查看资料", book_this:"预约这位成员", back:"返回", profile_title:"自我介绍", hobby:"爱好", fav_date:"擅长的约会",
+      this_week:"本周出勤", sec_diary_short:"照片日记", load_error:"无法加载信息，请稍后刷新页面。",
       err_phone:"请输入正确的电话号码(10〜11位)", err_sample:"示例模式下无法发送", err_network:"发送失败，请检查网络后重试。",
       weekdays:["日","一","二","三","四","五","六"]
     },
@@ -632,7 +864,23 @@
       or_line:"LINE으로도 상담・예약을 받고 있습니다", fixed_reserve:"예약", fixed_line:"LINE 상담", footer_recruit:"캐스트 모집", loading:"불러오는 중…",
       filter_all:"전체", filter_today:"오늘 출근", today:"오늘", cast_preparing:"캐스트 정보 준비 중입니다", sched_none:"이 날의 출근 정보는 아직 없습니다.",
       cat_course:"코스", cat_option:"옵션", cat_other:"기타", cat_nomination:"지명료", cat_transport:"교통비", age:"세",
-      f_transport:"만날 지역(교통비)", f_transport_none:"미정・상담", f_source:"저희 가게를 알게 된 계기", f_source_none:"선택 안 함", free:"무료", load_error:"정보를 불러올 수 없습니다. 잠시 후 새로고침해 주세요.",
+      f_transport:"만날 지역(교통비)", f_transport_none:"미정・상담", f_source:"저희 가게를 알게 된 계기", f_source_none:"선택 안 함", free:"무료",
+      nav_diary:"사진 일기", nav_recruit:"캐스트 모집", sec_diary:"사진 일기", diary_more:"더 보기", recruit_title:"캐스트 모집 중",
+      recruit_text:"경험・학생・부업 OK. 자유 출근・일급 가능. 자세히 보기 →",
+      cat_extension:"연장료", f_extension:"연장 예정", f_extension_none:"연장 없음(당일 상담)", f_payment:"결제 방법",
+      min_ago:"분 전", hour_ago:"시간 전", close:"닫기",
+      hero_cast:"캐스트 보기", sec_featured:"이달의 주목 캐스트", sec_about:"서비스 소개", sec_howto:"이용 방법・예약", sec_enjoy:"즐기는 방법",
+      step1_h:"캐스트 고르기", step1_p:"프로필과 사진 일기를 보고 마음에 드는 캐스트를 찾아보세요. 맡겨 주셔도 됩니다.",
+      step2_h:"편하게 상담", step2_p:"LINE으로 원하는 데이트를 알려주세요. 처음 이용하시는 분의 궁금증에도 답해 드립니다.",
+      step3_h:"플랜 정하기", step3_p:"날짜・코스・만날 장소를 정합니다. 가고 싶은 가게가 있다면 알려주세요.",
+      step4_h:"예약하기", step4_p:"폼 또는 LINE으로 예약 요청을 보내주세요. 일정을 확인한 후 확정 연락을 드립니다.",
+      step5_h:"데이트 즐기기", step5_p:"당일 약속 장소에서 캐스트가 기다립니다. 편안하게 특별한 시간을 즐기세요.",
+      step6_h:"결제", step6_p:"요금은 데이트 시작 시 지불해 주세요. 결제 방법은 예약 시 선택할 수 있습니다.",
+      cc1_h:"거리 산책 파트너", cc1_p:"가보고 싶던 카페, 화제의 장소, 혼자 들어가기 어려운 가게도 함께. 관광객을 위한 안내도 맡겨 주세요.",
+      cc2_h:"하루만의 특별한 시간", cc2_p:"기념일, 생일, 평범한 휴일에도. 당신의 페이스에 맞춰 에스코트하며 기억에 남는 하루를 만듭니다.",
+      cc3_h:"이야기를 들어주는 사람", cc3_p:"일, 인간관계, 누군가에게 털어놓고 싶은 이야기. 판단하지 않고 귀 기울입니다.",
+      view_profile:"프로필 보기", book_this:"이 캐스트로 예약하기", back:"뒤로", profile_title:"자기소개", hobby:"취미", fav_date:"자신 있는 데이트",
+      this_week:"이번 주 출근", sec_diary_short:"사진 일기", load_error:"정보를 불러올 수 없습니다. 잠시 후 새로고침해 주세요.",
       err_phone:"전화번호를 올바르게 입력해 주세요(10~11자리)", err_sample:"샘플 표시 중에는 보낼 수 없습니다", err_network:"전송하지 못했습니다. 통신 상태를 확인하고 다시 시도해 주세요.",
       weekdays:["일","월","화","수","목","금","토"]
     },
@@ -642,7 +890,9 @@
     f_line_ph:"LINE IDを入力", f_mail_ph:"メールアドレスを入力", f_sending:"送信中…",
     filter_all:"すべて", filter_today:"本日出勤", today:"本日", cast_preparing:"ただいまキャスト準備中です", sched_none:"この日の出勤情報はまだありません",
     cat_course:"コース", cat_option:"オプション", cat_other:"その他", cat_nomination:"指名料", cat_transport:"交通費", age:"歳",
-    f_transport_none:"未定・相談", f_source_none:"選択しない", free:"無料", load_error:"情報を読み込めませんでした。時間をおいて再読み込みしてください。",
+    f_transport_none:"未定・相談", f_source_none:"選択しない", free:"無料",
+    cat_extension:"延長料", f_extension_none:"延長なし(当日相談)", f_select:"選択", min_ago:"分前", hour_ago:"時間前", close:"閉じる",
+    view_profile:"プロフィールを見る", profile_title:"自己紹介", hobby:"趣味", fav_date:"得意なデート", this_week:"今週の出勤", sec_diary_short:"写メ日記", load_error:"情報を読み込めませんでした。時間をおいて再読み込みしてください。",
     err_phone:"電話番号を正しく入力してください(10〜11桁)", err_sample:"サンプル表示中のため送信できません(config.js に GAS_URL を設定してください)",
     err_network:"送信できませんでした。通信状況を確認して、もう一度お試しください", weekdays:["日","月","火","水","木","金","土"], loading:"読み込み中…"
   };
@@ -683,12 +933,15 @@
       "コンセプト文": "Lueur(リュウール)はフランス語で「やさしい光」。\n忙しい毎日の中で、ほっとできる時間をお届けしたい。\nはじめての方でも安心してご利用いただけるよう、\n丁寧なヒアリングと明朗な料金でお迎えします。",
       "タイプ一覧": "癒し系,王子様系,爽やか系,かわいい系,クール系,大人系,体育会系,インテリ系,オラオラ系",
       "流入元の選択肢": "Instagram,X(旧Twitter),TikTok,Google検索,口コミ・紹介,ブログ・まとめサイト,その他",
+      "支払い方法の選択肢": "現金,クレジットカード,PayPay,銀行振込",
       "LINE_URL": "", "LINE公式ID": "", "Instagram_URL": "", "X_URL": "", "TikTok_URL": "", "YouTube_URL": "",
       "受付時間": "受付時間 12:00〜22:00(年中無休)",
       "料金の注意書き": "※キャストの交通費、デート中の飲食代・施設利用料はお客様のご負担となります。\n※料金はデート当日、開始時にキャストへ現金でお支払いください。"
     },
     casts: [
-      { name:"ハルト", age:"24", height:"178", types:["癒し系","大人系"], tags:["聞き上手","カフェ好き"], photo:"", comment:"のんびりお話しするのが好きです。", sns:{} },
+      { name:"ハルト", age:"24", height:"178", types:["癒し系","大人系"], tags:["聞き上手","カフェ好き"], photo:"", comment:"のんびりお話しするのが好きです。", sns:{},
+        featured:true, photos:[], profile:"はじめまして、ハルトです。人の話を聞くのが好きで、友達からはよく相談されます。緊張しなくて大丈夫なので、気軽に会いに来てください。",
+        hobby:"カフェ巡り・読書", favDate:"落ち着いたカフェでゆっくりお話し" },
       { name:"ソウタ", age:"22", height:"175", types:["爽やか系","体育会系"], tags:["明るい","映画好き"], photo:"", comment:"はじめての方も大歓迎!", sns:{} },
       { name:"レン",   age:"26", height:"181", types:["王子様系","クール系"], tags:["ショッピング","紳士"], photo:"", comment:"落ち着いたデートならお任せください。", sns:{} },
       { name:"ユウキ", age:"23", height:"173", types:["かわいい系"], tags:["テーマパーク","笑顔"], photo:"", comment:"一緒にはしゃぎましょう!", sns:{} }
@@ -706,7 +959,8 @@
       { cat:"コース", item:"初回限定 お試し60分", price:4000, unit:"", note:"はじめての方のみ" },
       { cat:"指名料", item:"指名料", price:1000, unit:"", note:"はじめてそのキャストを指名する場合" },
       { cat:"指名料", item:"本指名料", price:2000, unit:"", note:"2回目以降、同じキャストを指名する場合" },
-      { cat:"オプション", item:"延長30分", price:2500, unit:"/30分", note:"" },
+      { cat:"延長料", item:"延長30分", price:2500, unit:"", note:"デート中の延長もOK(キャストの予定によります)" },
+      { cat:"延長料", item:"延長60分", price:5000, unit:"", note:"" },
       { cat:"オプション", item:"深夜料金(22時以降)", price:1000, unit:"", note:"" },
       { cat:"オプション", item:"ツーショット写真", price:1000, unit:"", note:"" },
       { cat:"交通費", item:"○○駅周辺", price:0, unit:"", note:"無料エリア" },
@@ -719,7 +973,12 @@
       { q:"キャンセルはできますか?", a:"前日までは無料です。当日のキャンセルはデート料金の50%、無断キャンセルは100%をキャンセル料として頂戴します。" },
       { q:"デート以外のお願いもできますか?", a:"話し相手、買い物の付き添い、イベントの同行なども承ります。ルールの範囲内でご相談ください。" }
     ],
-    news: [ { date:"2026/10/01", text:"ホームページをオープンしました!" } ]
+    news: [ { date:"2026/10/01", text:"ホームページをオープンしました!" } ],
+    banners: [],
+    diaries: [
+      { id:"d1", date: today0 + " 12:30", cast:"ハルト", text:"今日は新しくできたカフェに行ってきました☕\nお客様とのデートでも行ってみたいな。", photos:[] },
+      { id:"d2", date: addDays(today0, -1) + " 21:10", cast:"ユウキ", text:"明日も出勤です!テーマパークデートお待ちしてます🎢", photos:[] }
+    ]
   };
 
   // 写真がないキャストの背景色(順番に使う)
@@ -781,8 +1040,12 @@
     $("newsSec").hidden = news.length === 0;
     $("newsList").innerHTML = news.map(n => `<div class="news-item"><span class="date">${esc(n.date)}</span><span>${br(T(n, "text"))}</span></div>`).join("");
 
+    renderBanners();
+    renderHero();
     renderCasts();
+    renderFeatured();
     renderSchedule();
+    renderDiary();
     renderPrices();
     renderForm();
 
@@ -806,30 +1069,210 @@
 
     const list = casts.filter(c => castFilter === "all" ? true : castFilter === "today" ? !!shiftOf(c.name, d.today) : (c.types || []).includes(castFilter));
     $("castGrid").innerHTML = list.length ? list.map(c => {
-      const i = casts.indexOf(c);
-      const photo = safeUrl(c.photo);
-      const col = COLORS[i % COLORS.length];
-      const bg = photo ? `background-image:url('${esc(photo)}')` : `background:linear-gradient(145deg,${col[0]},${col[1]})`;
       const meta = [c.age && `${esc(c.age)}${t("age")}`, c.height && `${esc(c.height)}cm`].filter(Boolean).join(" / ");
       const sh = shiftOf(c.name, d.today);
-      const sns = [["X", c.sns && c.sns.x], ["Instagram", c.sns && c.sns.instagram], ["TikTok", c.sns && c.sns.tiktok]].filter(x => safeUrl(x[1]));
-      const tags = c.tags_t || c.tags || [];
       return `
-        <div class="cast">
-          <div class="photo" style="${bg}">${photo ? "" : esc(String(c.name).charAt(0))}
-            ${sh ? `<span class="on-today">${esc(t("today"))} ${esc(sh.start)}〜${esc(sh.end)}</span>` : ""}
+        <button class="cast" data-cast="${esc(c.name)}">
+          <div class="photo" style="${castBg(c)}">${safeUrl(c.photo) ? "" : esc(String(c.name).charAt(0))}
+            ${sh ? `<span class="on-today">${esc(t("today"))} ${esc(sh.start)}〜</span>` : ""}
+            ${c.featured ? `<span class="star">★ PICK UP</span>` : ""}
           </div>
           <div class="info">
-            <div class="name">${esc(T(c, "name"))}</div>
-            ${meta ? `<div class="meta">${meta}</div>` : ""}
-            ${(c.types || []).length ? `<div class="types">${c.types.map(ty => `<span>${esc(typeLabel(ty))}</span>`).join("")}</div>` : ""}
-            ${c.comment ? `<div class="comment">${br(T(c, "comment"))}</div>` : ""}
-            <div class="tags">${tags.map(x => `<span>${esc(x)}</span>`).join("")}</div>
-            ${sns.length ? `<div class="sns">${sns.map(x => `<a href="${esc(x[1])}" target="_blank" rel="noopener">${x[0]}</a>`).join("")}</div>` : ""}
+            <div class="name">${esc(T(c, "name"))}${meta ? `<span class="meta">${meta}</span>` : ""}</div>
+            ${(c.types || []).length ? `<div class="types">${c.types.slice(0, 3).map(ty => `<span>${esc(typeLabel(ty))}</span>`).join("")}</div>` : ""}
+            ${c.comment ? `<div class="comment">${esc(T(c, "comment"))}</div>` : ""}
           </div>
-        </div>`;
+        </button>`;
     }).join("") : `<div class="loading">${esc(t("cast_preparing"))}</div>`;
   }
+
+  // 写真の背景(写真がなければ頭文字+グラデーション)
+  function castBg(c){
+    const i = Math.max(0, (DATA.casts || []).indexOf(c));
+    const col = COLORS[i % COLORS.length];
+    const photo = c && safeUrl(c.photo);
+    return photo ? `background-image:url('${esc(photo)}')` : `background:linear-gradient(145deg,${col[0]},${col[1]})`;
+  }
+
+  // ===== トップの写真(注目キャスト → それ以外 の順に3人) =====
+  function renderHero(){
+    const casts = (DATA.casts || []).slice().sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0)).slice(0, 3);
+    $("heroCollage").hidden = casts.length === 0;
+    $("heroCollage").innerHTML = casts.map(c => `<a href="#cast/${encodeURIComponent(c.name)}" style="${castBg(c)}">
+      ${safeUrl(c.photo) ? "" : `<span class="ini">${esc(String(c.name).charAt(0))}</span>`}<span>${esc(T(c, "name"))}</span></a>`).join("");
+  }
+
+  // ===== 今月の注目キャスト =====
+  function renderFeatured(){
+    const list = (DATA.casts || []).filter(c => c.featured);
+    $("featured").hidden = list.length === 0;
+    const p = (DATA.today || "").split("/");
+    const month = p.length === 3 ? `${p[0]}.${p[1]}` : "";
+    $("featuredList").innerHTML = list.map(c => `<button class="feat" data-cast="${esc(c.name)}">
+      <div class="ph" style="${castBg(c)}">${safeUrl(c.photo) ? "" : esc(String(c.name).charAt(0))}<span class="month">${esc(month)}</span></div>
+      <div class="tx"><div class="lb">FEATURED CAST</div><h3>${esc(T(c, "name"))}</h3>
+        <p>${esc(T(c, "profile") || T(c, "comment"))}</p><span class="more">${esc(t("view_profile"))} →</span></div>
+    </button>`).join("");
+  }
+
+  // ===== キャスト個別ページ =====
+  let galTimer = null;
+  function openCast(name){
+    const c = (DATA && DATA.casts || []).find(x => x.name === name);
+    if (!c) return false;
+    const photos = [c.photo].concat(c.photos || []).map(safeUrl).filter(Boolean);
+    const meta = [c.age && `${esc(c.age)}${t("age")}`, c.height && `${esc(c.height)}cm`].filter(Boolean).join(" / ");
+    const tags = c.tags_t || c.tags || [];
+    const sns = [["X", c.sns && c.sns.x], ["Instagram", c.sns && c.sns.instagram], ["TikTok", c.sns && c.sns.tiktok]].filter(x => safeUrl(x[1]));
+    const days = [...Array(7)].map((_, i) => addDays(DATA.today, i));
+    const diaries = (DATA.diaries || []).map((d, i) => Object.assign({ _i: i }, d)).filter(d => d.cast === c.name).slice(0, 6);
+    const prof = [[t("hobby"), T(c, "hobby")], [t("fav_date"), T(c, "favDate")]].filter(x => x[1]);
+    $("cInner").innerHTML = `<div class="cp-grid">
+      <div>
+        <div class="gallery">
+          <div class="gal-track" id="galTrack">${(photos.length ? photos : [""]).map(u => u ? `<div style="background-image:url('${esc(u)}')"></div>`
+            : `<div style="${castBg(c)}">${esc(String(c.name).charAt(0))}</div>`).join("")}</div>
+          ${photos.length > 1 ? `<div class="gal-dots" id="galDots">${photos.map((_, i) => `<span class="${i ? "" : "on"}"></span>`).join("")}</div>` : ""}
+        </div>
+        ${photos.length > 1 ? `<div class="thumbs" id="galThumbs">${photos.map((u, i) => `<button class="${i ? "" : "on"}" data-g="${i}" style="background-image:url('${esc(u)}')"></button>`).join("")}</div>` : ""}
+      </div>
+      <div class="cp-body">
+        <div class="lb">PROFILE</div>
+        <h2>${esc(T(c, "name"))}</h2>
+        ${meta ? `<div class="meta">${meta}</div>` : ""}
+        ${(c.types || []).length ? `<div class="types">${c.types.map(ty => `<span>${esc(typeLabel(ty))}</span>`).join("")}</div>` : ""}
+        ${tags.length ? `<div class="tags">${tags.map(x => `<span>${esc(x)}</span>`).join("")}</div>` : ""}
+        ${c.comment ? `<div class="comment">${br(T(c, "comment"))}</div>` : ""}
+        ${c.profile ? `<div class="cp-sec"><h3>${esc(t("profile_title"))}</h3><p>${esc(T(c, "profile"))}</p></div>` : ""}
+        ${prof.length ? `<div class="cp-sec"><dl class="cp-prof">${prof.map(x => `<dt>${esc(x[0])}</dt><dd>${esc(x[1])}</dd>`).join("")}</dl></div>` : ""}
+        <div class="cp-sec"><h3>${esc(t("this_week"))}</h3><div class="cp-week">${days.map((dt, i) => {
+          const s = shiftOf(c.name, dt); const L = dayLabel(dt);
+          return `<div class="${s ? "on" : ""}"><b>${L.md.split("/")[1]}</b>${esc(i === 0 ? t("today") : L.wd)}<small>${s ? esc(s.start) + "〜" : "-"}</small></div>`;
+        }).join("")}</div></div>
+        ${sns.length ? `<div class="cp-sec"><h3>SNS</h3><div class="cp-sns">${sns.map(x => `<a href="${esc(x[1])}" target="_blank" rel="noopener">${x[0]}</a>`).join("")}</div></div>` : ""}
+        ${diaries.length ? `<div class="cp-sec"><h3>${esc(t("sec_diary_short"))}</h3><div class="cp-diaries">${diaries.map(d => {
+          const ph = (d.photos || []).map(safeUrl).filter(Boolean)[0];
+          return `<button data-diary="${d._i}" style="${ph ? `background-image:url('${esc(ph)}')` : ""}">${ph ? "" : esc(String(d.text).slice(0, 40))}</button>`;
+        }).join("")}</div></div>` : ""}
+      </div>
+    </div>`;
+    $("cPage").dataset.cast = c.name;
+    $("cPage").hidden = false;
+    $("cPage").scrollTop = 0;
+    document.body.classList.add("lock");
+    const tr = $("galTrack");
+    if (photos.length > 1) {
+      const idx = () => Math.round(tr.scrollLeft / tr.clientWidth);
+      tr.onscroll = () => {
+        [...$("galDots").children].forEach((d, i) => d.classList.toggle("on", i === idx()));
+        [...$("galThumbs").children].forEach((d, i) => d.classList.toggle("on", i === idx()));
+      };
+    }
+    return true;
+  }
+  function closeCast(){
+    $("cPage").hidden = true;
+    document.body.classList.remove("lock");
+  }
+  // URLの #cast/名前 で個別ページを開く(戻るボタン・リンク共有に対応)
+  function route(){
+    const m = decodeURIComponent(location.hash).match(/^#cast\/(.+)$/);
+    if (m && DATA) { if (!openCast(m[1])) closeCast(); }
+    else closeCast();
+  }
+  window.addEventListener("hashchange", route);
+  document.addEventListener("click", e => {
+    const b = e.target.closest("[data-cast]");
+    if (b && !e.target.closest("#cPage")) { e.preventDefault(); location.hash = "#cast/" + encodeURIComponent(b.dataset.cast); }
+  });
+  $("cBack").addEventListener("click", () => {
+    if (history.length > 1 && /^#cast\//.test(location.hash)) history.back(); else { location.hash = "#cast"; }
+  });
+  $("cInner").addEventListener("click", e => {
+    const g = e.target.closest("[data-g]");
+    if (g) { const tr = $("galTrack"); tr.scrollTo({ left: +g.dataset.g * tr.clientWidth, behavior: "smooth" }); return; }
+    const d = e.target.closest("[data-diary]");
+    if (d) openDiary(+d.dataset.diary);
+  });
+  // 「このキャストで予約する」→ 予約フォームの指名キャストに入れて移動
+  $("cBook").addEventListener("click", () => {
+    const name = $("cPage").dataset.cast;
+    location.hash = "#reserve";
+    setTimeout(() => {
+      $("fCast").value = name;
+      $("fCast").dispatchEvent(new Event("change", { bubbles: true }));
+      $("reserve").scrollIntoView({ behavior: "smooth" });
+    }, 50);
+  });
+
+  // ===== スマホのメニュー =====
+  $("menuBtn").addEventListener("click", () => { $("drawer").hidden = false; });
+  $("drawer").addEventListener("click", e => { if (e.target === $("drawer") || e.target.closest("a") || e.target.id === "drawerClose") $("drawer").hidden = true; });
+
+  // ===== バナー(横にスワイプ・5秒ごとに自動で切り替え) =====
+  let bnTimer = null;
+  function renderBanners(){
+    const list = (DATA.banners || []).filter(b => safeUrl(b.image));
+    $("bannerSec").hidden = list.length === 0;
+    $("bnTrack").innerHTML = list.map(b => {
+      const link = b.link && (safeUrl(b.link) || /^#|\.html/.test(b.link)) ? b.link : "";
+      const attrs = `class="bn" style="background-image:url('${esc(b.image)}')" role="img" aria-label="${esc(T(b, "alt") || "banner")}"`;
+      return link ? `<a ${attrs} href="${esc(link)}" ${safeUrl(link) ? 'target="_blank" rel="noopener"' : ""}></a>` : `<div ${attrs}></div>`;
+    }).join("");
+    $("bnDots").innerHTML = list.length > 1 ? list.map((_, i) => `<span class="${i === 0 ? "on" : ""}"></span>`).join("") : "";
+    clearInterval(bnTimer);
+    if (list.length > 1) {
+      const tr = $("bnTrack");
+      const idx = () => Math.round(tr.scrollLeft / tr.clientWidth);
+      tr.onscroll = () => [...$("bnDots").children].forEach((d, i) => d.classList.toggle("on", i === idx()));
+      bnTimer = setInterval(() => {
+        const next = (idx() + 1) % list.length;
+        tr.scrollTo({ left: next * tr.clientWidth, behavior: "smooth" });
+      }, 5000);
+    }
+  }
+
+  // ===== 写メ日記 =====
+  let diaryShown = 12;
+  function relTime(s){
+    const m = String(s || "").match(/(\d{4})\/(\d{2})\/(\d{2}) (\d{2}):(\d{2})/);
+    if (!m) return s || "";
+    const diff = (Date.now() - new Date(+m[1], m[2] - 1, +m[3], +m[4], +m[5]).getTime()) / 60000;
+    if (diff < 60) return Math.max(1, Math.round(diff)) + t("min_ago");
+    if (diff < 1440) return Math.round(diff / 60) + t("hour_ago");
+    return `${+m[2]}/${+m[3]}`;
+  }
+  function renderDiary(){
+    const list = DATA.diaries || [];
+    $("diary").hidden = list.length === 0;
+    $("diaryGrid").innerHTML = list.slice(0, diaryShown).map((d, i) => {
+      const c = (DATA.casts || []).find(x => x.name === d.cast) || {};
+      const ci = Math.max(0, (DATA.casts || []).indexOf(c));
+      const col = COLORS[ci % COLORS.length];
+      const ph = (d.photos || []).map(safeUrl).filter(Boolean);
+      const bg = ph[0] ? `background-image:url('${esc(ph[0])}')` : `background:linear-gradient(145deg,${col[0]},${col[1]})`;
+      return `<button class="dcard" data-diary="${i}">
+        <div class="ph" style="${bg}">${ph[0] ? "" : esc(String(d.cast).charAt(0))}${ph.length > 1 ? `<span class="n">${ph.length}</span>` : ""}</div>
+        <div class="tx"><div class="who">${esc(castDisplayName(d.cast))}<span class="when">${esc(relTime(d.date))}</span></div>
+        <div class="body">${esc(d.text)}</div></div></button>`;
+    }).join("");
+    $("diaryMore").hidden = list.length <= diaryShown;
+  }
+  function openDiary(idx){
+    const d = DATA.diaries[idx];
+    if (!d) return;
+    const ph = (d.photos || []).map(safeUrl).filter(Boolean);
+    $("dBox").innerHTML = (ph.length ? `<div class="imgs">${ph.map(u => `<img src="${esc(u)}" alt="">`).join("")}</div>` : "") +
+      `<div class="in"><div class="who" style="font-weight:700">${esc(castDisplayName(d.cast))} <span style="font-size:12px;color:var(--sub);font-weight:400">${esc(d.date)}</span></div>
+       <p>${esc(d.text)}</p></div><button class="close" data-close>${esc(t("close"))}</button>`;
+    $("dModal").hidden = false;
+  }
+  $("diaryGrid").addEventListener("click", e => {
+    const b = e.target.closest("[data-diary]");
+    if (b) openDiary(+b.dataset.diary);
+  });
+  $("dModal").addEventListener("click", e => { if (e.target === $("dModal") || e.target.closest("[data-close]")) $("dModal").hidden = true; });
+  $("diaryMore").addEventListener("click", () => { diaryShown += 12; renderDiary(); });
 
   function renderSchedule(){
     const d = DATA;
@@ -846,7 +1289,7 @@
       const col = COLORS[(i < 0 ? 0 : i) % COLORS.length];
       const photo = safeUrl(c.photo);
       const bg = photo ? `background-image:url('${esc(photo)}')` : `background:linear-gradient(145deg,${col[0]},${col[1]})`;
-      return `<div class="sched-item"><div class="ph" style="${bg}">${photo ? "" : esc(String(s.cast).charAt(0))}</div>
+      return `<div class="sched-item" data-cast="${esc(s.cast)}"><div class="ph" style="${bg}">${photo ? "" : esc(String(s.cast).charAt(0))}</div>
         <div class="nm">${esc(castDisplayName(s.cast))}</div><div class="tm">${esc(s.start)} – ${esc(s.end)}</div></div>`;
     }).join("") : `<div class="loading">${esc(t("sched_none"))}</div>`;
   }
@@ -858,7 +1301,7 @@
   }
 
   function renderPrices(){
-    const cats = [["コース", "cat_course"], ["指名料", "cat_nomination"], ["オプション", "cat_option"], ["交通費", "cat_transport"], ["その他", "cat_other"]];
+    const cats = [["コース", "cat_course"], ["指名料", "cat_nomination"], ["延長料", "cat_extension"], ["オプション", "cat_option"], ["交通費", "cat_transport"], ["その他", "cat_other"]];
     $("priceList").innerHTML = cats.map(([cat, key]) => {
       const list = (DATA.prices || []).filter(p => p.cat === cat);
       if (!list.length) return "";
@@ -901,6 +1344,23 @@
       trs.map(p => `<option value="${esc(p.item)}">${esc(T(p, "item"))}(${p.price ? "+" + yen(p.price) + esc(T(p, "unit")) : esc(t("free"))})</option>`).join("");
     if (trs.some(p => p.item === curTr)) $("fTransport").value = curTr;
 
+    // 延長の予定
+    const exts = (d.prices || []).filter(p => p.cat === "延長料" && p.price != null);
+    const curExt = $("fExtension").value;
+    $("extWrap").hidden = exts.length === 0;
+    $("fExtension").innerHTML = `<option value="">${esc(t("f_extension_none"))}</option>` +
+      exts.map(p => `<option value="${esc(p.item)}">${esc(T(p, "item"))}(+${yen(p.price)})</option>`).join("");
+    if (exts.some(p => p.item === curExt)) $("fExtension").value = curExt;
+
+    // お支払い方法
+    const pays = String((d.settings || {})["支払い方法の選択肢"] || "").split(/[,、,]/).map(x => x.trim()).filter(Boolean);
+    const curPay = $("fPayment").value;
+    $("payWrap").hidden = pays.length === 0;
+    $("fPayment").required = pays.length > 0;
+    $("fPayment").innerHTML = `<option value="">${esc(t("f_select") || "選択")}</option>` +
+      pays.map(x => `<option value="${esc(x)}">${esc((d.payMap && d.payMap[x]) || x)}</option>`).join("");
+    if (pays.includes(curPay)) $("fPayment").value = curPay;
+
     // 当店を知ったきっかけ
     const sources = String((d.settings || {})["流入元の選択肢"] || "").split(/[,、,]/).map(x => x.trim()).filter(Boolean);
     const curSrc = $("fSource").value;
@@ -941,6 +1401,8 @@
       const o = P.find(p => p.cat === "オプション" && p.item === x.value);
       if (o) lines.push([T(o, "item"), o.price || 0]);
     });
+    const ex = P.find(p => p.cat === "延長料" && p.item === $("fExtension").value && p.price != null);
+    if (ex) lines.push([T(ex, "item"), ex.price || 0]);
     const tr = P.find(p => p.cat === "交通費" && p.item === $("fTransport").value && p.price != null);
     if (tr) lines.push([t("cat_transport") + "(" + T(tr, "item") + ")", tr.price || 0]);
     const sum = lines.reduce((a, l) => a + l[1], 0);
@@ -951,7 +1413,7 @@
 
   form.addEventListener("change", e => {
     if (e.target.id === "fDate") renderCastSelect();
-    if (["fCourse", "fCast", "fDate", "fTransport"].includes(e.target.id) || e.target.name === "options") updateEstimate();
+    if (["fCourse", "fCast", "fDate", "fTransport", "fExtension"].includes(e.target.id) || e.target.name === "options") updateEstimate();
   });
 
   // 開始時間(10:00〜22:00 を30分刻み)
@@ -1114,6 +1576,7 @@
     if (!GAS_URL) {
       DATA = SAMPLE;
       render();
+      route();
       return;
     }
     try {
@@ -1121,6 +1584,7 @@
       const r = await fetch(url);
       DATA = await r.json();
       render();
+      route();
     } catch (err) {
       showError();
     }

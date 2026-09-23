@@ -148,6 +148,15 @@
   .warn-t{color:#b7791f;font-weight:700}
   .mini{font-size:12px;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;cursor:pointer}
 
+  .bnbox{aspect-ratio:16/7;border-radius:12px;background:#e6e1d9 center/cover no-repeat;display:flex;align-items:flex-end;justify-content:center;cursor:pointer;position:relative;overflow:hidden}
+  .bnbox input{display:none}
+  .bnbox span{width:100%;text-align:center;font-size:12px;color:#fff;background:rgba(0,0,0,.45);padding:5px 0}
+  .bnbox.busy::before{content:"アップ中…";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);color:#fff;font-size:12px}
+  .dphotos{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+  .dph{aspect-ratio:1/1;border-radius:10px;background:#e6e1d9 center/cover no-repeat;position:relative}
+  .dph button{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;border:none;background:rgba(0,0,0,.6);color:#fff;font-size:13px;cursor:pointer;line-height:22px;padding:0}
+  .dph.add{display:flex;align-items:center;justify-content:center;border:2px dashed #cfc6ba;background:#fff;font-size:22px;color:var(--sub);cursor:pointer}
+  .dph.add input{display:none}
   .add{width:100%;padding:14px;border:2px dashed #cfc6ba;border-radius:var(--radius);background:none;color:var(--navy);font-weight:700;cursor:pointer;font-size:15px}
 
   /* ===== 予約・応募 ===== */
@@ -281,21 +290,23 @@
 <script>
   const GAS_URL = window.GAS_URL || "";
   const TOKEN_KEY = "rk_admin_token";
-  const SECTIONS = { shifts:"出勤", casts:"キャスト", prices:"料金", news:"お知らせ", faqs:"FAQ", settings:"基本設定", recruit:"求人", notice:"自動送信", manage:"給与・店舗設定" };
+  const SECTIONS = { shifts:"出勤", casts:"キャスト", prices:"料金", news:"お知らせ", faqs:"FAQ", settings:"基本設定", recruit:"求人", notice:"自動送信", manage:"給与・店舗設定", banners:"バナー" };
+  let diaryDraft = { cast:"", text:"", photos:[] };  // 写メ日記の書きかけ
   const KV_SECTIONS = ["settings", "recruit", "notice", "manage"];
   const MULTILINE_KEYS = ["キャッチコピー", "サブコピー", "コンセプト文", "料金の注意書き", "タイプ一覧", "流入元の選択肢", "紹介文", "給与", "応募資格", "待遇", "募集者"];
-  const PRICE_CATEGORIES = ["コース", "指名料", "オプション", "交通費", "その他"];
+  const PRICE_CATEGORIES = ["コース", "指名料", "延長料", "オプション", "交通費", "その他"];
   const NOM_TYPES = ["フリー", "指名", "本指名"];
   // 画面上の切り替え(運営 / お金 / HP編集)
   const GROUPS = {
     ops:   ["reservations", "shifts", "customers", "applications"],
     money: ["report", "sales", "expenses", "manage"],
-    hp:    ["casts", "prices", "news", "faqs", "settings", "recruit", "notice"],
+    hp:    ["diary", "casts", "banners", "prices", "news", "faqs", "settings", "recruit", "notice"],
   };
   const TAB_LABELS = {
     reservations:"予約", shifts:"出勤", customers:"顧客", applications:"応募",
     report:"集計", sales:"売上・給料", expenses:"経費・広告費", manage:"給与・店舗設定",
     casts:"キャスト", prices:"料金", news:"お知らせ", faqs:"FAQ", settings:"基本設定", recruit:"求人", notice:"自動送信",
+    diary:"写メ日記", banners:"バナー",
   };
   let group = "ops";
   const RES_STATUSES = ["新規", "対応中", "確定", "完了", "キャンセル"];
@@ -535,6 +546,7 @@
             ${r.phone ? `<dt>電話</dt><dd><a href="tel:${esc(r.phone)}">${esc(r.phone)}</a></dd>` : ""}
             <dt>${esc(r.method)}</dt><dd>${contactLink(r)}</dd>
             <dt>オプション</dt><dd>${esc(r.options) || "なし"}</dd>
+            ${r.payment ? `<dt>支払い</dt><dd>${esc(r.payment)}</dd>` : ""}
             <dt>待ち合わせ</dt><dd>${esc(r.place) || "未記入"}</dd>
             <dt>予約番号</dt><dd>${esc(r.number)}</dd>
           </dl>
@@ -640,7 +652,7 @@
     casts(){
       const list = state.casts;
       const types = splitList(kv("settings", "タイプ一覧"));
-      return `<p class="hint">写真をタップすると変更できます(自動で縦長3:4に切り抜き・縮小されます)。「HPに表示」をオフにするとHPから非表示になります(データは残ります)。</p>` +
+      return `<p class="hint">写真をタップすると変更できます(自動で縦長3:4に切り抜き・縮小されます)。「HPに表示」をオフにするとHPから非表示になります(データは残ります)。<br>「★注目」をオンにしたキャストは、HPの「今月の注目キャスト」に大きく表示されます。</p>` +
         list.map((c, i) => {
           const photo = safeUrl(c.photo);
           const myTypes = splitList(c.types);
@@ -665,7 +677,17 @@
             <label class="f">タイプ(タップで選択・複数OK。HPのタイプ検索に使われます)</label>
             <div class="chips">${allTypes.map(t => `<button class="chip ${myTypes.includes(t) ? "active" : ""}" data-act="type" data-i="${i}" data-ty="${esc(t)}">${esc(t)}</button>`).join("")}</div>
             <label class="f">タグ(カンマ区切り)</label>${input("casts", i, "tags", c.tags, "聞き上手,カフェ好き")}
-            <label class="f">ひとこと</label>${textarea("casts", i, "comment", c.comment, "お客様へのひとこと")}
+            <label class="f">ひとこと(一覧に出る短い文)</label>${textarea("casts", i, "comment", c.comment, "お客様へのひとこと")}
+            <label class="f">個別ページのサブ写真(6枚まで・自動で3:4に切り抜き)</label>
+            <div class="dphotos" id="sub${i}">
+              ${splitList(c.subPhotos).map((u, j) => `<div class="dph" style="background-image:url('${esc(u)}')"><button data-act="subRemove" data-i="${i}" data-j="${j}" aria-label="外す">×</button></div>`).join("")}
+              ${splitList(c.subPhotos).length < 6 ? `<label class="dph add">＋<input type="file" accept="image/*" multiple data-subupload="${i}"></label>` : ""}
+            </div>
+            <label class="f">自己紹介(個別ページ用・長めでOK)</label>${textarea("casts", i, "profile", c.profile, "どんな人か、どんなデートが好きか など")}
+            <div class="row2">
+              <div><label class="f">趣味</label>${input("casts", i, "hobby", c.hobby, "例:カフェ巡り・読書")}</div>
+              <div><label class="f">得意なデート</label>${input("casts", i, "favDate", c.favDate, "例:カフェでおしゃべり")}</div>
+            </div>
             <label class="f">SNS(URLを貼り付け。空欄なら表示しない)</label>
             <div class="row3">
               ${input("casts", i, "x", c.x, "X", "url")}
@@ -685,13 +707,72 @@
                 : c.code ? `<span class="warn-t">未登録</span><br>キャスト本人に、お店の公式LINEへ「キャスト登録 <code>${esc(c.code)}</code>」と送ってもらうと登録されます。`
                 : `<span class="warn-t">未登録</span>(保存すると登録コードが発行されます)`}</div>
             </div>
-            <div class="ctrl">
-              <label class="sw"><input type="checkbox" data-sec="casts" data-i="${i}" data-k="show" ${c.show ? "checked" : ""}><span class="knob"></span>HPに表示</label>
+            <div class="ctrl" style="flex-wrap:wrap;gap:10px">
+              <div style="display:flex;gap:14px;flex-wrap:wrap">
+                <label class="sw"><input type="checkbox" data-sec="casts" data-i="${i}" data-k="show" ${c.show ? "checked" : ""}><span class="knob"></span>HPに表示</label>
+                <label class="sw"><input type="checkbox" data-sec="casts" data-i="${i}" data-k="featured" ${c.featured ? "checked" : ""}><span class="knob"></span>★注目</label>
+              </div>
               ${ctrlButtons("casts", i, list.length)}
             </div>
           </div>`;
         }).join("") +
         `<button class="add" data-add="casts">+ キャストを追加</button>`;
+    },
+
+    // ---------- 写メ日記 ----------
+    diary(){
+      const d = diaryDraft;
+      const castNames = (state.casts || []).map(c => c.name);
+      const list = state.diaries || [];
+      return `<div class="item">
+          <div class="sec-h" style="margin-top:0">✏️ 新しく投稿する</div>
+          <label class="f">キャスト</label><select class="t" id="dCast">${opts(castNames, d.cast, "選択してください")}</select>
+          <label class="f">写真(4枚まで・自動で縮小されます)</label>
+          <div class="dphotos">
+            ${d.photos.map((p, i) => `<div class="dph" style="background-image:url('${p}')"><button data-act="dRemove" data-i="${i}" aria-label="外す">×</button></div>`).join("")}
+            ${d.photos.length < 4 ? `<label class="dph add">＋<input type="file" accept="image/*" multiple id="diaryFiles"></label>` : ""}
+          </div>
+          <label class="f">本文</label><textarea class="t" id="dText" placeholder="今日の出来事や、お客様へのメッセージ">${esc(d.text)}</textarea>
+          <button class="btn full" data-act="dPost" style="margin-top:12px">投稿する(すぐHPに公開)</button>
+        </div>
+        <div class="item">
+          <div class="sec-h" style="margin-top:0">📱 キャストがLINEから投稿する方法</div>
+          <ol class="steps">
+            <li>キャストは「キャスト」タブの登録コードで、お店の公式LINEに登録しておく</li>
+            <li>公式LINEに<b>写真を送る</b>(4枚まで)</li>
+            <li>続けて「<b>日記 今日はカフェに行きました!</b>」のように「日記」から始まる文を送る → すぐHPに公開</li>
+          </ol>
+          <p class="hint" style="margin-top:6px">※写真なしで「日記 〜」だけ送ってもOK。LINE連携(「自動送信」タブ)が必要です。</p>
+        </div>
+        <div class="sec-h">投稿済み(${list.length}件)</div>` +
+        (list.length ? list.map(x => `<div class="item ${x.show ? "" : "off"}">
+          <div style="display:flex;justify-content:space-between;align-items:center"><b>${esc(x.cast)}</b><small style="color:var(--sub)">${esc(x.date)}</small></div>
+          ${x.photos.length ? `<div class="dphotos" style="margin-top:8px">${x.photos.map(u => safeUrl(u) ? `<div class="dph" style="background-image:url('${esc(u)}')"></div>` : "").join("")}</div>` : ""}
+          ${x.text ? `<div class="res-req">${esc(x.text)}</div>` : ""}
+          <div class="ctrl">
+            <label class="sw"><input type="checkbox" data-diaryshow="${esc(x.id)}" ${x.show ? "checked" : ""}><span class="knob"></span>HPに表示</label>
+            <button class="ic del" data-act="dDelete" data-id="${esc(x.id)}" aria-label="削除">🗑</button>
+          </div>
+        </div>`).join("") : `<div class="center">まだ投稿がありません</div>`);
+    },
+
+    // ---------- バナー ----------
+    banners(){
+      const list = state.banners || [];
+      return `<p class="hint">HPの一番上に、横にスライドして表示されます(2枚以上で5秒ごとに自動で切り替わります)。<br>横長の画像(横:縦=16:7くらい)がおすすめ。キャンペーン告知や求人募集などに使えます。</p>` +
+        list.map((b, i) => `<div class="item ${b.show ? "" : "off"}">
+          <label class="bnbox" id="bn${i}" style="${safeUrl(b.image) ? `background-image:url('${esc(b.image)}')` : ""}">
+            <input type="file" accept="image/*" data-upload="${i}" data-usec="banners">
+            <span>${safeUrl(b.image) ? "画像を変更" : "＋ 画像を選ぶ"}</span>
+          </label>
+          <label class="f">タップした時のリンク先(空欄ならリンクなし)</label>${input("banners", i, "link", b.link, "例:recruit.html や https://〜")}
+          <label class="f">説明(画像が出ない時の代わりの文字)</label>${input("banners", i, "alt", b.alt, "例:新規のお客様20%オフ")}
+          <div class="ctrl">
+            <label class="sw"><input type="checkbox" data-sec="banners" data-i="${i}" data-k="show" ${b.show ? "checked" : ""}><span class="knob"></span>HPに表示</label>
+            ${ctrlButtons("banners", i, list.length)}
+          </div>
+        </div>`).join("") +
+        `<button class="add" data-add="banners">+ バナーを追加</button>`;
     },
 
     // ---------- 料金 ----------
@@ -700,6 +781,7 @@
       return `<p class="hint">区分ごとの使われ方:<br>
         ・<b>コース</b>:予約フォームで1つ選ぶ<br>
         ・<b>指名料</b>:キャストを指名すると自動で加算。名前に「本指名」を含む項目は、同じキャストを2回目以降に指名したお客様に自動で使われます<br>
+        ・<b>延長料</b>:予約フォームで延長の予定として1つ選べる(会計では「延長・その他」に入ります)<br>
         ・<b>オプション</b>:追加で選べる<br>
         ・<b>交通費</b>:予約フォームで待ち合わせエリアとして1つ選ぶ<br>
         ・<b>その他</b>:料金表に載せるだけ(飲食代など)</p>` +
@@ -768,6 +850,10 @@
             <td>${x.cpa == null ? "-" : yen(x.cpa)}</td><td class="${x.roas == null ? "" : x.roas >= 1 ? "good" : "bad"}">${x.roas == null ? "-" : Math.round(x.roas * 100) + "%"}</td></tr>`).join("")}
         </table></div>
         <p class="hint">1予約あたり=広告費÷予約数。費用対効果=売上÷広告費(100%以上なら広告費より売上が多い)。流入元は予約フォームの「当店を知ったきっかけ」から。</p>` : "";
+      const pay = (m.byPayment || []).length ? `<div class="sec-h">💳 支払い方法ごと</div><div class="tbl-wrap"><table class="tbl">
+          <tr><th>支払い方法</th><th>件数</th><th>売上</th></tr>
+          ${m.byPayment.map(x => `<tr><td>${esc(x.payment)}</td><td>${x.count}</td><td>${yen(x.sales)}</td></tr>`).join("")}
+        </table></div>` : "";
       return periodBar() + `<div class="kpis">
           <div class="kpi"><span>売上</span><b>${yen(t.sales)}</b><small>接客${t.count}件(指名${t.nominated}・本指名${t.honshimei})</small></div>
           <div class="kpi"><span>キャスト給料</span><b>${yen(t.pay)}</b></div>
@@ -775,7 +861,7 @@
           <div class="kpi"><span>経費</span><b>${yen(t.expenses)}</b><small>うち広告費 ${yen(t.ad)}</small></div>
           <div class="kpi"><span>利益(取り分−経費)</span><b class="${t.profit < 0 ? "minus" : ""}">${yen(t.profit)}</b></div>
           <div class="kpi"><span>予約</span><b>${t.reservations}件</b><small>キャンセル${t.canceled}件</small></div>
-        </div>` + store + cast + media +
+        </div>` + store + cast + media + pay +
         (!m.sales.length && !m.expenses.length ? `<p class="hint">まだこの期間の売上・経費がありません。予約を「完了」にして会計を入力するか、「売上・給料」「経費・広告費」タブから手で追加してください。</p>` : "");
     },
 
@@ -860,7 +946,7 @@
           ※LINEの無料プランは月200通まで(お客様とキャストへの確定のお知らせ1件で2通)。</p>
         </div>
         <div class="sec-h">✉️ 送る文章</div>
-        <div class="ph-help">文章の中の <code>{名前}</code> <code>{日付}</code> <code>{時間}</code> <code>{コース}</code> <code>{オプション}</code> <code>{キャスト}</code> <code>{待ち合わせ}</code> <code>{料金}</code> <code>{ご要望}</code> <code>{ご利用}</code> <code>{予約番号}</code> <code>{応募番号}</code> <code>{店名}</code> は、自動で中身に置き換わります。</div>
+        <div class="ph-help">文章の中の <code>{名前}</code> <code>{日付}</code> <code>{時間}</code> <code>{コース}</code> <code>{オプション}</code> <code>{キャスト}</code> <code>{待ち合わせ}</code> <code>{料金}</code> <code>{ご要望}</code> <code>{ご利用}</code> <code>{予約番号}</code> <code>{支払い方法}</code> <code>{応募番号}</code> <code>{店名}</code> は、自動で中身に置き換わります。</div>
         <div style="height:10px"></div>` + kvForm("notice");
     },
   };
@@ -1005,12 +1091,15 @@
           <div><label class="f">お客様</label><input class="t" type="text" id="sCustomer" value="${esc(s.customer)}"></div>
           <div><label class="f">電話番号</label><input class="t" type="tel" id="sPhone" value="${esc(s.phone)}"></div>
         </div>
-        <label class="f">流入元(当店を知ったきっかけ)</label><select class="t" id="sSource">${opts(sources, s.source, "不明")}</select>
+        <div class="row2">
+          <div><label class="f">流入元</label><select class="t" id="sSource">${opts(sources, s.source, "不明")}</select></div>
+          <div><label class="f">支払い方法</label><select class="t" id="sPayment">${opts(splitList(kv("settings", "支払い方法の選択肢")), s.payment, "未設定")}</select></div>
+        </div>
       </div>
       <div class="item">
         <div class="row2">${numIn("sCourse", "コース", s.course)}${numIn("sNomination", "指名料", s.nomination)}</div>
         <div class="row2">${numIn("sOption", "オプション", s.option)}${numIn("sTransport", "交通費", s.transport)}</div>
-        <div class="row2">${numIn("sOther", "その他・延長", s.other)}${numIn("sDiscount", "値引き", s.discount)}</div>
+        <div class="row2">${numIn("sOther", "延長・その他", s.other)}${numIn("sDiscount", "値引き", s.discount)}</div>
         <label class="f">キャスト報酬(空欄ならバック率で自動計算)</label>
         <input class="t" type="number" inputmode="numeric" min="0" step="100" id="sPay" value="${s.pay === "" || s.pay == null ? "" : s.pay}">
         <label class="f">メモ</label><input class="t" type="text" id="sMemo" value="${esc(s.memo)}">
@@ -1029,7 +1118,7 @@
       date: $("sDate").value.replace(/-/g, "/"), store: $("sStore").value, cast: $("sCast").value, nomType: $("sNom").value,
       customer: $("sCustomer").value, phone: $("sPhone").value, source: $("sSource").value,
       course: n("sCourse"), nomination: n("sNomination"), option: n("sOption"), transport: n("sTransport"), other: n("sOther"), discount: n("sDiscount"),
-      pay: $("sPay").value === "" ? "" : n("sPay"), memo: $("sMemo").value,
+      pay: $("sPay").value === "" ? "" : n("sPay"), memo: $("sMemo").value, payment: $("sPayment").value,
     };
   }
   function calcSale(){
@@ -1177,6 +1266,8 @@
   // ===== 入力の反映 =====
   $("panel").addEventListener("input", e => {
     const el = e.target;
+    if (el.id === "dText") { diaryDraft.text = el.value; return; }
+    if (el.id === "dCast") { diaryDraft.cast = el.value; return; }
     if (el.id === "custSearch") {
       custQuery = el.value;
       $("custList").innerHTML = customerList();  // 入力欄はそのまま、一覧だけ書き換える
@@ -1210,9 +1301,11 @@
     if (add) {
       const sec = add.dataset.add;
       const blank = {
-        casts:  { show:true, name:"", age:"", height:"", tags:"", types:"", photo:"", comment:"", x:"", instagram:"", tiktok:"", email:"", code:"", lineUser:"", store: splitList(kv("manage", "店舗一覧"))[0] || "", rate:"" },
+        casts:  { show:true, name:"", age:"", height:"", tags:"", types:"", photo:"", comment:"", x:"", instagram:"", tiktok:"", email:"", code:"", lineUser:"", store: splitList(kv("manage", "店舗一覧"))[0] || "", rate:"",
+                  subPhotos:"", profile:"", hobby:"", favDate:"", featured:false },
         news:   { date: state.today, text:"" },
         prices: { cat:"オプション", item:"", price:"", unit:"", note:"" },
+        banners: { show:true, image:"", link:"", alt:"" },
         faqs:   { q:"", a:"" },
       }[sec];
       if (sec === "news") state.news.unshift(blank); else state[sec].push(blank);
@@ -1244,6 +1337,39 @@
       case "editExpense": { const x = money && money.expenses.find(y => y.id === b.dataset.id); if (x) openExpenseModal(x); return; }
       case "castDetail": openCastDetail(b.dataset.cast); return;
       case "checkout": openCheckout(b.dataset.id); return;
+      // ---- 写メ日記 ----
+      case "dRemove": diaryDraft.photos.splice(i, 1); renderAll(); return;
+      case "subRemove": {
+        const list = splitList(state.casts[i].subPhotos);
+        list.splice(+b.dataset.j, 1);
+        state.casts[i].subPhotos = list.join(",");
+        markDirty("casts"); renderAll(); return;
+      }
+      case "dPost": {
+        if (!diaryDraft.cast) { toast("キャストを選んでください", true); return; }
+        if (!diaryDraft.text.trim() && !diaryDraft.photos.length) { toast("写真か本文を入れてください", true); return; }
+        b.disabled = true; b.textContent = "投稿中…";
+        try {
+          const urls = [];
+          for (const p of diaryDraft.photos) urls.push((await api({ action:"upload", dataUrl: p })).url);
+          const j = await api({ action:"postDiary", cast: diaryDraft.cast, text: diaryDraft.text, photos: urls });
+          const now = new Date();
+          state.diaries.unshift({ id: j.id, date: `${ymd(now)} ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`,
+            cast: diaryDraft.cast, text: diaryDraft.text, photos: urls, show: true });
+          diaryDraft = { cast: diaryDraft.cast, text: "", photos: [] };
+          renderAll(); toast("写メ日記を公開しました");
+        } catch(err) { b.disabled = false; b.textContent = "投稿する(すぐHPに公開)"; toast(err.message, true); }
+        return;
+      }
+      case "dDelete": {
+        if (!confirm("この日記を削除しますか?(元に戻せません。一時的に隠すだけなら「HPに表示」をオフに)")) return;
+        try {
+          await api({ action:"deleteDiary", id: b.dataset.id });
+          state.diaries = state.diaries.filter(x => x.id !== b.dataset.id);
+          renderAll(); toast("削除しました");
+        } catch(err) { toast(err.message, true); }
+        return;
+      }
       // ---- ここまで ----
       case "showCustRes":
         resPhone = b.dataset.phone; resFilter = "すべて"; current = "reservations";
@@ -1424,17 +1550,60 @@
       return;
     }
 
+    // 写メ日記の表示/非表示(すぐ反映)
+    if (el.dataset.diaryshow) {
+      const x = state.diaries.find(y => y.id === el.dataset.diaryshow);
+      try {
+        await api({ action:"showDiary", id: x.id, show: el.checked });
+        x.show = el.checked; renderAll(); toast(el.checked ? "HPに表示しました" : "HPから非表示にしました");
+      } catch(err) { el.checked = !el.checked; toast(err.message, true); }
+      return;
+    }
+
+    // キャストのサブ写真(選んだらすぐアップ → 「保存する」でHPに反映)
+    if (el.dataset.subupload) {
+      const i = +el.dataset.subupload;
+      const c = state.casts[i];
+      const cur = splitList(c.subPhotos);
+      const files = [...el.files].slice(0, 6 - cur.length);
+      $("sub" + i).style.opacity = ".5";
+      try {
+        for (const f of files) {
+          const dataUrl = await resizeImage(f, 900, 0.85, 3 / 4);
+          cur.push((await api({ action:"upload", dataUrl })).url);
+        }
+        c.subPhotos = cur.join(",");
+        markDirty("casts");
+        toast("写真をアップしました。「保存する」でHPに反映されます");
+      } catch(err) { toast(err.message, true); }
+      renderAll();
+      return;
+    }
+
+    // 写メ日記の写真(最大4枚。投稿ボタンを押すまでは手元に置いておく)
+    if (el.id === "diaryFiles") {
+      const files = [...el.files].slice(0, 4 - diaryDraft.photos.length);
+      for (const f of files) {
+        try { diaryDraft.photos.push(await resizeImage(f, 1080, 0.85)); } catch(err) { toast(err.message, true); }
+      }
+      el.value = "";
+      renderAll();
+      return;
+    }
+
     if (!el.dataset.upload) return;
     const i = +el.dataset.upload;
+    const sec = el.dataset.usec || "casts";
     const file = el.files[0];
     if (!file) return;
-    const box = $("ph" + i);
+    const box = $((sec === "banners" ? "bn" : "ph") + i);
     box.classList.add("busy");
     try {
-      const dataUrl = await resizeImage(file, 900, 0.85, 3 / 4);
+      // キャスト写真は縦長3:4に切り抜き、バナーは切り抜かずに横1600pxまで縮小
+      const dataUrl = sec === "banners" ? await resizeImage(file, 1600, 0.85) : await resizeImage(file, 900, 0.85, 3 / 4);
       const j = await api({ action:"upload", dataUrl });
-      state.casts[i].photo = j.url;
-      markDirty("casts");
+      if (sec === "banners") state.banners[i].image = j.url; else state.casts[i].photo = j.url;
+      markDirty(sec);
       renderAll();
       toast("写真をアップしました。「保存する」でHPに反映されます");
     } catch(err) {
