@@ -395,6 +395,7 @@
     if (!expired && token) api({ action:"logout" }).catch(() => {});
     token = ""; storeSet("");
     state = null; dirty.clear();
+    clearInterval(pollTimer);
     $("appView").hidden = true;
     $("loginView").hidden = false;
     if (expired) $("loginErr").textContent = "ログインの有効期限が切れました。もう一度ログインしてください";
@@ -413,8 +414,85 @@
     state = j.data;
     if (!weekStart) weekStart = state.today;
     dirty.clear();
+    seenIds = new Set((state.reservations || []).concat(state.applications || []).map(x => x.id));
     renderAll();
+    startPolling();
   }
+
+  // =====================================================================
+  //  自動更新:開いている間は30秒ごとに新しい予約・応募を確認する
+  // =====================================================================
+  const POLL_SEC = 30;
+  let pollTimer = null;
+  let seenIds = new Set();
+  let unseen = 0;
+  const baseTitle = document.title;
+
+  function startPolling(){
+    clearInterval(pollTimer);
+    pollTimer = setInterval(poll, POLL_SEC * 1000);
+  }
+  async function poll(){
+    if (!state || !token || document.hidden) return;
+    let j;
+    try { j = await api({ action:"poll" }); } catch(err) { return; }
+    const d = j.data;
+    const fresh = (d.reservations || []).concat(d.applications || []).filter(x => !seenIds.has(x.id));
+    const changed = JSON.stringify([state.reservations, state.applications]) !== JSON.stringify([d.reservations, d.applications]);
+    state.reservations = d.reservations;
+    state.customers = d.customers;
+    state.applications = d.applications;
+    fresh.forEach(x => seenIds.add(x.id));
+    if (fresh.length) notifyNew(fresh, d);
+    if (!changed) return;
+    // 入力中は画面を書き換えない(打っている途中のメモが消えないように)
+    const typing = document.activeElement && $("panel").contains(document.activeElement) && /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
+    if (["reservations", "customers", "applications"].includes(current) && !typing && $("modal").hidden) renderAll();
+    else renderTabsOnly();
+  }
+  // タブの件数バッジだけ更新(編集中の画面はそのまま)
+  function renderTabsOnly(){
+    const counts = badgeCounts();
+    $("dotOps").hidden = !(counts.reservations || counts.applications);
+    document.querySelectorAll(".tab").forEach(t => {
+      const n = counts[t.dataset.tab];
+      let b = t.querySelector(".badge");
+      if (n) { if (!b) { b = document.createElement("span"); b.className = "badge"; t.appendChild(b); } b.textContent = n; }
+      else if (b) b.remove();
+    });
+  }
+  function notifyNew(fresh, d){
+    const res = fresh.filter(x => (d.reservations || []).includes(x));
+    const app = fresh.length - res.length;
+    const msg = [res.length ? `新しい予約 ${res.length}件` : "", app ? `新しい応募 ${app}件` : ""].filter(Boolean).join("・");
+    unseen += fresh.length;
+    document.title = `(${unseen}) ${baseTitle}`;
+    toast("🔔 " + msg + (res[0] ? `\n${res[0].date} ${res[0].time}〜 ${res[0].name}様` : ""));
+    chime();
+    try {
+      if (window.Notification && Notification.permission === "granted") new Notification("🔔 " + msg, { body: res[0] ? `${res[0].date} ${res[0].time}〜 ${res[0].name}様` : "" });
+    } catch(e) {}
+    try { navigator.vibrate && navigator.vibrate([200, 100, 200]); } catch(e) {}
+  }
+  // ピンポン音(ファイル不要)
+  function chime(){
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      [[880, 0], [660, 0.18]].forEach(([f, t]) => {
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.frequency.value = f; o.connect(g); g.connect(ctx.destination);
+        g.gain.setValueAtTime(0.0001, ctx.currentTime + t);
+        g.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime + t + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + t + 0.35);
+        o.start(ctx.currentTime + t); o.stop(ctx.currentTime + t + 0.4);
+      });
+    } catch(e) {}
+  }
+  // 別のアプリから戻ってきたら、すぐ確認してタイトルの件数を消す
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) { unseen = 0; document.title = baseTitle; poll(); }
+  });
+  window.addEventListener("focus", () => { unseen = 0; document.title = baseTitle; });
 
   // ===== タブ =====
   $("groups").addEventListener("click", e => {
@@ -446,9 +524,16 @@
     if (["report", "sales", "expenses"].includes(current)) ensureMoney();
   }
 
+  // 初期セットアップ前でも動くように、足りない設定は標準の値を使う
+  const KV_DEFAULTS = {
+    "settings:支払い方法の選択肢": "現金,クレジットカード,PayPay,銀行振込",
+    "settings:流入元の選択肢": "Instagram,X(旧Twitter),TikTok,Google検索,口コミ・紹介,ブログ・まとめサイト,その他",
+    "manage:店舗一覧": "本店",
+    "manage:経費の区分": "広告費,家賃・場所代,通信費,備品・消耗品,内勤給与,交通費,その他",
+  };
   function kv(sec, key){
     const x = (state[sec] || []).find(s => s.key === key);
-    return x ? x.value : "";
+    return x ? x.value : (KV_DEFAULTS[sec + ":" + key] || "");
   }
 
   function badgeCounts(){
@@ -530,7 +615,10 @@
         : "";
       const chips = Object.keys(RES_FILTERS).map(k => `<button class="chip ${k === resFilter ? "active" : ""}" data-filter="${k}">${k}(${all.filter(RES_FILTERS[k]).length})</button>`).join("");
 
+      const notifyBtn = window.Notification && Notification.permission === "default"
+        ? `<button class="mini" data-act="enableNotify" style="margin-bottom:10px">🔔 新しい予約をパソコン・スマホの通知でも知らせる</button>` : "";
       return phoneBar + `<div class="res-bar"><div class="chips scroll">${chips}</div><button class="reload" data-act="reloadRes">更新</button></div>` +
+        `<p class="hint" style="margin-bottom:6px">🔄 この画面を開いている間は、30秒ごとに新しい予約を自動で確認します(新着は音と表示でお知らせ)。</p>` + notifyBtn +
         `<p class="hint">「確定」にすると、お客様と担当キャストに確定のお知らせが自動で届きます(「自動送信」タブで設定)。</p>` +
         (list.length ? list.map(r => {
           const shift = (state.shifts || []).find(s => s.cast === r.cast && s.date === r.date);
@@ -559,6 +647,8 @@
           <label class="f">店舗メモ(お客様には見えません)</label>
           <textarea class="t" data-rid="${esc(r.id)}" data-field="memo" placeholder="対応内容など" style="min-height:60px">${esc(r.memo)}</textarea>
           ${r.notified ? `<div class="notified">📨 自動送信:${esc(r.notified)}</div>` : ""}
+          ${r.status === "確定" ? `<button class="mini" style="margin-top:8px" data-act="resend" data-id="${esc(r.id)}">📨 確定のお知らせを再送</button>
+            ${!r.lineLinked && r.method !== "メール" ? `<div class="desc" style="margin-top:4px">※お客様のLINEがまだつながっていません。お客様から公式LINEに「予約番号 ${esc(r.number)}」を送ってもらうと、その場で確定のお知らせが自動で返ります。</div>` : ""}` : ""}
           ${r.status === "完了" ? `<button class="mini" style="margin-top:10px" data-act="checkout" data-id="${esc(r.id)}">💴 会計(売上・給料)を入力・確認</button>` : ""}
           <div class="res-foot">受付:${esc(r.received)}${r.source ? " / きっかけ:" + esc(r.source) : ""}${r.nomType ? " / " + esc(r.nomType) : ""}</div>
         </div>`;
@@ -1337,6 +1427,24 @@
       case "editExpense": { const x = money && money.expenses.find(y => y.id === b.dataset.id); if (x) openExpenseModal(x); return; }
       case "castDetail": openCastDetail(b.dataset.cast); return;
       case "checkout": openCheckout(b.dataset.id); return;
+      case "enableNotify":
+        try {
+          const p = await Notification.requestPermission();
+          toast(p === "granted" ? "通知をオンにしました" : "通知は許可されませんでした(ブラウザの設定から変更できます)", p !== "granted");
+          chime(); // 音の再生も、ここで一度タップしておくと鳴るようになる
+        } catch(err) { toast("このブラウザは通知に対応していません", true); }
+        renderAll();
+        return;
+      case "resend": {
+        const r = state.reservations.find(x => x.id === b.dataset.id);
+        b.disabled = true;
+        try {
+          const j = await api({ action:"resendConfirm", id: r.id });
+          r.notified = j.notified; r.lineLinked = j.lineLinked;
+          renderAll(); toast("再送しました\n" + j.notified);
+        } catch(err) { b.disabled = false; toast(err.message, true); }
+        return;
+      }
       // ---- 写メ日記 ----
       case "dRemove": diaryDraft.photos.splice(i, 1); renderAll(); return;
       case "subRemove": {
