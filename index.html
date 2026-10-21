@@ -1159,6 +1159,41 @@
 
     // FAQ
     $("faqList").innerHTML = (d.faqs || []).map(f => `<details><summary><span>${esc(T(f, "q"))}</span></summary><p>${br(T(f, "a"))}</p></details>`).join("");
+
+    // HOW TO BOOK
+    renderHowto(s);
+  }
+
+  // ===== HOW TO BOOK =====
+  // 基本設定の「HOW TO BOOK STEP1」「HOW TO BOOK STEP2」…の内容で表示する
+  // (1行目:見出し / 2行目:英語の小見出し / 3行目から:説明)
+  // その行が1つもないときと、日本語以外で見ているときは、HTMLに書いてある元のステップを出す
+  const HOWTO_DEFAULT = document.querySelector("#howto .steps").innerHTML;
+  function renderHowto(s){
+    const box = document.querySelector("#howto .steps");
+    const keys = Object.keys(s)
+      .filter(k => /^HOW TO BOOK STEP\d+$/.test(k) && String(s[k] || "").trim())
+      .sort((a, b) => Number(a.replace(/\D/g, "")) - Number(b.replace(/\D/g, "")));
+    if (LANG !== "ja" || !keys.length) {
+      if (box.dataset.custom) {
+        box.innerHTML = HOWTO_DEFAULT;
+        delete box.dataset.custom;
+        const dict = I18N[LANG] || {};
+        box.querySelectorAll("[data-i18n]").forEach(el => {
+          el.dataset.ja = el.textContent;
+          el.textContent = LANG === "ja" ? el.dataset.ja : (dict[el.dataset.i18n] || el.dataset.ja);
+        });
+      }
+      return;
+    }
+    box.innerHTML = keys.map((k, i) => {
+      const lines = String(s[k]).replace(/\r/g, "").split("\n");
+      const h = lines[0] || "";
+      const en = lines[1] || "";
+      const p = lines.slice(2).join("\n");
+      return `<div class="step"><div class="no">STEP<b>${String(i + 1).padStart(2, "0")}</b></div><h3>${esc(h)}</h3>${en ? `<div class="sub-en">${esc(en)}</div>` : ""}${p ? `<p>${br(p)}</p>` : ""}</div>`;
+    }).join("");
+    box.dataset.custom = "1";
   }
 
   function renderCasts(){
