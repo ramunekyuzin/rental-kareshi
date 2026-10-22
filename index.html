@@ -1162,6 +1162,42 @@
 
     // HOW TO BOOK
     renderHowto(s);
+
+    // HOW TO ENJOY
+    renderEnjoy(s);
+  }
+
+  // ===== HOW TO ENJOY =====
+  // 基本設定の「HOW TO ENJOY 1」「HOW TO ENJOY 2」…の内容で表示する
+  // (1行目:アイコン(絵文字) / 2行目:見出し / 3行目:英語の小見出し / 4行目から:説明)
+  // その行が1つもないときと、日本語以外で見ているときは、HTMLに書いてある元のカードを出す
+  const ENJOY_DEFAULT = document.querySelector("#ourconcept .concepts").innerHTML;
+  function renderEnjoy(s){
+    const box = document.querySelector("#ourconcept .concepts");
+    const keys = Object.keys(s)
+      .filter(k => /^HOW TO ENJOY \d+$/.test(k) && String(s[k] || "").trim())
+      .sort((a, b) => Number(a.replace(/\D/g, "")) - Number(b.replace(/\D/g, "")));
+    if (LANG !== "ja" || !keys.length) {
+      if (box.dataset.custom) {
+        box.innerHTML = ENJOY_DEFAULT;
+        delete box.dataset.custom;
+        const dict = I18N[LANG] || {};
+        box.querySelectorAll("[data-i18n]").forEach(el => {
+          el.dataset.ja = el.textContent;
+          el.textContent = LANG === "ja" ? el.dataset.ja : (dict[el.dataset.i18n] || el.dataset.ja);
+        });
+      }
+      return;
+    }
+    box.innerHTML = keys.map((k, i) => {
+      const lines = String(s[k]).replace(/\r/g, "").split("\n");
+      const ico = lines[0] || "";
+      const h = lines[1] || "";
+      const en = lines[2] || "";
+      const p = lines.slice(3).join("\n");
+      return `<div class="concept-card cc${(i % 3) + 1}"><div class="top">${ico ? `<div class="ico">${esc(ico)}</div>` : ""}<h3>${esc(h)}</h3>${en ? `<div class="sub-en">${esc(en)}</div>` : ""}</div>${p ? `<p>${br(p)}</p>` : ""}</div>`;
+    }).join("");
+    box.dataset.custom = "1";
   }
 
   // ===== HOW TO BOOK =====
